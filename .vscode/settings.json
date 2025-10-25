@@ -1,0 +1,11 @@
+{
+    "files.exclude": {
+        "**/*.meta": true,
+        "**/*.unityproj": true
+    },
+    "omnisharp.useGlobalMono": "always",
+    "omnisharp.useModernNet": false,
+    "omnisharp.monoPath": "/usr/bin/mono",
+    "dotnet.server.useOmnisharp": true,
+    "dotnet.defaultSolution": "Spielversion.sln"
+}

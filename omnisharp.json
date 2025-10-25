@@ -1,0 +1,9 @@
+{
+    "RoslynExtensionsOptions": {
+        "EnableAnalyzersSupport": true,
+        "EnableImportCompletion": true
+    },
+    "FormattingOptions": {
+        "EnableEditorConfigSupport": true
+    }
+}

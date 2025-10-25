@@ -1,0 +1,24 @@
+```
+# Unity generierte Ordner
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# Rider/Visual Studio
+.idea/
+.vs/
+*.csproj
+*.sln
+*.suo
+*.user
+
+# OS spezifisch
+.DS_Store
+Thumbs.db
+
+# Unity Asset Store Tools
+/[Aa]ssets/AssetStoreTools*

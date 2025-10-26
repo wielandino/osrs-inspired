@@ -7,5 +7,5 @@
     "omnisharp.useModernNet": false,
     "omnisharp.monoPath": "/usr/bin/mono",
     "dotnet.server.useOmnisharp": true,
-    "dotnet.defaultSolution": "Spielversion.sln"
+    "dotnet.defaultSolution": "osrs-inspired.slnx"
 }

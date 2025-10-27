@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Item", menuName = "ScriptableObjects/Items/Normal Item")]
-public class Item : ScriptableObject
+public class Item : ScriptableObject, IInventoryItemData
 {
     [Header("Basic Item Info")]
     public GameObject Prefab;
@@ -13,4 +13,9 @@ public class Item : ScriptableObject
 
     [Header("Item Properties")]
     public ItemType ItemType;
+
+
+    public string ItemName => Name;
+    public string ItemDescription => Description;
+    public Sprite IconSprite => Icon;
 }

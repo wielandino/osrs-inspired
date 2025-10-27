@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -18,9 +17,7 @@ public class TreeStateManager : MonoBehaviour
     {
         AttachedTree = gameObject.GetComponent<Tree>();
         _currentState = IdleState;
-
-        Debug.Log("Test!");
-
+        
         _currentState.EnterState(this);
     }
 

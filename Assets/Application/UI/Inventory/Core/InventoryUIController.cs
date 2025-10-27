@@ -11,6 +11,8 @@ public class InventoryUIController : MonoBehaviour
     public InventoryGridElement GridElementPrefab;
     private List<InventoryGridElement> _gridElements = new();
 
+    private bool _isPanelActive;
+
     void OnEnable()
     {
         Instance = this;
@@ -83,14 +85,10 @@ public class InventoryUIController : MonoBehaviour
         
     }
 
-    public void EnableInventoryPanel()
+    public void TriggerInventoryPanel()
     {
-        InventoryPanel.SetActive(true);
-    }
-
-    public void DisableInventoryPanel()
-    {
-        InventoryPanel.SetActive(false);
+        InventoryPanel.SetActive(!_isPanelActive);
+        _isPanelActive = !_isPanelActive;
     }
     
 }

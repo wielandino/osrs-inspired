@@ -22,3 +22,6 @@ Thumbs.db
 
 # Unity Asset Store Tools
 /[Aa]ssets/AssetStoreTools*
+
+# Stuff
+*.blob

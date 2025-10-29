@@ -74,8 +74,8 @@ public class OSRSInventoryGridElement : MonoBehaviour, IInventoryGridElement, IP
         return contextMenuOptions;
     }
 
-    private void DebugContext()
+    void OnDisable()
     {
-        Debug.Log($"Debug from ContextMenu");
+        _selectItemPlugin.ClearAllSelectedItems();
     }
 }

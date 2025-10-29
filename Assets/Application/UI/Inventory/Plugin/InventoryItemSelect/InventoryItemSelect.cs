@@ -35,4 +35,9 @@ public class InventoryItemSelect : MonoBehaviour, IInventoryPlugin
 
         _gridElement = gridElement;
     }
+
+    public void ClearAllSelectedItems()
+    {
+        Container.ClearAllSelectedItems();
+    }
 }

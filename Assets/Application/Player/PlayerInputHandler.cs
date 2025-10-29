@@ -39,6 +39,9 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void OnRightClick(InputAction.CallbackContext context)
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+            
         var mousePosition = _playerInputActions.Gameplay.MousePosition.ReadValue<Vector2>();
         var ray = Camera.main.ScreenPointToRay(mousePosition);
 

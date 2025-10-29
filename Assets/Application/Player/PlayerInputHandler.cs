@@ -52,8 +52,7 @@ public class PlayerInputHandler : MonoBehaviour
                 return;
 
             ContextMenuPanel.Instance.ShowContextMenuForObject(interactable.GetContextMenuOptions(_playerStateManager),
-                                                               mousePosition,
-                                                               _playerStateManager);
+                                                               mousePosition);
         }
     }
 

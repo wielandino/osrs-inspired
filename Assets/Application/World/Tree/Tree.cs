@@ -114,8 +114,7 @@ public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
             options.Add(
                 new(
                     "Chop tree",
-                    (p) => p.ReplaceCommands(moveCommand, woodcuttingCommand),
-                    (p) => true
+                    () => player.ReplaceCommands(moveCommand, woodcuttingCommand)
                 )
             );
         }
@@ -123,8 +122,7 @@ public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
         options.Add(
             new(
                 "Examine",
-                (p) => Debug.Log($"Das ist ein {GetDisplayName()}"),
-                (p) => true // Immer verfügbar
+                () => Debug.Log($"Das ist ein {GetDisplayName()}")
             )
         );
         

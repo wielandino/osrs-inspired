@@ -65,8 +65,7 @@ public class TreeLog : MonoBehaviour, IInteractable, IHasInteractionTiles
             options.Add(
                 new(
                     "Pick up",
-                    (p) => p.ReplaceCommands(moveCommand, carryTreeLogCommand),
-                    (p) => true // Immer verfügbar
+                    () => player.ReplaceCommands(moveCommand, carryTreeLogCommand)
                 )
             );
         }
@@ -76,8 +75,7 @@ public class TreeLog : MonoBehaviour, IInteractable, IHasInteractionTiles
             options.Add(
                 new(
                     "Drop Treelog",
-                    (p) => p.ReplaceCommands(DropTreeLogCommand.Create(p, transform.position)),
-                    (p) => true
+                    () => player.ReplaceCommands(DropTreeLogCommand.Create(player, transform.position))
                 )
             );
         }

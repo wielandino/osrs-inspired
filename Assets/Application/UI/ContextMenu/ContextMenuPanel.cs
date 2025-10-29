@@ -17,7 +17,7 @@ public class ContextMenuPanel : MonoBehaviour, IPointerExitHandler
         Instance = this;
     }
 
-    public void ShowContextMenuForObject(List<ContextMenuOption> options, Vector2 screenPosition, PlayerStateManager player)
+    public void ShowContextMenuForObject(List<ContextMenuOption> options, Vector2 screenPosition)
     {
         ClearOptions();
 
@@ -33,7 +33,7 @@ public class ContextMenuPanel : MonoBehaviour, IPointerExitHandler
             createdContextMenuGridElement.ContextMenuText.text = option.DisplayText;
             createdContextMenuGridElement.ContextMenuButton.onClick.AddListener(() =>
             {
-                option.OnExecute(player);
+                option.OnExecute();
                 HideContextMenu();
             });
         }

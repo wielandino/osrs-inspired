@@ -3,16 +3,13 @@ using System;
 public class ContextMenuOption
 {
     public string DisplayText = string.Empty;
-    public Action<PlayerStateManager> OnExecute;
-    public Func<PlayerStateManager, bool> IsAvailable;
+    public Action OnExecute;
 
 
     public ContextMenuOption(string displayText,
-                              Action<PlayerStateManager> onExecute,
-                              Func<PlayerStateManager, bool> availabilityCheck)
+                              Action onExecute)
     {
         DisplayText = displayText;
         OnExecute = onExecute;
-        IsAvailable = availabilityCheck ?? (_ => true);
     }
 }

@@ -91,26 +91,28 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void HandleTreeLogInteraction(TreeLog treeLog)
     {
-
         if (!treeLog.IsInteractable())
             return;
 
-        // TreeLog kann nur aufgehoben werden wenn Spieler im Idle State ist
-        if (!_playerStateManager.IsInIdleState() && !_playerStateManager.IsInCarryingState())
+        // Treelog can only collected if player and treelog is in idle
+        if (_playerStateManager.IsInIdleState() && treeLog.GetStateManager().IsInIdleState())
         {
-            Debug.Log("Du musst zuerst deine aktuelle Aktion beenden");
+            HandleTreeLogCarrying(treeLog);
             return;
         }
+    }
 
+    private void HandleTreeLogCarrying(TreeLog treeLog)
+    {
         var carryTreeLogCommand = new CarryTreeLogCommand(treeLog);
 
-        if (carryTreeLogCommand.CanExecute(_playerStateManager, out string errorMessage))
+        if (carryTreeLogCommand.CanExecute(_playerStateManager, out CommandErrorCode errorCode))
         {
             _playerStateManager.ReplaceCommands(carryTreeLogCommand);
         }
         else
         {
-            if (errorMessage == "NotInInteractionTile")
+            if (errorCode == CommandErrorCode.PlayerNotInInteractionTile)
             {
                 Vector3 nearestTile = _playerMovementService.GetNearestInteractionTile(treeLog.InteractionTiles);
                 var moveCommand = new MoveCommand(nearestTile);
@@ -119,7 +121,7 @@ public class PlayerInputHandler : MonoBehaviour
             }
             else
             {
-                Debug.Log(errorMessage);
+                Debug.Log($"HandleTreeLogCarrying could not be executed. ErrorCode: {errorCode}");
             }
         }
     }
@@ -156,14 +158,14 @@ public class PlayerInputHandler : MonoBehaviour
     {
         var woodcuttingCommand = new WoodcuttingCommand(tree);
 
-        if (woodcuttingCommand.CanExecute(_playerStateManager, out string errorMessage))
+        if (woodcuttingCommand.CanExecute(_playerStateManager, out CommandErrorCode errorCode))
         {
             _playerStateManager.ReplaceCommands(woodcuttingCommand);
         }
         else
         {
             // Prüfe ob es nur ein Positionsproblem ist
-            if (errorMessage == "Du bist zu weit vom Baum entfernt")
+            if (errorCode == CommandErrorCode.PlayerNotInInteractionTile)
             {
                 Vector3 nearestTile = _playerMovementService.GetNearestInteractionTile(tree.InteractionTiles);
                 var moveCommand = new MoveCommand(nearestTile);
@@ -173,17 +175,8 @@ public class PlayerInputHandler : MonoBehaviour
             }
             else
             {
-                // Zeige Fehlermeldung für andere Probleme
-                Debug.Log(errorMessage);
-                // Hier könntest du auch ein UI-System aufrufen: UIManager.ShowMessage(errorMessage);
+                Debug.Log($"HandleTreeInteraction could not be executed. ErrorCode: {errorCode}");
             }
         }
-    }
-
-
-
-    public bool ShouldDropItem()
-    {
-        return Input.GetKeyDown(KeyCode.Q);
     }
 }

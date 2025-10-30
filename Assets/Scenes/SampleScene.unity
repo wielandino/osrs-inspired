@@ -4398,7 +4398,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 930ee6b35c2f9eb13bd6ec6b07a8738e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _items: []
+  _items:
+  - {fileID: 11400000, guid: 66c0156b2300b5877acb3aaa08f1067d, type: 2}
   DebugItem: {fileID: 11400000, guid: f2764d815f6d8948988eeae1458911e2, type: 2}
 --- !u!1 &1655115359
 GameObject:
@@ -5208,6 +5209,7 @@ GameObject:
   - component: {fileID: 2048886785}
   - component: {fileID: 2048886786}
   - component: {fileID: 2048886787}
+  - component: {fileID: 2048886788}
   m_Layer: 0
   m_Name: Skills
   m_TagString: Untagged
@@ -5258,6 +5260,21 @@ MonoBehaviour:
   _xpBarUI: {fileID: 1415007150}
   _currentXP: 0
   _requiredXPForLevelUp: 85
+--- !u!114 &2048886788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048886784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49473b5b954ac9caeb6e405433e7b1c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FiremakingSkill
+  _xpBarUI: {fileID: 1415007150}
+  _currentXP: 0
+  _requiredXPForLevelUp: 30
 --- !u!1001 &2113235187
 PrefabInstance:
   m_ObjectHideFlags: 0

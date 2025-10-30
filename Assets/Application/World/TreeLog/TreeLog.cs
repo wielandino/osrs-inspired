@@ -70,6 +70,18 @@ public class TreeLog : MonoBehaviour, IInteractable, IHasInteractionTiles
             );
         }
 
+        if (GetStateManager().IsInIdleState() &&
+            player.IsInIdleState() &&
+            player.PlayerInventory.HasValidToolForSkill(SkillType.Firemaking, player.PlayerSkills))
+        {
+            options.Add(
+                new(
+                    "Burn",
+                    () => Debug.Log("Firemaking Command execute")
+                )
+            );
+        }
+
         if (player.IsInCarryingState())
         {
             options.Add(

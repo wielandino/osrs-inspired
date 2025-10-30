@@ -9,8 +9,6 @@ public class ToolItem : Item, ISkillTool
     [SerializeField] private int _requiredLevel;
     [SerializeField] private float _efficiencyBonus = 1.0f;
     [SerializeField] private float _durabilityMax = 100f;
-
-    // F�r Tools die f�r mehrere Skills verwendet werden k�nnen
     [SerializeField] private SkillRequirement[] _additionalSkillRequirements;
 
     public SkillType RequiredSkill => _requiredSkill;
@@ -20,11 +18,10 @@ public class ToolItem : Item, ISkillTool
 
     public bool CanUseForSkill(SkillType skill, int playerLevel)
     {
-        // Pr�fe prim�ren Skill
         if (_requiredSkill == skill && playerLevel >= _requiredLevel)
             return true;
 
-        // Pr�fe zus�tzliche Skills (z.B. Speer f�r Hunting UND Combat)
+        // Check if Items has multiple purposes
         foreach (var requirement in _additionalSkillRequirements)
         {
             if (requirement.Skill == skill && playerLevel >= requirement.RequiredLevel)
@@ -38,7 +35,7 @@ public class ToolItem : Item, ISkillTool
     {
         var allRequirements = new List<SkillRequirement>
         {
-            new SkillRequirement { Skill = _requiredSkill, RequiredLevel = _requiredLevel }
+            new() { Skill = _requiredSkill, RequiredLevel = _requiredLevel }
         };
 
         if (_additionalSkillRequirements != null)

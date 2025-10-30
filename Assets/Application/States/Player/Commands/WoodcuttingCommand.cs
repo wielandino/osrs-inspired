@@ -19,46 +19,34 @@ public class WoodcuttingCommand : PlayerCommandBase
         return CanExecute(player, out _);
     }
 
-    public bool CanExecute(PlayerStateManager player, out string errorMessage)
+    public bool CanExecute(PlayerStateManager player, out CommandErrorCode errorCode)
     {
-        errorMessage = string.Empty;
+        var targetTreeState = _targetTree.GetComponent<TreeStateManager>();
 
-        // Prüfe zuerst ob Spieler einen TreeLog trägt
-        if (player.IsInCarryingState())
+        errorCode = CommandErrorCode.Default;
+
+        if (!player.IsInIdleState())
         {
-            errorMessage = "Du kannst nicht Holz hacken während du einen TreeLog trägst";
+            errorCode = CommandErrorCode.PlayerNotInIdleState;
             return false;
         }
 
-        if (_targetTree == null)
+        if (_targetTree == null || targetTreeState.IsInDestroyedState())
         {
-            errorMessage = "Kein Baum ausgewählt";
+            errorCode = CommandErrorCode.NoTarget;
             return false;
         }
 
         if (!_targetTree.InteractionTiles.Contains(player.transform.position))
         {
-            errorMessage = "Du bist zu weit vom Baum entfernt";
+            errorCode = CommandErrorCode.PlayerNotInInteractionTile;
             return false;
         }
 
-        var targetTreeState = _targetTree.GetComponent<TreeStateManager>();
-
-        if (targetTreeState.IsInDestroyedState())
+        if (player.PlayerSkills.GetWoodcuttingSkill().CurrentLevel < _targetTree.GetRequiredLevelToCut() ||
+            !player.PlayerInventory.HasValidToolForSkill(SkillType.Woodcutting, player.PlayerSkills))
         {
-            errorMessage = "Dieser Baum ist bereits gefällt";
-            return false;
-        }
-
-        if (player.PlayerSkills.GetWoodcuttingSkill().CurrentLevel < _targetTree.GetRequiredLevelToCut())
-        {
-            errorMessage = $"Du benötigst Holzfäller-Level {_targetTree.GetRequiredLevelToCut()}";
-            return false;
-        }
-
-        if (!player.PlayerInventory.HasValidToolForSkill(SkillType.Woodcutting, player.PlayerSkills))
-        {
-            errorMessage = "Du hast kein geeignetes Werkzeug zum Holzfällen";
+            errorCode = CommandErrorCode.PlayerSkillRequirementNotMet;
             return false;
         }
 

@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public class WoodcuttingSkill : PlayerSkill
+public class FiremakingSkill : PlayerSkill
 {
+    private SkillType _skillType;
+
     [SerializeField]
     private float _currentXP = 0;
 
@@ -11,19 +13,13 @@ public class WoodcuttingSkill : PlayerSkill
     private float _requiredXPForLevelUp = 85;
 
     private readonly int _requiredXPIncreasePerLevel = 10; //In percantage 
-
-    public float BonusDamage { private set; get; } = 0.5f;
-
-    public readonly float DamageMultiplerPerLevel = 0.5f;
-
-    private SkillType _skillType;
-
+    
     private void Start()
     {
-        _skillType = SkillType.Woodcutting;
+        _skillType = SkillType.Firemaking;
     }
 
-    public void IncreaseWoodcuttingXP(float amount)
+    public void IncreaseFiremakingXP(float amount)
     {
         _currentXP = this.IncreaseXP(amount, _currentXP);
 
@@ -41,8 +37,6 @@ public class WoodcuttingSkill : PlayerSkill
         {
             CurrentLevel++;
             _requiredXPForLevelUp += _requiredXPForLevelUp / 100 * _requiredXPIncreasePerLevel;
-
-            BonusDamage = CurrentLevel * DamageMultiplerPerLevel;
         }
 
         this.UpdateUI(_skillType, currentXP: _currentXP, requiredXPForLevelUp: _requiredXPForLevelUp);

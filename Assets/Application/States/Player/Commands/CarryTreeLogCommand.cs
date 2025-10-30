@@ -1,4 +1,4 @@
-using UnityEngine;
+using UnityEditor.PackageManager;
 
 public class CarryTreeLogCommand : PlayerCommandBase
 {
@@ -17,19 +17,19 @@ public class CarryTreeLogCommand : PlayerCommandBase
         => CanExecute(player, out _);
 
 
-    public bool CanExecute(PlayerStateManager player, out string errorMessage)
+    public bool CanExecute(PlayerStateManager player, out CommandErrorCode errorCode)
     {
-        errorMessage = string.Empty;
+        errorCode = CommandErrorCode.Default;
 
         if (player.IsInCarryingState())
         {
-            errorMessage = "IsInCarryingState";
+            errorCode = CommandErrorCode.PlayerAlreadyPerformingTask;
             return false;
         }
 
         if (!_treeLog.InteractionTiles.Contains(player.transform.position))
         {
-            errorMessage = "NotInInteractionTile";
+            errorCode = CommandErrorCode.PlayerNotInInteractionTile;
             return false;
         }
 

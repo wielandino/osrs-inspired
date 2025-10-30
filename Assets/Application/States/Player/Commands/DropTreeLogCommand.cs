@@ -45,14 +45,13 @@ public class DropTreeLogCommand : PlayerCommandBase
         if (carriedTreeLog == null)
             return false;
         
-        // Jetzt sollte der Spieler in der Nähe sein (durch MoveCommand)
         var listOfInteractionTiles = ObjectHelper.CollectInteractionTilesOfPosition(_targetPosition);
         if (listOfInteractionTiles.Count > 0)
         {
             return PlayerMovementService.Instance.IsPlayerInInteractionTile(listOfInteractionTiles);
         }
         
-        return true; // Kein Interaction Tile nötig
+        return true;
     }
 
     public override void ExecuteInternal(PlayerStateManager player)

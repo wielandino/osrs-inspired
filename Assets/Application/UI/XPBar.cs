@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class XPBar : MonoBehaviour
 {
+    private static WaitForSeconds _waitForSeconds5 = new(5);
+    
     [SerializeField] private GameObject _xpPanel;
     [SerializeField] private TextMeshProUGUI _currentXP;
     [SerializeField] private TextMeshProUGUI _neededXP;
@@ -19,7 +21,7 @@ public class XPBar : MonoBehaviour
 
     private IEnumerator ShowXPBar()
     {
-        yield return new WaitForSeconds(5);
+        yield return _waitForSeconds5;
         _xpPanel.SetActive(false);
         yield break;
     }

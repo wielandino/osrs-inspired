@@ -48,7 +48,7 @@ public class PlayerWoodcuttingState : PlayerBaseState
         while (_currentTree.CurrentHealth > 0 && !treeStateManager.IsInDestroyedState())
         {
             // Schaden pro "Schlag"
-            float damage = _player.PlayerSkills.WoodcuttingBonusDamage + bestTool.EfficiencyBonus;
+            float damage = _player.PlayerSkills.GetWoodcuttingSkill().BonusDamage + bestTool.EfficiencyBonus;
             _currentTree.CurrentHealth -= damage;
 
             Debug.Log($"Tree health: {_currentTree.CurrentHealth}");
@@ -68,12 +68,9 @@ public class PlayerWoodcuttingState : PlayerBaseState
         if (_treeWasChopped)
         {
             Debug.Log("Tree chopped down!");
-            _player.PlayerSkills.IncreaseWoodcuttingXP(_currentTree.XPDropPerCut);
+            _player.PlayerSkills.GetWoodcuttingSkill().IncreaseWoodcuttingXP(_currentTree.XPDropPerCut);
 
-            // TreeLog spawnen
             SpawnTreeLog();
-
-            // Baum zu DestroyedState wechseln
             treeStateManager.SwitchState(treeStateManager.DestroyedState);
         }
 

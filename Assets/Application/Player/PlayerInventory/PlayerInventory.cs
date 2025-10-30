@@ -9,11 +9,11 @@ public class PlayerInventory : MonoBehaviour
 
     public List<Item> GetItems() => _items;
 
-    public bool HasValidToolForSkill(SkillType skill, PlayerSkills playerSkills)
+    public bool HasValidToolForSkill(SkillType skill, PlayerSkill playerSkills)
         => ToolValidator.GetBestToolForSkill(_items, skill, playerSkills) != null;
     
 
-    public ISkillTool GetBestToolForSkill(SkillType skill, PlayerSkills playerSkills)
+    public ISkillTool GetBestToolForSkill(SkillType skill, PlayerSkill playerSkills)
         => ToolValidator.GetBestToolForSkill(_items, skill, playerSkills);
 
     private void OnEnable()

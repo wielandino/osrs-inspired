@@ -5207,6 +5207,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2048886785}
   - component: {fileID: 2048886786}
+  - component: {fileID: 2048886787}
   m_Layer: 0
   m_Name: Skills
   m_TagString: Untagged
@@ -5241,11 +5242,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33f93df8c27a8c2bb94fee034d9f760f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  XPBar: {fileID: 1415007150}
-  WoodcuttingLevel: 0
-  WoodcuttingCurrentEP: 0
-  WoodcuttingBonusDamage: 0
-  WoodcuttingNeededEP: 0
+  _xpBarUI: {fileID: 1415007150}
+--- !u!114 &2048886787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048886784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa370bb083b5c3aa2bd1996764ffc171, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WoodcuttingSkill
+  _xpBarUI: {fileID: 1415007150}
+  _currentXP: 0
+  _requiredXPForLevelUp: 85
 --- !u!1001 &2113235187
 PrefabInstance:
   m_ObjectHideFlags: 0

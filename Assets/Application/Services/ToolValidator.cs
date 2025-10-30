@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ToolValidator
 {
-    public static bool CanPlayerUseTool(Item item, SkillType skill, PlayerSkills playerSkills)
+    public static bool CanPlayerUseTool(Item item, SkillType skill, PlayerSkill playerSkills)
     {
         if (item is not ISkillTool skillTool)
             return false;
@@ -12,7 +12,7 @@ public class ToolValidator
         return skillTool.CanUseForSkill(skill, playerLevel);
     }
 
-    public static ISkillTool GetBestToolForSkill(List<Item> inventory, SkillType skill, PlayerSkills playerSkills)
+    public static ISkillTool GetBestToolForSkill(List<Item> inventory, SkillType skill, PlayerSkill playerSkills)
     {
         ISkillTool bestTool = null;
         float bestEfficiency = 0f;
@@ -32,12 +32,12 @@ public class ToolValidator
         return bestTool;
     }
 
-    private static int GetPlayerSkillLevel(SkillType skill, PlayerSkills playerSkills)
+    private static int GetPlayerSkillLevel(SkillType skill, PlayerSkill playerSkills)
     {
         return skill switch
         {
-            SkillType.Woodcutting => playerSkills.WoodcuttingLevel,
-            // Weitere Skills hier hinzuf�gen
+            SkillType.Woodcutting => playerSkills.GetWoodcuttingSkill().CurrentLevel,
+            // Add Skills
             _ => 1
         };
     }

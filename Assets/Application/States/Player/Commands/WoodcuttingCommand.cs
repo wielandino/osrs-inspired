@@ -50,7 +50,7 @@ public class WoodcuttingCommand : PlayerCommandBase
             return false;
         }
 
-        if (player.PlayerSkills.WoodcuttingLevel < _targetTree.GetRequiredLevelToCut())
+        if (player.PlayerSkills.GetWoodcuttingSkill().CurrentLevel < _targetTree.GetRequiredLevelToCut())
         {
             errorMessage = $"Du benötigst Holzfäller-Level {_targetTree.GetRequiredLevelToCut()}";
             return false;

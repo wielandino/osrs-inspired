@@ -8,7 +8,7 @@ public class PlayerStateManager : MonoBehaviour
 
     [HideInInspector]
     public PlayerMovementController PlayerMovementController;
-    public PlayerSkills PlayerSkills;
+    public PlayerSkill PlayerSkills;
     public PlayerInventory PlayerInventory;
 
     private PlayerBaseState _currentState;

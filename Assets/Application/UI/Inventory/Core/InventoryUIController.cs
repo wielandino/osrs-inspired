@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,17 +14,19 @@ public class InventoryUIController : MonoBehaviour
 
     private bool _isPanelActive;
 
-    void OnEnable()
+    public event Action<IInventoryItemData> OnGridElementRemoved;
+
+    private void OnEnable()
     {
         Instance = this;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         Instance = null;
     }
 
-    void Start()
+    private void Start()
     {
         InventoryPanel.SetActive(false);
 
@@ -72,8 +75,13 @@ public class InventoryUIController : MonoBehaviour
             return;
         }
 
+        IInventoryGridElement gridElementInterface = gridElementInList.GetComponent<IInventoryGridElement>();
+        IInventoryItemData itemData = gridElementInterface?.GetItemData();
+
         Destroy(gridElementInList.gameObject);
         _gridElements.Remove(gridElementInList);
+
+        OnGridElementRemoved?.Invoke(itemData);
     }
 
     private void ConfigurePlugins(InventoryGridElement gridElementObj, IInventoryGridElement gridElement)

@@ -16,7 +16,13 @@ public class PlayerInventory : MonoBehaviour
     public ISkillTool GetBestToolForSkill(SkillType skill, PlayerSkills playerSkills)
         => ToolValidator.GetBestToolForSkill(_items, skill, playerSkills);
 
-    void Update()
+    private void OnEnable()
+    {
+        if (InventoryUIController.Instance != null)
+            InventoryUIController.Instance.OnGridElementRemoved += OnItemRemovedFromUI;
+    }
+
+    private void Update()
     {
         //DEBUG!
         if (Input.GetKeyDown(KeyCode.Q))
@@ -33,5 +39,22 @@ public class PlayerInventory : MonoBehaviour
     public bool RemoveItem(Item item)
     {
         return _items.Remove(item);
+    }
+
+    private void OnItemRemovedFromUI(IInventoryItemData itemData)
+    {
+        if (itemData is Item item)
+        {
+            bool removed = _items.Remove(item);
+            
+            if (removed)
+            {
+                Debug.Log($"Item {item.ItemName} wurde aus Inventar entfernt");
+            }
+            else
+            {
+                Debug.LogWarning($"Item {item.ItemName} war nicht im Inventar!");
+            }
+        }
     }
 }

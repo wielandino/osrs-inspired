@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class CarryTreeLogCommand : PlayerCommandBase
 {
-    private TreeLog _treeLog;
-    private bool _isCompleted;
+    private readonly TreeLog _treeLog;
 
     public CarryTreeLogCommand(TreeLog treeLog)
     {
@@ -40,13 +39,9 @@ public class CarryTreeLogCommand : PlayerCommandBase
     public override void ExecuteInternal(PlayerStateManager player)
     {
         _treeLog.OnInteract(player);        
-        _isCompleted = true;
+        _isComplete = true;
     }
 
     public override bool IsComplete(PlayerStateManager player)
-    {
-        Debug.Log("IsCompleted by CarryTreeLogCommand");
-
-        return true;
-    }
+        => _isComplete;
 }

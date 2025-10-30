@@ -23,18 +23,13 @@ public class FloatingXPController : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
 
-        // Finde Main Camera
         _mainCamera = Camera.main;
         if (_mainCamera == null)
-        {
-            _mainCamera = FindObjectOfType<Camera>();
-        }
-
-        // Finde Canvas falls nicht zugewiesen
+            Debug.LogError($"No Camera found for {this.name}");
+        
         if (_uiCanvas == null)
-        {
-            _uiCanvas = FindObjectOfType<Canvas>();
-        }
+            Debug.LogError($"No UI Canvas for {this.name}");
+        
     }
 
     public void ShowXPGain(SkillType skillType, float xpAmount, Vector3 worldPosition)

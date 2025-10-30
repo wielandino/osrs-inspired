@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class OSRSInventoryGridElement : MonoBehaviour, IInventoryGridElement, IPointerClickHandler
+public class OSRSInventoryGridElement : InventoryGridElement, IInventoryGridElement, IPointerClickHandler
 {
     private IInventoryItemData _itemData;
     private InventoryItemContextMenu _contextMenuPlugin;
@@ -29,6 +30,7 @@ public class OSRSInventoryGridElement : MonoBehaviour, IInventoryGridElement, IP
 
         _contextMenuPlugin.ClearContextOptions();
         _contextMenuPlugin.AddContextOption("Select", _selectItemPlugin.AddSelectedItem, priority: 100);
+        _contextMenuPlugin.AddContextOption("Destroy", DestroyItem, priority: 90);
         
     }
 
@@ -53,16 +55,16 @@ public class OSRSInventoryGridElement : MonoBehaviour, IInventoryGridElement, IP
             ContextMenuPanel.Instance.ShowContextMenuForObject(contextMenuOptions, mousePosition);
         }
     }
-    
+
     private List<ContextMenuOption> ConvertItemContextMenuOptions()
     {
         var contextMenuOptions = new List<ContextMenuOption>();
 
-        if(_contextMenuPlugin.GetContextMenuOptions().Count > 0)
+        if (_contextMenuPlugin.GetContextMenuOptions().Count > 0)
         {
             var contextMenuItemOptions = _contextMenuPlugin.GetContextMenuOptions();
 
-            foreach(var contextMenuItemOption in contextMenuItemOptions)
+            foreach (var contextMenuItemOption in contextMenuItemOptions)
             {
                 contextMenuOptions.Add(new(
                     displayText: contextMenuItemOption.Label,
@@ -73,8 +75,13 @@ public class OSRSInventoryGridElement : MonoBehaviour, IInventoryGridElement, IP
 
         return contextMenuOptions;
     }
+    
+    private void DestroyItem()
+    {
+        _inventoryUIController.RemoveGridElement(_gridElement);
+    }
 
-    void OnDisable()
+    private void OnDisable()
     {
         _selectItemPlugin.ClearAllSelectedItems();
     }

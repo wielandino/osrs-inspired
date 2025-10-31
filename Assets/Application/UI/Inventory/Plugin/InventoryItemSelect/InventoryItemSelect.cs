@@ -10,15 +10,8 @@ public class InventoryItemSelect : MonoBehaviour, IInventoryPlugin
     {
         get
         {
-            if (_container == null)
-            {
-                Debug.Log($"⚠️ CONTAINER WIRD ERSTELLT!");
-                _container = new InventoryItemSelectContainer();
-            }
-            else
-            {
-                Debug.Log($"✓ Container existiert bereits, wird wiederverwendet");
-            }
+            _container ??= new InventoryItemSelectContainer();
+            
             return _container;
         }
     }

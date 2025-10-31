@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 public class BurnTreeLogCommand : PlayerCommandBase
 {
     private readonly TreeLog _treeLog;
@@ -38,6 +40,7 @@ public class BurnTreeLogCommand : PlayerCommandBase
 
     public override void ExecuteInternal(PlayerStateManager player)
     {
-        throw new System.NotImplementedException();
+
+        _isComplete = true;
     }
 }

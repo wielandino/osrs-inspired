@@ -99,16 +99,12 @@ public class PlayerInputHandler : MonoBehaviour
 
             if (selectedItem?.Callback != null)
             {
-                if (selectedItem.Callback.CanCreateCommand(treeLog.gameObject, _playerStateManager))
-                {
-                    var command = selectedItem.Callback.CreateCommand(treeLog.gameObject, _playerStateManager);
-                    
-                    if (command.CanExecute(_playerStateManager))
-                    {
-                        _playerStateManager.ReplaceCommands(command);
-                        return;
-                    }
-                }
+                var command = selectedItem.Callback.ExecuteCallback(treeLog.gameObject, _playerStateManager);
+
+                if (command != null)
+                    _playerStateManager.ReplaceCommands(command);
+
+                return; 
             }
         }
 

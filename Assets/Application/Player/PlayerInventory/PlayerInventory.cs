@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
@@ -8,6 +9,9 @@ public class PlayerInventory : MonoBehaviour
     public Item DebugItem;
 
     public List<Item> GetItems() => _items;
+
+    [SerializeField]
+    public Item SelectedItem;
 
     public bool HasValidToolForSkill(SkillType skill, PlayerSkill playerSkills)
         => ToolValidator.GetBestToolForSkill(_items, skill, playerSkills) != null;
@@ -20,6 +24,8 @@ public class PlayerInventory : MonoBehaviour
     {
         if (InventoryUIController.Instance != null)
             InventoryUIController.Instance.OnGridElementRemoved += OnItemRemovedFromUI;
+
+        InventoryItemSelect.OnItemSelected += OnItemSelectedFromUI;
     }
 
     private void Update()
@@ -39,6 +45,21 @@ public class PlayerInventory : MonoBehaviour
     public bool RemoveItem(Item item)
     {
         return _items.Remove(item);
+    }
+    
+    private void OnItemSelectedFromUI(IInventoryItemData itemData)
+    {
+        if (itemData is Item item)
+        {
+            var itemInList = _items.Where(x => x == item).FirstOrDefault();
+
+            if (itemInList == null)
+                return;
+
+            SelectedItem = itemInList;
+
+            Debug.Log($"Item {item.ItemName} is currently in selected mode");
+        }
     }
 
     private void OnItemRemovedFromUI(IInventoryItemData itemData)

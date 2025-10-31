@@ -10,6 +10,8 @@ public class Item : ScriptableObject, IInventoryItemData
     public string Description;
     public bool IsStackable;
     public Sprite Icon;
+    [Header("Item Interaction")]
+    public ItemCallback Callback;
 
     [Header("Item Properties")]
     public ItemType ItemType;

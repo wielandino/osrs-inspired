@@ -17,6 +17,7 @@ MonoBehaviour:
   Description: 
   IsStackable: 0
   Icon: {fileID: 0}
+  Callback: {fileID: 11400000, guid: 427eb2a9aaac6c43e9623a0088520861, type: 2}
   ItemType: 1
   _requiredSkill: 2
   _requiredLevel: 0

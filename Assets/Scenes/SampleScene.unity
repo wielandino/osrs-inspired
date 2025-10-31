@@ -4399,8 +4399,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _items:
-  - {fileID: 11400000, guid: 66c0156b2300b5877acb3aaa08f1067d, type: 2}
-  DebugItem: {fileID: 11400000, guid: f2764d815f6d8948988eeae1458911e2, type: 2}
+  - {fileID: 11400000, guid: f2764d815f6d8948988eeae1458911e2, type: 2}
+  DebugItem: {fileID: 11400000, guid: 66c0156b2300b5877acb3aaa08f1067d, type: 2}
+  SelectedItem: {fileID: 0}
 --- !u!1 &1655115359
 GameObject:
   m_ObjectHideFlags: 0

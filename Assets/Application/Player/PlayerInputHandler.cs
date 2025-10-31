@@ -33,7 +33,6 @@ public class PlayerInputHandler : MonoBehaviour
     void OnDisable()
     {
         _playerInputActions.Gameplay.ContextMenu.performed -= OnRightClick;
-
         _playerInputActions.Disable();
     }
 
@@ -77,8 +76,8 @@ public class PlayerInputHandler : MonoBehaviour
             {
                 if (treeLog.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
                     treeLog = GetTopTreeLogAtPosition(hit.transform.position);
-
-                HandleTreeLogInteraction(treeLog);
+                    
+                HandleTreeLogInteraction(treeLog);        
             }
             else if (hit.collider.TryGetComponent<Tile>(out var tile))
             {
@@ -94,12 +93,36 @@ public class PlayerInputHandler : MonoBehaviour
         if (!treeLog.IsInteractable())
             return;
 
+        if (_playerStateManager.PlayerInventory.SelectedItem != null)
+        {
+            var selectedItem = _playerStateManager.PlayerInventory.SelectedItem;
+
+            if (selectedItem?.Callback != null)
+            {
+                if (selectedItem.Callback.CanCreateCommand(treeLog.gameObject, _playerStateManager))
+                {
+                    var command = selectedItem.Callback.CreateCommand(treeLog.gameObject, _playerStateManager);
+                    
+                    if (command.CanExecute(_playerStateManager))
+                    {
+                        _playerStateManager.ReplaceCommands(command);
+                        return;
+                    }
+                }
+            }
+        }
+
         // Treelog can only collected if player and treelog is in idle
         if (_playerStateManager.IsInIdleState() && treeLog.GetStateManager().IsInIdleState())
         {
             HandleTreeLogCarrying(treeLog);
             return;
         }
+    }
+
+    private void HandleTreeLogBurningInteraction(TreeLog treelog)
+    {
+        Debug.Log("HandleTreeLogBurningInteraction");
     }
 
     private void HandleTreeLogCarrying(TreeLog treeLog)

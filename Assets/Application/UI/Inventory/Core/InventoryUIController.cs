@@ -10,7 +10,7 @@ public class InventoryUIController : MonoBehaviour
     public GameObject InventoryPanel;
     public GameObject GridContainer;
     public InventoryGridElement GridElementPrefab;
-    private List<InventoryGridElement> _gridElements = new();
+    private readonly List<InventoryGridElement> _gridElements = new();
 
     private bool _isPanelActive;
 

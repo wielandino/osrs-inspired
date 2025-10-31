@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 public class InventoryItemSelect : MonoBehaviour, IInventoryPlugin
 {
+    public static Action<IInventoryItemData> OnItemSelected;
     private static InventoryItemSelectContainer _container;
 
     private static InventoryItemSelectContainer Container
@@ -26,6 +28,8 @@ public class InventoryItemSelect : MonoBehaviour, IInventoryPlugin
     public void AddSelectedItem()
     {
         Container.AddSelectedItem(_gridElement);
+        OnItemSelected?.Invoke(_gridElement.GetItemData());
+        
         Debug.Log($"Item selected: {_gridElement.GetItemData().ItemName}");
     }
 

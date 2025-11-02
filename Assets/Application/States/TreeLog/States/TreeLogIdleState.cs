@@ -4,11 +4,10 @@ public class TreeLogIdleState : TreeLogBaseState
 {
     public override void EnterState(TreeLogStateManager treeLog)
     {
-        Debug.Log($"TreeLog entered Idle state");
+        treeLog.AttachedTreeLog.TreeLogIdleStateObject.gameObject.SetActive(true);
+        treeLog.AttachedTreeLog.TreeLogBurningStateObject.gameObject.SetActive(false);
 
-        if (treeLog.AttachedTreeLog != null)
-            treeLog.AttachedTreeLog.SetInteractable(true);
-        
+        Debug.Log($"TreeLog entered Idle state");   
 
         var interactionTiles = ObjectHelper.CollectInteractionTilesOfPosition(treeLog.transform.position);
         treeLog.AttachedTreeLog.InteractionTiles = interactionTiles;
@@ -23,11 +22,6 @@ public class TreeLogIdleState : TreeLogBaseState
 
     public override void ExitState(TreeLogStateManager treeLog)
     {
-        // TreeLog wird nicht mehr interaktiv wenn aufgehoben
-        if (treeLog.AttachedTreeLog != null)
-        {
-            treeLog.AttachedTreeLog.SetInteractable(false);
-        }
     }
 
     public override void OnInteract(TreeLogStateManager treeLog, PlayerStateManager player)

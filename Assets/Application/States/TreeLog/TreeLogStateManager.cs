@@ -34,7 +34,7 @@ public class TreeLogStateManager : MonoBehaviour
         state.EnterState(this);
     }
 
-    public void OnInteract(PlayerStateManager player)
+    public void OnInteractInCurrentState(PlayerStateManager player)
     {
         _currentState.OnInteract(this, player);
     }

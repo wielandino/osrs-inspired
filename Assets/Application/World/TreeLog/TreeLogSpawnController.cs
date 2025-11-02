@@ -39,29 +39,52 @@ public class TreeLogSpawnController : MonoBehaviour
         _logPrefab = null;
     }
 
+    // public void SpawnLog(Tree tree, GameObject logPrefab)
+    // {
+    //     _currentTree = tree;
+    //     _logPrefab = logPrefab;
+
+    //     Vector3 spawnPosition = FindFreeSpawnPosition();
+
+    //     if (spawnPosition != Vector3.zero)
+    //     {
+    //         // Calculate Y-Position before the Treelog gets spawned
+    //         float correctYPosition = ObjectHelper.CalculateCorrectYPosition(spawnPosition, logPrefab);
+
+
+    //         Vector3 finalPosition = new(spawnPosition.x, correctYPosition, spawnPosition.z);
+    //         var log = Instantiate(_logPrefab, finalPosition, Quaternion.identity);
+
+    //         Debug.Log($"[SpawnLog] Final Position: {log.transform.position}");
+
+    //         RegisterForDespawn(log);
+    //     }
+
+    //     ResetController();
+    // }
+    
     public void SpawnLog(Tree tree, GameObject logPrefab)
     {
         _currentTree = tree;
         _logPrefab = logPrefab;
-
         Vector3 spawnPosition = FindFreeSpawnPosition();
 
         if (spawnPosition != Vector3.zero)
         {
-            // NEU: Berechne die Y-Position VOR dem Spawn!
-            //float correctYPosition = CalculateCorrectYPositionBeforeSpawn(spawnPosition, logPrefab);
-            float correctYPosition = ObjectHelper.CalculateCorrectYPosition(spawnPosition, logPrefab);
-            
-            
-            // Spawn mit korrekter Position
-            Vector3 finalPosition = new(spawnPosition.x, correctYPosition, spawnPosition.z);
+            // 1. Parent spawnt auf dem Boden
+            float groundY = ObjectHelper.GetGroundYPosition(spawnPosition);
+            Vector3 finalPosition = new(spawnPosition.x, groundY, spawnPosition.z);
+
             var log = Instantiate(_logPrefab, finalPosition, Quaternion.identity);
-            
-            Debug.Log($"[SpawnLog] Final Position: {log.transform.position}");
-            
+            var treeLogComponent = log.GetComponent<TreeLog>();
+
+            // 2. Setze LOKALE Y-Positionen für die Children
+            ObjectHelper.SetChildModelLocalYPosition(treeLogComponent.TreeLogIdleStateObject.gameObject);
+            ObjectHelper.SetChildModelLocalYPosition(treeLogComponent.TreeLogBurningStateObject.gameObject);
+
             RegisterForDespawn(log);
         }
-
+        
         ResetController();
     }
 

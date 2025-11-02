@@ -13,25 +13,25 @@ public class BurnTreeLogCommand : PlayerCommandBase
         => CanExecute(player, out _);
 
 
-    public bool CanExecute(PlayerStateManager player, out string errorMessage)
+    public bool CanExecute(PlayerStateManager player, out CommandErrorCode errorCode)
     {
-        errorMessage = string.Empty;
+        errorCode = CommandErrorCode.Default;
 
         if (!player.IsInIdleState())
         {
-            errorMessage = "PlayerNotInIdleState";
+            errorCode = CommandErrorCode.PlayerNotInIdleState;
             return false;
         }
 
         if (!_treeLog.GetStateManager().IsInIdleState())
         {
-            errorMessage = "TreeLogNotInIdleState";
+            errorCode = CommandErrorCode.TreeLogNotInIdleState;
             return false;
         }
 
         if (!_treeLog.InteractionTiles.Contains(player.transform.position))
         {
-            errorMessage = "PlayerNotInInteractionTile";
+            errorCode = CommandErrorCode.PlayerNotInInteractionTile;
             return false;
         }
 
@@ -40,7 +40,7 @@ public class BurnTreeLogCommand : PlayerCommandBase
 
     public override void ExecuteInternal(PlayerStateManager player)
     {
-
+        _treeLog.GetStateManager().SwitchState(_treeLog.GetStateManager().BurningState);
         _isComplete = true;
     }
 }

@@ -51,8 +51,6 @@ public class PlayerWoodcuttingState : PlayerBaseState
             float damage = _player.PlayerSkills.GetWoodcuttingSkill().BonusDamage + bestTool.EfficiencyBonus;
             _currentTree.CurrentHealth -= damage;
 
-            Debug.Log($"Tree health: {_currentTree.CurrentHealth}");
-
             // Prüfe ob Baum jetzt gefällt ist
             if (_currentTree.CurrentHealth <= 0)
             {
@@ -67,7 +65,6 @@ public class PlayerWoodcuttingState : PlayerBaseState
         // Baum ist gefällt
         if (_treeWasChopped)
         {
-            Debug.Log("Tree chopped down!");
             _player.PlayerSkills.GetWoodcuttingSkill().IncreaseWoodcuttingXP(_currentTree.XPDropPerCut);
 
             SpawnTreeLog();

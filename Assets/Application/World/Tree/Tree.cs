@@ -134,7 +134,6 @@ public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
 
     public void RecalculateInteractionTiles()
     {
-        Debug.Log("Tree InteractionTiles recalc started");
         InteractionTiles = ObjectHelper.CollectInteractionTilesOfPosition(gameObject.transform.position);
     }
 }

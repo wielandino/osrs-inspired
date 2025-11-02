@@ -46,15 +46,15 @@ public class PlayerInputHandler : MonoBehaviour
 
         if(Physics.Raycast(ray, out var hitInfo))
         {
-            var interactable = hitInfo.collider.GetComponent<IInteractable>();
+            if (hitInfo.collider.TryGetComponent<IInteractable>(out var interactable) ||
+                hitInfo.collider.transform.parent.TryGetComponent<IInteractable>(out interactable))
+            {
+                ContextMenuPanel.Instance
+                    .ShowContextMenuForObject(interactable.GetContextMenuOptions(_playerStateManager),
+                                              mousePosition);
+            }
 
-            Debug.Log(hitInfo.transform.position);
-
-            if (interactable == null)
-                return;
-
-            ContextMenuPanel.Instance.ShowContextMenuForObject(interactable.GetContextMenuOptions(_playerStateManager),
-                                                               mousePosition);
+            return;
         }
     }
 
@@ -72,7 +72,8 @@ public class PlayerInputHandler : MonoBehaviour
                 HandleTreeInteraction(tree);
                 return;
             }
-            else if (hit.collider.TryGetComponent<TreeLog>(out var treeLog))
+            else if (hit.collider.TryGetComponent<TreeLog>(out var treeLog) || 
+                     hit.collider.transform.parent.TryGetComponent(out treeLog))
             {
                 if (treeLog.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
                     treeLog = GetTopTreeLogAtPosition(hit.transform.position);
@@ -109,7 +110,8 @@ public class PlayerInputHandler : MonoBehaviour
         }
 
         // Treelog can only collected if player and treelog is in idle
-        if (_playerStateManager.IsInIdleState() && treeLog.GetStateManager().IsInIdleState())
+        if (_playerStateManager.IsInIdleState() &&
+             treeLog.GetStateManager().IsInIdleState())
         {
             HandleTreeLogCarrying(treeLog);
             return;
@@ -158,7 +160,8 @@ public class PlayerInputHandler : MonoBehaviour
 
         foreach (RaycastHit hit in hits)
         {
-            if (hit.collider.TryGetComponent<TreeLog>(out var treeLog))
+            if (hit.collider.TryGetComponent<TreeLog>(out var treeLog) ||
+                hit.collider.transform.parent.TryGetComponent(out treeLog))
             {
                 // Nimm den höchsten
                 if (treeLog.transform.position.y > highestY)

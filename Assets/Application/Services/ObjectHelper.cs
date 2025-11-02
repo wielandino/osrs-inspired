@@ -4,6 +4,16 @@ using UnityEngine;
 public static class ObjectHelper
 {
 
+    public static float GetGroundYPosition(Vector3 spawnPosition)
+    {
+        Ray ray = new(spawnPosition + Vector3.up * 5f, Vector3.down);
+        if (Physics.Raycast(ray, out RaycastHit hit, 20f))
+        {
+            return hit.point.y;
+        }
+        return spawnPosition.y;
+    }
+
     public static List<Vector3> CollectInteractionTilesOfPosition(Vector3 position)
     {
         var tileSize = GridManager.Instance.UnityGridSize;
@@ -52,7 +62,6 @@ public static class ObjectHelper
         var tileSize = GridManager.Instance.UnityGridSize;
         var obstacleLayerMask = LayerMask.GetMask("Obstacle");
         
-        // Die 4 angrenzenden Positionen
         Vector3[] adjacentPositions = new Vector3[]
         {
             placedPosition + Vector3.right * tileSize,
@@ -60,8 +69,6 @@ public static class ObjectHelper
             placedPosition + Vector3.forward * tileSize,
             placedPosition + Vector3.back * tileSize
         };
-        
-        Debug.Log($"[UpdateAdjacentInteractionTiles] Checking adjacent positions for object at {placedPosition}");
         
         foreach (var adjacentPos in adjacentPositions)
         {
@@ -80,12 +87,52 @@ public static class ObjectHelper
                 // Prüfe ob es ein Objekt mit Interaktionstiles ist
                 if (col.TryGetComponent<IHasInteractionTiles>(out var interactableObject))
                 {
-                    Debug.Log($"[UpdateAdjacentInteractionTiles] Found {col.gameObject.name} at {adjacentPos}, triggering recalculation");
                     interactableObject.RecalculateInteractionTiles();
                 }
             }
         }
     }
+
+    public static float GetModelHeight(GameObject gameObject)
+    {
+        MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
+        if (meshFilter != null && meshFilter.sharedMesh != null)
+        {
+            Vector3 meshSize = meshFilter.sharedMesh.bounds.size;
+            Vector3 scale = gameObject.transform.localScale;
+            return meshSize.y * scale.y;
+        }
+
+        return 0f;
+    }
+
+    // public static float CalculateCorrectYPosition(Vector3 spawnPosition, GameObject prefab)
+    // {
+    //     Ray ray = new(spawnPosition + Vector3.up * 5f, Vector3.down);
+
+    //     if (Physics.Raycast(ray, out RaycastHit hit, 20f))
+    //     {
+    //         float tileTopY = hit.point.y;
+
+    //         // Hol die Höhe vom PREFAB
+    //         Renderer renderer = prefab.GetComponentInChildren<Renderer>();
+    //         if (renderer != null)
+    //         {
+    //             Mesh mesh = prefab.GetComponent<MeshFilter>().sharedMesh;
+    //             Vector3 meshSize = mesh.bounds.size;
+    //             Vector3 scale = prefab.transform.localScale;
+
+    //             float objectHeight = meshSize.y * scale.y;
+    //             float objectHalfHeight = objectHeight / 2f;
+
+    //             float pivotY = tileTopY + objectHalfHeight;
+
+    //             return pivotY;
+    //         }
+    //     }
+
+    //     return spawnPosition.y;
+    // }
 
     public static float CalculateCorrectYPosition(Vector3 spawnPosition, GameObject prefab)
     {
@@ -113,5 +160,41 @@ public static class ObjectHelper
         }
 
         return spawnPosition.y;
+    }
+
+    public static void SetChildModelLocalYPosition(GameObject childModel)
+    {
+        if (childModel == null) return;
+        
+        Renderer renderer = childModel.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            float objectHeight = renderer.bounds.size.y;
+            float objectHalfHeight = objectHeight / 2f;
+            
+            Vector3 localPos = childModel.transform.localPosition;
+            localPos.y = objectHalfHeight;
+            childModel.transform.localPosition = localPos;
+            
+        }
+    }
+
+    public static void PositionChildModelOnGround(GameObject childModel)
+    {
+        if (childModel == null) return;
+
+        MeshFilter meshFilter = childModel.GetComponent<MeshFilter>();
+        if (meshFilter != null && meshFilter.sharedMesh != null)
+        {
+            Mesh mesh = meshFilter.sharedMesh;
+            Vector3 meshSize = mesh.bounds.size;
+            Vector3 scale = childModel.transform.localScale;
+            float objectHeight = meshSize.y * scale.y;
+
+            // Lokale Y-Position = halbe Höhe (Pivot in Mitte → steht auf Y=0 des Parents)
+            Vector3 localPos = childModel.transform.localPosition;
+            localPos.y = objectHeight / 2f;
+            childModel.transform.localPosition = localPos;
+        }
     }
 }

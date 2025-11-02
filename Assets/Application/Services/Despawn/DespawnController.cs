@@ -66,7 +66,6 @@ public class DespawnController : MonoBehaviour
     {
         if (objectToDespawn == null)
         {
-            Debug.LogWarning("DespawnController: Versuch ein null Objekt zu registrieren!");
             return;
         }
 
@@ -74,13 +73,10 @@ public class DespawnController : MonoBehaviour
         DespawnItem existingItem = DespawnItems.Find(item => item.GameObjectToDespawn == objectToDespawn);
         if (existingItem != null)
         {
-            Debug.LogWarning($"DespawnController: {objectToDespawn.name} ist bereits registriert!");
             return;
         }
 
         DespawnItem newItem = new(objectToDespawn, despawnTime);
         DespawnItems.Add(newItem);
-
-        Debug.Log($"DespawnController: {objectToDespawn.name} registriert f�r Despawn in {despawnTime} Sekunden");
     }
 }

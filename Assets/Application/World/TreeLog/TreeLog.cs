@@ -1,64 +1,75 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TreeLog : MonoBehaviour, IInteractable, IHasInteractionTiles
+public class TreeLog : MonoBehaviour, IHasInteractionTiles, IInteractable
 {
-    [SerializeField]
-    private bool _isInteractable = true;
-
     private TreeLogStateManager _stateManager;
-    private Collider _collider;
     
-    private float _tileSize;
     public List<Vector3> InteractionTiles = new();
+    private float _tileSize;
     
+    public GameObject TreeLogIdleStateObject;
+    public GameObject TreeLogBurningStateObject;
+
+    public GameObject CurrentActiveStateObject;
+
+    public bool _isInteractable;
+
     private void Awake()
     {
         _stateManager = gameObject.GetComponent<TreeLogStateManager>();
-        _collider = gameObject.GetComponent<Collider>();
     }
 
-    void Start()
+    private void Start()
     {
         _tileSize = GridManager.Instance.UnityGridSize;
-
         InteractionTiles = ObjectHelper.CollectInteractionTilesOfPosition(gameObject.transform.position);
     }
 
-    public void SetInteractable(bool interactable)
+    protected void SetInteractable(bool status)
     {
-        _isInteractable = interactable;
-
-        if (_collider != null)
-        {
-            _collider.enabled = interactable;
-        }
-    }
-
-    public bool IsInteractable()
-    {
-        return _isInteractable;
-    }
-
-    public TreeLogStateManager GetStateManager()
-    {
-        return _stateManager;
+        _isInteractable = status;
     }
 
     public void OnInteract(PlayerStateManager player)
     {
-        if (!_isInteractable || _stateManager == null)
+        if (!_isInteractable || GetStateManager() == null)
             return;
 
-        _stateManager.OnInteract(player);
+        GetStateManager().OnInteractInCurrentState(player);
     }
+
+    public Collider GetColliderFromActiveStateObject()
+        => CurrentActiveStateObject.GetComponent<Collider>();
+
+    public TreeLogStateManager GetStateManager()
+        => _stateManager;
+   
+    public string GetDisplayName()
+        => "Treelog";
+
+    public void RecalculateInteractionTiles()
+    {
+        Debug.Log("Recalculation for Treelog started!");
+        InteractionTiles = ObjectHelper.CollectInteractionTilesOfPosition(gameObject.transform.position);
+    }
+
+    public void SetCorrectYPositionForAllStateModelObjects(Vector3 targetPosition)
+    {
+        ObjectHelper.SetChildModelLocalYPosition(TreeLogIdleStateObject);
+        ObjectHelper.SetChildModelLocalYPosition(TreeLogBurningStateObject);
+    }
+
+    public bool IsInteractable()
+        => _isInteractable;
 
     public List<ContextMenuOption> GetContextMenuOptions(PlayerStateManager player)
     {
         var options = new List<ContextMenuOption>();
 
         var carryTreeLogCommand = new CarryTreeLogCommand(this);
-        var moveCommand = new MoveCommand(PlayerMovementService.Instance.GetNearestInteractionTile(InteractionTiles));
+        var moveCommand =
+            new MoveCommand(PlayerMovementService.Instance.GetNearestInteractionTile(InteractionTiles));
 
         if (!player.IsInCarryingState())
         {
@@ -70,8 +81,7 @@ public class TreeLog : MonoBehaviour, IInteractable, IHasInteractionTiles
             );
         }
 
-        if (GetStateManager().IsInIdleState() &&
-            player.IsInIdleState() &&
+        if (player.IsInIdleState() &&
             player.PlayerInventory.HasValidToolForSkill(SkillType.Firemaking, player.PlayerSkills))
         {
             options.Add(
@@ -95,15 +105,6 @@ public class TreeLog : MonoBehaviour, IInteractable, IHasInteractionTiles
         return options;
     }
 
-    public string GetDisplayName()
-        => "Treelog";
-
-    public void RecalculateInteractionTiles()
-    {
-        Debug.Log("Recalculation for Treelog started!");
-        InteractionTiles = ObjectHelper.CollectInteractionTilesOfPosition(gameObject.transform.position);
-    }
-
     private void OnDrawGizmos()
     {
         if (!Application.isPlaying) return;
@@ -112,7 +113,7 @@ public class TreeLog : MonoBehaviour, IInteractable, IHasInteractionTiles
         Gizmos.color = Color.green;
         Vector3 tileSize = new(_tileSize, 0.1f, _tileSize);
 
-        foreach(var interactionTile in InteractionTiles)
+        foreach (var interactionTile in InteractionTiles)
         {
             Gizmos.DrawWireCube(interactionTile, tileSize);
         }

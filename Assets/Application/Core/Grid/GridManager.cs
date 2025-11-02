@@ -54,7 +54,7 @@ public class GridManager : MonoBehaviour
     {
         var bounds = collider.bounds;
         var guo = new GraphUpdateObject(bounds);
-        AstarPath.active.UpdateGraphs(guo);
+        AstarPath.active.UpdateGraphs(guo, 0.1f);
     }
 
     public void UpdateGraph()

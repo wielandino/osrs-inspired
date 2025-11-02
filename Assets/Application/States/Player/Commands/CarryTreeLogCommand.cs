@@ -33,6 +33,12 @@ public class CarryTreeLogCommand : PlayerCommandBase
             return false;
         }
 
+        if(!_treeLog.GetStateManager().IsInIdleState())
+        {
+            errorCode = CommandErrorCode.TreeLogNotInIdleState;
+            return false;
+        }
+
         return true;
     }
 

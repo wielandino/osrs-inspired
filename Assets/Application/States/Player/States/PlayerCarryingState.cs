@@ -26,15 +26,16 @@ public class PlayerCarryingState : PlayerBaseState
     }
 
     public TreeLog GetCarriedTreeLog()
-    {
-        return _carriedTreeLog;
-    }
+        => _carriedTreeLog;
 
     public override void EnterState(PlayerStateManager player)
     {
         Debug.Log($"Player entered Carrying state with TreeLog: {_carriedTreeLog?.name}");
         _carriedTreeLog.InteractionTiles.Clear();
         _carriedTreeLog.gameObject.layer = LayerMask.NameToLayer("GroundItem");
+        foreach (Transform treeLogStateObject in _carriedTreeLog.gameObject.transform)
+            treeLogStateObject.gameObject.layer = LayerMask.NameToLayer("GroundItem");
+            
         GridManager.Instance.UpdateGraph();
 
         _currentSubState.EnterState(this, player);
@@ -58,11 +59,17 @@ public class PlayerCarryingState : PlayerBaseState
         _carriedTreeLog.transform.SetParent(null);
         _carriedTreeLog.GetStateManager().ClearCarriedByPlayer();
 
-        targetPosition.y = ObjectHelper.CalculateCorrectYPosition(targetPosition, _carriedTreeLog.gameObject);
-        _carriedTreeLog.transform.position = targetPosition;
+        float groundY = ObjectHelper.GetGroundYPosition(targetPosition);
+        _carriedTreeLog.transform.position =
+            new(targetPosition.x, groundY, targetPosition.z);
+
+        _carriedTreeLog.SetCorrectYPositionForAllStateModelObjects(targetPosition);
 
         _carriedTreeLog.gameObject.layer = LayerMask.NameToLayer("Obstacle");
-        GridManager.Instance.UpdateGraphOfObject(_carriedTreeLog.GetComponent<Collider>());
+        foreach(Transform treeLogStateObject in _carriedTreeLog.gameObject.transform)
+            treeLogStateObject.gameObject.layer = LayerMask.NameToLayer("Obstacle");
+
+        GridManager.Instance.UpdateGraphOfObject(_carriedTreeLog.CurrentActiveStateObject.GetComponent<Collider>());
 
         player.SwitchState(player.IdleState);
     }

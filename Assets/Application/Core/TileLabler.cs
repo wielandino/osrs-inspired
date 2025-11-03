@@ -14,12 +14,12 @@ public class TileLabler : MonoBehaviour
         _gridManager = FindAnyObjectByType<GridManager>();
 
         DisplayCords();
+        
     }
 
     private void Update()
     {    
         DisplayCords();
-        transform.name = _cords.ToString();
     }
 
     private void DisplayCords()

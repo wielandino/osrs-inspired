@@ -16,7 +16,7 @@ public class Tile : MonoBehaviour, IInteractable
             )
         );
 
-        if(player.IsInCarryingState())
+        if (player.IsInCarryingState())
         {
             options.Add(
                 new(
@@ -25,7 +25,7 @@ public class Tile : MonoBehaviour, IInteractable
                 )
             );
         }
-        
+
         return options;
     }
 

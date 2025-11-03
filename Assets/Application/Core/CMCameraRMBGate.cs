@@ -1,24 +1,24 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Unity.Cinemachine; // für Cinemachine v3
+using Unity.Cinemachine;
 
 public class CMCameraRMBGate : MonoBehaviour
 {
     [Header("Input Actions")]
-    [Tooltip("Look-Action (Vector2, z. B. Mouse Delta).")]
+    [Tooltip("Look-Action (Vector2, e.g. Mouse Delta).")]
     public InputActionReference lookAction;
 
-    [Tooltip("RotateHeld-Action (Button, z. B. RMB).")]
+    [Tooltip("RotateHeld-Action (Button, e.g. RMB).")]
     public InputActionReference rotateHeld;
 
     [Tooltip("Zoom-Action (Vector2, <Mouse>/scroll).")]
     public InputActionReference zoomAction;
 
     [Header("Cinemachine Components")]
-    [Tooltip("Cinemachine Input Axis Controller auf der Kamera.")]
+    [Tooltip("Cinemachine Input Axis Controller.")]
     public CinemachineInputAxisController axisController;
 
-    [Tooltip("Cinemachine Orbit Follow auf der Kamera.")]
+    [Tooltip("Cinemachine Orbit Follow")]
     public CinemachineOrbitalFollow orbitFollow;
 
     [Header("Zoom Settings")]
@@ -26,30 +26,30 @@ public class CMCameraRMBGate : MonoBehaviour
     public float minRadius = 3f;
     public float maxRadius = 12f;
 
-    void Start()
+    private void Start()
     {
         if (axisController == null)
-            axisController = GetComponent<CinemachineInputAxisController>();
+            axisController = gameObject.GetComponent<CinemachineInputAxisController>();
 
         if (orbitFollow == null)
-            orbitFollow = GetComponent<CinemachineOrbitalFollow>();
+            orbitFollow = gameObject.GetComponent<CinemachineOrbitalFollow>();
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         if (lookAction != null) lookAction.action.Enable();
         if (rotateHeld != null) rotateHeld.action.Enable();
         if (zoomAction != null) zoomAction.action.Enable();
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         if (lookAction != null) lookAction.action.Disable();
         if (rotateHeld != null) rotateHeld.action.Disable();
         if (zoomAction != null) zoomAction.action.Disable();
     }
 
-    void Update()
+    private void Update()
     {
         // --- RMB Gate ---
         bool held = rotateHeld != null && rotateHeld.action.IsPressed();
@@ -60,7 +60,7 @@ public class CMCameraRMBGate : MonoBehaviour
         if (zoomAction != null && orbitFollow != null)
         {
             Vector2 scrollVec = zoomAction.action.ReadValue<Vector2>();
-            float scroll = scrollVec.y; // y = hoch/runter scrollen
+            float scroll = scrollVec.y;
 
             if (Mathf.Abs(scroll) > 0.01f)
             {

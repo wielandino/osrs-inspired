@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
-    [SerializeField] private List<Item> _items = new();
+    [SerializeField] 
+    private List<Item> _items = new();
 
     public Item DebugItem;
 
     public List<Item> GetItems() => _items;
 
-    [SerializeField]
     public Item SelectedItem;
 
     public bool HasValidToolForSkill(SkillType skill, PlayerSkill playerSkills)
@@ -57,25 +57,12 @@ public class PlayerInventory : MonoBehaviour
                 return;
 
             SelectedItem = itemInList;
-
-            Debug.Log($"Item {item.ItemName} is currently in selected mode");
         }
     }
 
     private void OnItemRemovedFromUI(IInventoryItemData itemData)
     {
         if (itemData is Item item)
-        {
-            bool removed = _items.Remove(item);
-            
-            if (removed)
-            {
-                Debug.Log($"Item {item.ItemName} wurde aus Inventar entfernt");
-            }
-            else
-            {
-                Debug.LogWarning($"Item {item.ItemName} war nicht im Inventar!");
-            }
-        }
+            _items.Remove(item);
     }
 }

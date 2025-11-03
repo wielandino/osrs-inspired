@@ -11,7 +11,7 @@ public class ContextMenuPanel : MonoBehaviour, IPointerExitHandler
     public GameObject GridElementPrefab;
 
 
-    void Start()
+    private void Start()
     {
         MenuPanel.SetActive(false);
         Instance = this;

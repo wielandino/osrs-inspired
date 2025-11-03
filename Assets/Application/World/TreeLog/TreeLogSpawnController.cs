@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TreeLogSpawnController : MonoBehaviour
@@ -8,7 +7,6 @@ public class TreeLogSpawnController : MonoBehaviour
     private Tree _currentTree;
     private GameObject _logPrefab;
 
-    [SerializeField]
     public LayerMask ObstacleLayerMask;
 
     [SerializeField]
@@ -38,30 +36,6 @@ public class TreeLogSpawnController : MonoBehaviour
         _currentTree = null;
         _logPrefab = null;
     }
-
-    // public void SpawnLog(Tree tree, GameObject logPrefab)
-    // {
-    //     _currentTree = tree;
-    //     _logPrefab = logPrefab;
-
-    //     Vector3 spawnPosition = FindFreeSpawnPosition();
-
-    //     if (spawnPosition != Vector3.zero)
-    //     {
-    //         // Calculate Y-Position before the Treelog gets spawned
-    //         float correctYPosition = ObjectHelper.CalculateCorrectYPosition(spawnPosition, logPrefab);
-
-
-    //         Vector3 finalPosition = new(spawnPosition.x, correctYPosition, spawnPosition.z);
-    //         var log = Instantiate(_logPrefab, finalPosition, Quaternion.identity);
-
-    //         Debug.Log($"[SpawnLog] Final Position: {log.transform.position}");
-
-    //         RegisterForDespawn(log);
-    //     }
-
-    //     ResetController();
-    // }
     
     public void SpawnLog(Tree tree, GameObject logPrefab)
     {
@@ -71,55 +45,20 @@ public class TreeLogSpawnController : MonoBehaviour
 
         if (spawnPosition != Vector3.zero)
         {
-            // 1. Parent spawnt auf dem Boden
             float groundY = ObjectHelper.GetGroundYPosition(spawnPosition);
             Vector3 finalPosition = new(spawnPosition.x, groundY, spawnPosition.z);
 
             var log = Instantiate(_logPrefab, finalPosition, Quaternion.identity);
             var treeLogComponent = log.GetComponent<TreeLog>();
 
-            // 2. Setze LOKALE Y-Positionen für die Children
-            ObjectHelper.SetChildModelLocalYPosition(treeLogComponent.TreeLogIdleStateObject.gameObject);
-            ObjectHelper.SetChildModelLocalYPosition(treeLogComponent.TreeLogBurningStateObject.gameObject);
+            ObjectHelper.SetChildModelLocalYPosition(treeLogComponent.TreeLogIdleStateObject);
+            ObjectHelper.SetChildModelLocalYPosition(treeLogComponent.TreeLogBurningStateObject);
 
             RegisterForDespawn(log);
         }
         
         ResetController();
     }
-
-    private float CalculateCorrectYPositionBeforeSpawn(Vector3 spawnPosition, GameObject prefab)
-    {
-        Ray ray = new Ray(spawnPosition + Vector3.up * 5f, Vector3.down);
-        RaycastHit hit;
-        
-        if (Physics.Raycast(ray, out hit, 20f))
-        {
-            float tileTopY = hit.point.y;
-            
-            Debug.Log($"[Debug] Raycast Hit Point: {tileTopY}");
-            Debug.Log($"[Debug] Hit Object: {hit.collider.gameObject.name}");
-            
-            // Hol die Höhe vom PREFAB
-            Renderer renderer = prefab.GetComponentInChildren<Renderer>();
-            if (renderer != null)
-            {
-                Mesh mesh = prefab.GetComponent<MeshFilter>().sharedMesh;
-                Vector3 meshSize = mesh.bounds.size;
-                Vector3 scale = prefab.transform.localScale;
-                
-                float objectHeight = meshSize.y * scale.y;
-                float objectHalfHeight = objectHeight / 2f;
-                
-                float pivotY = tileTopY + objectHalfHeight;
-                
-                return pivotY;
-            }
-        }
-        
-        return spawnPosition.y;
-    }
-
 
     private void RegisterForDespawn(GameObject log)
     {
@@ -151,15 +90,12 @@ public class TreeLogSpawnController : MonoBehaviour
         return Vector3.zero;
     }
 
-
-
-
     private bool IsTileFree(Vector3 position)
     {
         Vector3 halfExtents = new(
-            _tileSize * 0.4f,   // 40% der Tile-Breite
-            _tileSize * 0.5f,   // Höhe für 3D-Objekte  
-            _tileSize * 0.4f    // 40% der Tile-Tiefe
+            _tileSize * 0.4f,
+            _tileSize * 0.5f,  
+            _tileSize * 0.4f
         );
 
 
@@ -170,13 +106,7 @@ public class TreeLogSpawnController : MonoBehaviour
             for (int i = 0; i < overlapping.Length; i++)
             {
                 Collider col = overlapping[i];
-                //Debug.Log($"  [{i}] Name: {col.name}");
-                //Debug.Log($"      GameObject: {col.gameObject.name}");
-                //Debug.Log($"      Layer: {col.gameObject.layer} ({LayerMask.LayerToName(col.gameObject.layer)})");
-                //Debug.Log($"      Position: {col.transform.position}");
-                //Debug.Log($"      Bounds: {col.bounds}");
 
-                // WICHTIG: Prüfe ob es der Baum selbst ist
                 if (col.gameObject == _currentTree.gameObject || col.transform.IsChildOf(_currentTree.transform))
                     continue;
 
@@ -206,9 +136,9 @@ public class TreeLogSpawnController : MonoBehaviour
 
         Gizmos.color = Color.red;
         Vector3 checkSize = new(
-            _tileSize * 0.8f,   // 80% für Visualisierung
-            _tileSize * 1f,     // Höhe
-            _tileSize * 0.8f    // 80% der Tile-Tiefe
+            _tileSize * 0.8f,
+            _tileSize * 1f,
+            _tileSize * 0.8f
         );
 
         Gizmos.DrawWireCube(centerPos + Vector3.right * _tileSize, checkSize);
@@ -221,7 +151,7 @@ public class TreeLogSpawnController : MonoBehaviour
 
         Gizmos.color = Color.magenta;
         Vector3 realCheckSize = new(
-            _tileSize * 0.8f,   // Entspricht den halfExtents * 2
+            _tileSize * 0.8f,
             _tileSize * 1f,
             _tileSize * 0.8f
         );
@@ -232,7 +162,6 @@ public class TreeLogSpawnController : MonoBehaviour
         Gizmos.DrawWireCube(centerPos + Vector3.back * _tileSize, realCheckSize);
     }
 
-    // Debug-Hilfsmethode
     [ContextMenu("Debug Current Tree Colliders")]
     public void DebugTreeColliders()
     {

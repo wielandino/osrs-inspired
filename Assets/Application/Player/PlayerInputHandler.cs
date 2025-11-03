@@ -22,7 +22,7 @@ public class PlayerInputHandler : MonoBehaviour
         _playerMovementService = gameObject.GetComponent<PlayerMovementService>();
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         _playerInputActions.Enable();
 
@@ -30,7 +30,7 @@ public class PlayerInputHandler : MonoBehaviour
         _playerInputActions.Gameplay.LeftClick.performed += HandleMouseClick;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         _playerInputActions.Gameplay.ContextMenu.performed -= OnRightClick;
         _playerInputActions.Disable();
@@ -149,7 +149,6 @@ public class PlayerInputHandler : MonoBehaviour
         Vector3 rayStart = new(position.x, 50f, position.z);
         Ray ray = new(rayStart, Vector3.down);
 
-        // Alle TreeLogs treffen
         RaycastHit[] hits = Physics.RaycastAll(ray, 100f, LayerMask.GetMask("Obstacle"));
         
         TreeLog topTreeLog = null;
@@ -160,7 +159,6 @@ public class PlayerInputHandler : MonoBehaviour
             if (hit.collider.TryGetComponent<TreeLog>(out var treeLog) ||
                 hit.collider.transform.parent.TryGetComponent(out treeLog))
             {
-                // Nimm den höchsten
                 if (treeLog.transform.position.y > highestY)
                 {
                     highestY = treeLog.transform.position.y;
@@ -183,13 +181,12 @@ public class PlayerInputHandler : MonoBehaviour
         }
         else
         {
-            // Prüfe ob es nur ein Positionsproblem ist
+
             if (errorCode == CommandErrorCode.PlayerNotInInteractionTile)
             {
                 Vector3 nearestTile = _playerMovementService.GetNearestInteractionTile(tree.InteractionTiles);
                 var moveCommand = new MoveCommand(nearestTile);
 
-                // Ersetze Queue mit: Bewegen -> Holzhacken
                 _playerStateManager.ReplaceCommands(moveCommand, woodcuttingCommand);
             }
             else

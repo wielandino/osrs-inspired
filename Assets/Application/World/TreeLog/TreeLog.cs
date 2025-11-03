@@ -27,11 +27,6 @@ public class TreeLog : MonoBehaviour, IHasInteractionTiles, IInteractable
         InteractionTiles = ObjectHelper.CollectInteractionTilesOfPosition(gameObject.transform.position);
     }
 
-    protected void SetInteractable(bool status)
-    {
-        _isInteractable = status;
-    }
-
     public void OnInteract(PlayerStateManager player)
     {
         if (!_isInteractable || GetStateManager() == null)
@@ -113,8 +108,7 @@ public class TreeLog : MonoBehaviour, IHasInteractionTiles, IInteractable
     private void OnDrawGizmos()
     {
         if (!Application.isPlaying) return;
-
-        // Zeige freie Interaction Tiles in Grün
+        
         Gizmos.color = Color.green;
         Vector3 tileSize = new(_tileSize, 0.1f, _tileSize);
 

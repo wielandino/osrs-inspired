@@ -1,8 +1,6 @@
-using UnityEngine;
-
 public class WoodcuttingCommand : PlayerCommandBase
 {
-    private Tree _targetTree;
+    private readonly Tree _targetTree;
 
     public WoodcuttingCommand(Tree tree)
     {

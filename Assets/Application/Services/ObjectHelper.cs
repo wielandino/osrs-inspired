@@ -93,47 +93,6 @@ public static class ObjectHelper
         }
     }
 
-    public static float GetModelHeight(GameObject gameObject)
-    {
-        MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
-        if (meshFilter != null && meshFilter.sharedMesh != null)
-        {
-            Vector3 meshSize = meshFilter.sharedMesh.bounds.size;
-            Vector3 scale = gameObject.transform.localScale;
-            return meshSize.y * scale.y;
-        }
-
-        return 0f;
-    }
-
-    // public static float CalculateCorrectYPosition(Vector3 spawnPosition, GameObject prefab)
-    // {
-    //     Ray ray = new(spawnPosition + Vector3.up * 5f, Vector3.down);
-
-    //     if (Physics.Raycast(ray, out RaycastHit hit, 20f))
-    //     {
-    //         float tileTopY = hit.point.y;
-
-    //         // Hol die Höhe vom PREFAB
-    //         Renderer renderer = prefab.GetComponentInChildren<Renderer>();
-    //         if (renderer != null)
-    //         {
-    //             Mesh mesh = prefab.GetComponent<MeshFilter>().sharedMesh;
-    //             Vector3 meshSize = mesh.bounds.size;
-    //             Vector3 scale = prefab.transform.localScale;
-
-    //             float objectHeight = meshSize.y * scale.y;
-    //             float objectHalfHeight = objectHeight / 2f;
-
-    //             float pivotY = tileTopY + objectHalfHeight;
-
-    //             return pivotY;
-    //         }
-    //     }
-
-    //     return spawnPosition.y;
-    // }
-
     public static float CalculateCorrectYPosition(Vector3 spawnPosition, GameObject prefab)
     {
         Ray ray = new(spawnPosition + Vector3.up * 5f, Vector3.down);
@@ -142,7 +101,6 @@ public static class ObjectHelper
         {
             float tileTopY = hit.point.y;
 
-            // Hol die Höhe vom PREFAB
             Renderer renderer = prefab.GetComponentInChildren<Renderer>();
             if (renderer != null)
             {
@@ -176,25 +134,6 @@ public static class ObjectHelper
             localPos.y = objectHalfHeight;
             childModel.transform.localPosition = localPos;
             
-        }
-    }
-
-    public static void PositionChildModelOnGround(GameObject childModel)
-    {
-        if (childModel == null) return;
-
-        MeshFilter meshFilter = childModel.GetComponent<MeshFilter>();
-        if (meshFilter != null && meshFilter.sharedMesh != null)
-        {
-            Mesh mesh = meshFilter.sharedMesh;
-            Vector3 meshSize = mesh.bounds.size;
-            Vector3 scale = childModel.transform.localScale;
-            float objectHeight = meshSize.y * scale.y;
-
-            // Lokale Y-Position = halbe Höhe (Pivot in Mitte → steht auf Y=0 des Parents)
-            Vector3 localPos = childModel.transform.localPosition;
-            localPos.y = objectHeight / 2f;
-            childModel.transform.localPosition = localPos;
         }
     }
 }

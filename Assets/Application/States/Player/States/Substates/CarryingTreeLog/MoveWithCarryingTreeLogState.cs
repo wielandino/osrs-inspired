@@ -28,7 +28,6 @@ public class MoveWithCarryingTreeLogState : PlayerCarryingBaseSubState
 
     public override void UpdateState(PlayerCarryingState parentState, PlayerStateManager player)
     {
-        //??
     }
 
     public override void ExitState(PlayerCarryingState parentState, PlayerStateManager player)

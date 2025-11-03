@@ -1,11 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
 {
-    private TreeController _treeController;
-
     [Header("Tree Stats")]
     public float MaxHealth;
 
@@ -15,11 +12,9 @@ public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
     [SerializeField]
     private int _requiredLevelToCut = 1;
 
-    [SerializeField]
     public float XPDropPerCut = 5f;
 
     [Header("Other")]
-    [SerializeField]
     public float RespawnTime = 15f;
 
     [Header("Tree Models")]
@@ -36,7 +31,6 @@ public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
 
     private int _tileSize;
 
-    [SerializeField]
     public LayerMask ObstacleLayerMask;
 
     public Vector3 TreePosition { get; private set; }
@@ -51,7 +45,6 @@ public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
         ObstacleLayerMask = LayerMask.GetMask("Obstacle");
 
         _tileSize = GridManager.Instance.UnityGridSize;
-        _treeController = TreeController.Instance;
         TreePosition = transform.position;
         CurrentHealth = MaxHealth;
 
@@ -79,10 +72,8 @@ public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
     public void SwitchToIdleModel()
     {
         if (_defaultTreeModel != null)
-        {
             _defaultTreeModel.SetActive(true);
-            //gameObject.GetComponent<BoxCollider>().enabled = true;
-        }
+        
 
         if (_treeTrunkModel != null)
             _treeTrunkModel.SetActive(false);
@@ -92,10 +83,8 @@ public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
     public void SwitchToDestroyedModel()
     {
         if (_defaultTreeModel != null)
-        {
             _defaultTreeModel.SetActive(false);
-            //gameObject.GetComponent<BoxCollider>().enabled = false;
-        }
+        
 
         if (_treeTrunkModel != null)
             _treeTrunkModel.SetActive(true);
@@ -103,7 +92,6 @@ public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
 
     public List<ContextMenuOption> GetContextMenuOptions(PlayerStateManager player)
     {
-
         var options = new List<ContextMenuOption>();
 
         if(_treeStateManager.IsInIdleState())

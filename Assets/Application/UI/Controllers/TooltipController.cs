@@ -12,18 +12,17 @@ public class TooltipController : MonoBehaviour
     public Image tooltipBackground;
 
     [Header("Settings")]
-    public Vector2 offset = new Vector2(10f, -10f);
+    public Vector2 offset = new(10f, -10f);
     public float fadeSpeed = 5f;
 
     [Header("Auto-Resize Settings")]
-    public Vector2 padding = new Vector2(20f, 10f); // Padding um den Text
-    public Vector2 minSize = new Vector2(100f, 40f); // Mindestgr��e
-    public Vector2 maxSize = new Vector2(400f, 200f); // Maximalgr��e
+    public Vector2 padding = new(20f, 10f);
+    public Vector2 minSize = new(100f, 40f);
+    public Vector2 maxSize = new(400f, 200f);
 
-    private Camera playerCamera;
     private CanvasGroup canvasGroup;
 
-    void Awake()
+    private void Awake()
     {
         // Singleton Pattern
         if (Instance == null)
@@ -36,15 +35,14 @@ public class TooltipController : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
         if (ContextMenuPanel.Instance.MenuPanel.activeSelf)
             HideTooltip();
     }
 
-    void Start()
+    private void Start()
     {
-        playerCamera = Camera.main;
         canvasGroup = tooltipPanel.GetComponent<CanvasGroup>();
 
         if (canvasGroup == null)
@@ -58,13 +56,11 @@ public class TooltipController : MonoBehaviour
         tooltipText.text = text;
         tooltipText.color = color;
 
-        // Tooltip-Gr��e automatisch anpassen
         ResizeTooltip();
 
         tooltipPanel.SetActive(true);
         UpdateTooltipPosition();
 
-        // Smooth Fade In
         StopAllCoroutines();
         StartCoroutine(FadeTooltip(1f));
     }
@@ -79,17 +75,13 @@ public class TooltipController : MonoBehaviour
     {
         if (!tooltipPanel.activeInHierarchy) return;
 
-        // Mausposition in Screen Space
         Vector2 mousePos = Input.mousePosition;
 
-        // Tooltip als RectTransform behandeln f�r UI-Positionierung
         RectTransform tooltipRect = tooltipPanel.GetComponent<RectTransform>();
 
-        // Position mit Offset setzen
         Vector2 tooltipPos = mousePos + offset;
         tooltipRect.position = tooltipPos;
 
-        // Stelle sicher, dass Tooltip im Bildschirm bleibt
         ClampTooltipToScreen();
     }
 
@@ -97,19 +89,15 @@ public class TooltipController : MonoBehaviour
     {
         RectTransform rectTransform = tooltipPanel.GetComponent<RectTransform>();
 
-        // Aktuelle Position holen
         Vector2 pos = rectTransform.position;
 
-        // Tooltip-Gr��e holen
         Vector2 tooltipSize = rectTransform.sizeDelta;
 
-        // Bildschirmgrenzen berechnen
         float minX = tooltipSize.x * 0.5f;
         float maxX = Screen.width - (tooltipSize.x * 0.5f);
         float minY = tooltipSize.y * 0.5f;
         float maxY = Screen.height - (tooltipSize.y * 0.5f);
 
-        // Position auf Bildschirmgrenzen begrenzen
         pos.x = Mathf.Clamp(pos.x, minX, maxX);
         pos.y = Mathf.Clamp(pos.y, minY, maxY);
 
@@ -137,33 +125,22 @@ public class TooltipController : MonoBehaviour
     private void ResizeTooltip()
     {
         RectTransform tooltipRect = tooltipPanel.GetComponent<RectTransform>();
-        RectTransform textRect = tooltipText.GetComponent<RectTransform>();
 
-        // TextMeshPro - viel einfacher!
-        // Erst den Text setzen, dann Gr��e berechnen
-        tooltipText.text = tooltipText.text; // Stelle sicher, dass Text gesetzt ist
+        tooltipText.text = tooltipText.text;
 
-        // Force Update f�r sofortige Berechnung
         tooltipText.ForceMeshUpdate();
 
-        // Textgr��e direkt von TextMeshPro holen
         Vector2 textSize = tooltipText.GetPreferredValues();
 
-        // Bei zu breitem Text: Nutze die maximale Breite und lass TextMeshPro wrappen
         if (textSize.x > (maxSize.x - padding.x))
-        {
             textSize = tooltipText.GetPreferredValues(maxSize.x - padding.x, 0);
-        }
+        
 
-        // Tooltip-Gr��e basierend auf Text + Padding
         Vector2 tooltipSize = textSize + padding;
 
-        // Gr��e begrenzen
         tooltipSize.x = Mathf.Clamp(tooltipSize.x, minSize.x, maxSize.x);
         tooltipSize.y = Mathf.Clamp(tooltipSize.y, minSize.y, maxSize.y);
 
         tooltipRect.sizeDelta = tooltipSize;
     }
-
-    // Die alte CalculateTextSize Methode wird nicht mehr ben�tigt f�r TextMeshPro
 }

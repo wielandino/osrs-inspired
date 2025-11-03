@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 public class BurnTreeLogCommand : PlayerCommandBase
 {
     private readonly TreeLog _treeLog;

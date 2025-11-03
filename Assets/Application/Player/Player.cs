@@ -5,24 +5,23 @@ public class Player : MonoBehaviour
     public static Player Instance;
 
 
-    void OnEnable()
+    private void OnEnable()
     {
         Instance = this;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         Instance = null;
     }
 
-    void Start()
+    private void Start()
     {
         Instance = this;
     }
 
     public SimpleGroundSnap GetSimpleGroundSnap()
-    {
-        return gameObject.GetComponent<SimpleGroundSnap>();
-    }
+        => gameObject.GetComponent<SimpleGroundSnap>();
+    
 
 }

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Pathfinding;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMoveState : PlayerBaseState
@@ -11,7 +7,6 @@ public class PlayerMoveState : PlayerBaseState
 
     public void SetTargetPosition(Vector3 position)
     {
-        // Einfach die Zielposition setzen, wird beim Enter verwendet
         _targetPosition = position;
     }
 
@@ -37,15 +32,10 @@ public class PlayerMoveState : PlayerBaseState
 
     public override void UpdateState(PlayerStateManager player)
     {
-        // Nur Input handling, Bewegung läuft in MovementController
-        //player.InputHandler.HandleMouseClick();
     }
 
     public override void ExitState(PlayerStateManager player)
     {
-        Debug.Log("Exit PlayerMoveState");
-
-        // Events abmelden
         if (player.PlayerMovementController != null)
         {
             player.PlayerMovementController.OnMovementCompleted -= OnMovementCompleted;

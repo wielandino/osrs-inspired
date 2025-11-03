@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Pathfinding;
 using UnityEngine;
 
@@ -11,14 +10,14 @@ public class PlayerMovementService : MonoBehaviour
     public Seeker Seeker { get; private set; }
     public List<Vector3> PathPoints { get; private set; } = new();
 
-    void Awake()
+    private void Awake()
     {
         Instance = this;
     }
 
     private void Start()
     {
-        Seeker = GetComponent<Seeker>();
+        Seeker = gameObject.GetComponent<Seeker>();
     }
 
     public Vector3 GetNearestInteractionTile(List<Vector3> interactionTiles)

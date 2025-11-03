@@ -45,11 +45,9 @@ public class PlayerCarryingState : PlayerBaseState
 
     public override void UpdateState(PlayerStateManager player)
     {
-        // Prüfe ob TreeLog noch existiert
         if (_carriedTreeLog == null)
-        {
             player.SwitchState(player.IdleState);
-        }
+        
 
         _currentSubState.UpdateState(this, player);
     }
@@ -76,7 +74,6 @@ public class PlayerCarryingState : PlayerBaseState
 
     public override void ExitState(PlayerStateManager player)
     {
-        // Cleanup bleibt gleich
         if (_carriedTreeLog != null)
         {
             var treeLogStateManager = _carriedTreeLog.GetStateManager();

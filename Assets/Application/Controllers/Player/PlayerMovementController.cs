@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Pathfinding;
 using UnityEngine;
@@ -6,7 +5,7 @@ using UnityEngine;
 public class PlayerMovementController : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public float speedModifier = 1f; // Für verschiedene States (Carrying = 0.7f)
+    public float speedModifier = 1f;
 
     private PlayerStateManager _player;
     private PlayerMovementService _movementService;
@@ -18,8 +17,6 @@ public class PlayerMovementController : MonoBehaviour
     private Vector3 _targetPosition = Vector3.zero;
     private bool _isPathCallbackRegistered = false;
     private bool _isMoving = false;
-
-    // Events für State Communication
     public event System.Action OnMovementStarted;
     public event System.Action OnMovementCompleted;
     public event System.Action OnMovementCancelled;
@@ -28,9 +25,9 @@ public class PlayerMovementController : MonoBehaviour
 
     private void Awake()
     {
-        _player = GetComponent<PlayerStateManager>();
-        _movementService = GetComponent<PlayerMovementService>();
-        _seeker = GetComponent<Seeker>();
+        _player = gameObject.GetComponent<PlayerStateManager>();
+        _movementService = gameObject.GetComponent<PlayerMovementService>();
+        _seeker = gameObject.GetComponent<Seeker>();
     }
 
     private void Start()
@@ -45,9 +42,7 @@ public class PlayerMovementController : MonoBehaviour
     private void Update()
     {
         if (_isMoving)
-        {
             HandleTileMovement();
-        }
     }
 
     public void StartMovement(Vector3 targetPosition)
@@ -98,7 +93,6 @@ public class PlayerMovementController : MonoBehaviour
         
         if (direction != Vector3.zero)
         {
-            // Blickrichtung setzen
             float targetYRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, targetYRotation, 0);
             
@@ -109,11 +103,8 @@ public class PlayerMovementController : MonoBehaviour
             {
                 Vector3 localNormal = transform.InverseTransformDirection(worldNormal);
                 
-                // WICHTIG: Vorzeichen invertiert!
-                float xRotation = -Mathf.Asin(-localNormal.z) * Mathf.Rad2Deg;  // Doppelt negativ!
-                float zRotation = -Mathf.Asin(localNormal.x) * Mathf.Rad2Deg;   // Einfach negativ!
-                
-                //Debug.Log($"Y={targetYRotation:F0}°, LocalNormal=({localNormal.x:F3},{localNormal.z:F3}), Rot=(X:{xRotation:F1}°, Z:{zRotation:F1}°)");
+                float xRotation = -Mathf.Asin(-localNormal.z) * Mathf.Rad2Deg;
+                float zRotation = -Mathf.Asin(localNormal.x) * Mathf.Rad2Deg; 
                 
                 groundSnap.meshTransform.localRotation = Quaternion.Euler(xRotation, 0, zRotation);
             }
@@ -124,20 +115,15 @@ public class PlayerMovementController : MonoBehaviour
 
     private Vector3 SnapToGrid(Vector3 position)
     {
-        // Hol dir das SimpleGroundSnap Script
-        var groundSnap = GetComponent<SimpleGroundSnap>();
+        var groundSnap = gameObject.GetComponent<SimpleGroundSnap>();
 
-        // Berechne die Grid-Position (X und Z gerundet)
         Vector3 gridPosition = new Vector3(
             Mathf.Round(position.x),
-            0f, // Wird gleich ersetzt
+            0f,
             Mathf.Round(position.z)
         );
 
-        // Hol dir die echte Bodenhöhe an dieser Grid-Position
         float groundHeight = groundSnap.GetGroundHeight(gridPosition);
-
-        // Setze die richtige Höhe
         gridPosition.y = groundHeight;
 
         return gridPosition;
@@ -145,13 +131,11 @@ public class PlayerMovementController : MonoBehaviour
 
     private void HandleTileMovement()
     {
-        // Speed Modifier berücksichtigen (für Carrying State etc.)
         float adjustedTimePerTile = _movementService.TimePerTile / speedModifier;
 
         _moveProgress += Time.deltaTime / adjustedTimePerTile;
         _moveProgress = Mathf.Clamp01(_moveProgress);
 
-        // Lineare Bewegung zwischen Tile-Mittelpunkten
         _player.transform.position = Vector3.Lerp(_startPos, _targetPosition, _moveProgress);
 
         if (_moveProgress >= 1f)
@@ -163,7 +147,6 @@ public class PlayerMovementController : MonoBehaviour
             }
             else
             {
-                // Bewegung beendet
                 _player.transform.position = SnapToGrid(_targetPosition);
                 _isMoving = false;
                 ResetMovementState();
@@ -174,7 +157,6 @@ public class PlayerMovementController : MonoBehaviour
 
     private void ResetMovementState()
     {
-        // Cleanup aber Callback nicht entfernen (wird nur einmal registriert)
         _pathPoints.Clear();
         _currentPathIndex = 0;
         _moveProgress = 0f;
@@ -183,8 +165,7 @@ public class PlayerMovementController : MonoBehaviour
     private void OnDestroy()
     {
         if (_isPathCallbackRegistered)
-        {
             _seeker.pathCallback -= OnPathComplete;
-        }
+        
     }
 }

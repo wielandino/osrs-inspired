@@ -13,7 +13,5 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void UpdateState(PlayerStateManager player)
     {
-
-        //player.InputHandler.HandleMouseClick();
     }
 }

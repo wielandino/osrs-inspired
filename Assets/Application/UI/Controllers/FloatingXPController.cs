@@ -4,11 +4,11 @@ public class FloatingXPController : MonoBehaviour
 {
     [Header("Prefab References")]
     [SerializeField] private GameObject _floatingXPPrefab;
-    [SerializeField] private Canvas _uiCanvas; // Das UI Canvas
+    [SerializeField] private Canvas _uiCanvas;
 
     [Header("XP Display Settings")]
     [SerializeField] private Color _woodcuttingXPColor = Color.green;
-    [SerializeField] private Vector3 _spawnOffset = Vector3.up * 2f; // Offset �ber dem Spieler
+    [SerializeField] private Vector3 _spawnOffset = Vector3.up * 2f;
 
     public static FloatingXPController Instance { get; private set; }
 
@@ -16,7 +16,6 @@ public class FloatingXPController : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton Pattern
         if (Instance == null)
         {
             Instance = this;
@@ -34,12 +33,12 @@ public class FloatingXPController : MonoBehaviour
 
     public void ShowXPGain(SkillType skillType, float xpAmount, Vector3 worldPosition)
     {
-        if (_floatingXPPrefab == null || _uiCanvas == null || _mainCamera == null)
-        {
+        if (_floatingXPPrefab == null ||
+            _uiCanvas == null ||
+            _mainCamera == null)
             return;
-        }
+        
 
-        // Erstelle schwebenden Text
         GameObject floatingTextObj = Instantiate(_floatingXPPrefab, _uiCanvas.transform);
         FloatingXPText floatingText = floatingTextObj.GetComponent<FloatingXPText>();
 
@@ -49,17 +48,12 @@ public class FloatingXPController : MonoBehaviour
             return;
         }
 
-        // Bestimme Farbe basierend auf Skill-Typ
         Color textColor = GetColorForSkill(skillType);
-
-        // Formatiere Text
         string displayText = $"+{xpAmount:F1} XP";
 
-        // WICHTIG: Konvertiere Weltposition zu Screen Position
         Vector3 spawnWorldPosition = worldPosition + _spawnOffset;
         Vector3 screenPosition = ConvertWorldToUIPosition(spawnWorldPosition);
 
-        // Initialisiere und starte Animation
         floatingText.Initialize(displayText, textColor, screenPosition);
     }
 
@@ -70,32 +64,25 @@ public class FloatingXPController : MonoBehaviour
 
     private Vector3 ConvertWorldToUIPosition(Vector3 worldPosition)
     {
-        // Screen Space - Camera Canvas
         if (_uiCanvas.renderMode == RenderMode.ScreenSpaceCamera)
         {
-            // Konvertiere zu Screen Point
             Vector3 screenPoint = _mainCamera.WorldToScreenPoint(worldPosition);
 
-            // F�r Screen Space Camera m�ssen wir die Position anpassen
             RectTransform canvasRect = _uiCanvas.GetComponent<RectTransform>();
-            Vector2 localPoint;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 canvasRect,
                 screenPoint,
                 _uiCanvas.worldCamera,
-                out localPoint
+                out Vector2 localPoint
             );
 
-            // Konvertiere zur�ck zu World Position f�r das Canvas
             return _uiCanvas.transform.TransformPoint(localPoint);
         }
-        // Screen Space - Overlay Canvas
         else if (_uiCanvas.renderMode == RenderMode.ScreenSpaceOverlay)
         {
             return _mainCamera.WorldToScreenPoint(worldPosition);
         }
 
-        // Fallback
         return _mainCamera.WorldToScreenPoint(worldPosition);
     }
 

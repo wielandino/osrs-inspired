@@ -1,6 +1,6 @@
 using System;
 
-[System.Serializable]
+[Serializable]
 public class InventoryItemContextMenuOptions
 {
     public string Label;

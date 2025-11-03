@@ -22,7 +22,6 @@ public class MoveCommand : PlayerCommandBase
 
     public override bool IsComplete(PlayerStateManager player)
     {
-        // Movement ist fertig wenn wir im Idle State sind und die Position erreicht haben
         if (!player.IsInCarryingState())
         {
             if (player.IsInIdleState())

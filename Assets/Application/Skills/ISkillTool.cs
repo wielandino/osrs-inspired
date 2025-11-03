@@ -1,7 +1,7 @@
 public interface ISkillTool
 {
-    SkillType RequiredSkill { get; }
-    int RequiredLevel { get; }
-    float EfficiencyBonus { get; } // Multiplier f�r XP oder Geschwindigkeit
-    bool CanUseForSkill(SkillType skill, int playerLevel);
+    public SkillType RequiredSkill { get; }
+    public int RequiredLevel { get; }
+    public float EfficiencyBonus { get; }
+    public bool CanUseForSkill(SkillType skill, int playerLevel);
 }

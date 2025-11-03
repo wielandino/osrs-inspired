@@ -28,28 +28,6 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public Vector2Int WorldToGrid(Vector3 worldPosition)
-    {
-        return new Vector2Int(
-            Mathf.FloorToInt(worldPosition.x / _unityGridSize),
-            Mathf.FloorToInt(worldPosition.z / _unityGridSize) // Z-Achse f�r 3D
-        );
-    }
-
-    public Vector3 GridToWorld(Vector2Int gridPosition)
-    {
-        return new Vector3(
-            (gridPosition.x * _unityGridSize),
-            0,
-            (gridPosition.y * _unityGridSize)
-        );
-    }
-
-    public GridNode GetNode(Vector2Int coords)
-    {
-        return _grid.TryGetValue(coords, out GridNode node) ? node : null;
-    }
-
     public void UpdateGraphOfObject(Collider collider)
     {
         var bounds = collider.bounds;

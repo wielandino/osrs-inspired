@@ -7,10 +7,10 @@ public class TreeLogBurningState : TreeLogBaseState
 
     public override void EnterState(TreeLogStateManager treeLog)
     {
-        treeLog.AttachedTreeLog.TreeLogIdleStateObject.gameObject.SetActive(false);
-        treeLog.AttachedTreeLog.TreeLogBurningStateObject.gameObject.SetActive(true);
+        Debug.Log($"TreeLog {treeLog.name} entered TreeLogBurning State");
 
-        Debug.Log($"TreeLog {treeLog.name} is now burning!");
+        treeLog.AttachedTreeLog.TreeLogIdleStateObject.SetActive(false);
+        treeLog.AttachedTreeLog.TreeLogBurningStateObject.SetActive(true);
         
         _burnTime = MAX_BURN_TIME;
     }

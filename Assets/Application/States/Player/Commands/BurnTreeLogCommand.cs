@@ -41,6 +41,9 @@ public class BurnTreeLogCommand : PlayerCommandBase
     public override void ExecuteInternal(PlayerStateManager player)
     {
         _treeLog.GetStateManager().SwitchState(_treeLog.GetStateManager().BurningState);
+
+        player.PlayerSkills.GetFiremakingSkill().IncreaseFiremakingXP(_treeLog.XPDropPerFiremaking);
+
         _isComplete = true;
     }
 }

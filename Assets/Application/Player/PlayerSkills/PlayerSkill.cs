@@ -28,4 +28,7 @@ public class PlayerSkill : MonoBehaviour
 
     public WoodcuttingSkill GetWoodcuttingSkill()
         => gameObject.GetComponent<WoodcuttingSkill>();
+
+    public FiremakingSkill GetFiremakingSkill()
+        => gameObject.GetComponent<FiremakingSkill>();
 }

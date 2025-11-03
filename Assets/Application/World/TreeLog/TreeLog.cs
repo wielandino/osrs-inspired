@@ -14,6 +14,7 @@ public class TreeLog : MonoBehaviour, IHasInteractionTiles, IInteractable
     public GameObject CurrentActiveStateObject;
 
     public bool _isInteractable;
+    public float XPDropPerFiremaking = 5f;
 
     private void Awake()
     {
@@ -82,12 +83,16 @@ public class TreeLog : MonoBehaviour, IHasInteractionTiles, IInteractable
         }
 
         if (player.IsInIdleState() &&
-            player.PlayerInventory.HasValidToolForSkill(SkillType.Firemaking, player.PlayerSkills))
+            player.PlayerInventory.HasValidToolForSkill(SkillType.Firemaking, player.PlayerSkills) &&
+            !GetStateManager().IsInBurningState())
         {
+
+            var burnTreeLogCommand = new BurnTreeLogCommand(this);
+
             options.Add(
                 new(
                     "Burn",
-                    () => Debug.Log("Firemaking Command execute")
+                    () => player.ReplaceCommands(moveCommand, burnTreeLogCommand)
                 )
             );
         }

@@ -100,10 +100,12 @@ public class PlayerInputHandler : MonoBehaviour
 
             if (selectedItem?.Callback != null)
             {
+                Vector3 nearestTile = _playerMovementService.GetNearestInteractionTile(treeLog.InteractionTiles);
                 var command = selectedItem.Callback.ExecuteCallback(treeLog.gameObject, _playerStateManager);
+                var moveCommand = new MoveCommand(nearestTile);
 
                 if (command != null)
-                    _playerStateManager.ReplaceCommands(command);
+                    _playerStateManager.ReplaceCommands(moveCommand, command);
 
                 return; 
             }
@@ -116,11 +118,6 @@ public class PlayerInputHandler : MonoBehaviour
             HandleTreeLogCarrying(treeLog);
             return;
         }
-    }
-
-    private void HandleTreeLogBurningInteraction(TreeLog treelog)
-    {
-        Debug.Log("HandleTreeLogBurningInteraction");
     }
 
     private void HandleTreeLogCarrying(TreeLog treeLog)

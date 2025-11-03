@@ -8,6 +8,11 @@ public class TooltipTrigger : MonoBehaviour
     public string tooltipText = "Beispiel Tooltip";
     public Color tooltipColor = Color.yellow;
 
+    void OnDisable()
+    {
+        TooltipController.Instance.HideTooltip();
+    }
+
     void OnMouseEnter()
     {
         TooltipController.Instance.ShowTooltip(tooltipText, tooltipColor);

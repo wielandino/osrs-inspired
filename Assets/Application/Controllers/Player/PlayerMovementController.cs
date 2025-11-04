@@ -96,7 +96,7 @@ public class PlayerMovementController : MonoBehaviour
             float targetYRotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, targetYRotation, 0);
             
-            var groundSnap = GetComponent<SimpleGroundSnap>();
+            var groundSnap = gameObject.GetComponent<SimpleGroundSnap>();
             Vector3 worldNormal = groundSnap.GetGroundNormal(_targetPosition);
             
             if (groundSnap.meshTransform != null)
@@ -117,7 +117,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         var groundSnap = gameObject.GetComponent<SimpleGroundSnap>();
 
-        Vector3 gridPosition = new Vector3(
+        Vector3 gridPosition = new(
             Mathf.Round(position.x),
             0f,
             Mathf.Round(position.z)

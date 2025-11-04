@@ -35,6 +35,11 @@ public class TooltipController : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        Instance = null;
+    }
+
     private void Update()
     {
         if (ContextMenuPanel.Instance.MenuPanel.activeSelf)

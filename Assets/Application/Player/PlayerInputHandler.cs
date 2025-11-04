@@ -47,7 +47,7 @@ public class PlayerInputHandler : MonoBehaviour
         if(Physics.Raycast(ray, out var hitInfo))
         {
             if (hitInfo.collider.TryGetComponent<IInteractable>(out var interactable) ||
-                hitInfo.collider.transform.parent.TryGetComponent<IInteractable>(out interactable))
+                hitInfo.collider.transform.parent.TryGetComponent(out interactable))
             {
                 ContextMenuPanel.Instance
                     .ShowContextMenuForObject(interactable.GetContextMenuOptions(_playerStateManager),
@@ -82,6 +82,9 @@ public class PlayerInputHandler : MonoBehaviour
             }
             else if (hit.collider.TryGetComponent<Tile>(out var tile))
             {
+                if (tile.GetTileType() != Tile.TileType.WalkableTile)
+                    return;
+                    
                 var moveCommand = new MoveCommand(hit.point);
                 _playerStateManager.ReplaceCommands(moveCommand);
             }

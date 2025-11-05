@@ -8,8 +8,8 @@ public class PlayerSkill : MonoBehaviour
     protected void UpdateUI(SkillType skillType, float currentXP, float requiredXPForLevelUp)
     {
         _xpBarUI.DisplayXPBar(skillType,
-                                  currentXP.ToString(),
-                                  requiredXPForLevelUp.ToString());
+                              currentXP.ToString(),
+                              requiredXPForLevelUp.ToString());
     }
 
     protected void ShowFloatingXP(SkillType skillType, float xpAmount)
@@ -31,4 +31,7 @@ public class PlayerSkill : MonoBehaviour
 
     public FiremakingSkill GetFiremakingSkill()
         => gameObject.GetComponent<FiremakingSkill>();
+
+    public FishingSkill GetFishingSkill()
+        => gameObject.GetComponent<FishingSkill>();
 }

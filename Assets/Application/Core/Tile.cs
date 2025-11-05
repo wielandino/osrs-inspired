@@ -40,7 +40,4 @@ public class Tile : MonoBehaviour, IInteractable
 
         return options;
     }
-
-    public string GetDisplayName()
-        => "Tile";
 }

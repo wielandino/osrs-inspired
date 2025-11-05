@@ -106,19 +106,9 @@ public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
                 )
             );
         }
-
-        options.Add(
-            new(
-                "Examine",
-                () => Debug.Log($"Das ist ein {GetDisplayName()}")
-            )
-        );
         
         return options;
     }
-
-    public string GetDisplayName()
-        => "Tree";
 
     public void RecalculateInteractionTiles()
     {

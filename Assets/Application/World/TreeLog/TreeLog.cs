@@ -40,13 +40,9 @@ public class TreeLog : MonoBehaviour, IHasInteractionTiles, IInteractable
 
     public TreeLogStateManager GetStateManager()
         => _stateManager;
-   
-    public string GetDisplayName()
-        => "Treelog";
 
     public void RecalculateInteractionTiles()
     {
-        Debug.Log("Recalculation for Treelog started!");
         InteractionTiles = ObjectHelper.CollectInteractionTilesOfPosition(gameObject.transform.position);
     }
 

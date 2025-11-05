@@ -2,5 +2,6 @@ public enum SkillType
 {
     Woodcutting,
     Crafting,
-    Firemaking
+    Firemaking,
+    Fishing
 }

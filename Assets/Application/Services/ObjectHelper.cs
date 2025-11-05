@@ -23,10 +23,10 @@ public static class ObjectHelper
 
         Vector3[] potentialPositions = new Vector3[]
         {
-            position + Vector3.right * tileSize,   // Rechts (X+)
-            position + Vector3.left * tileSize,    // Links (X-)
-            position + Vector3.forward * tileSize, // Vorne (Z+)
-            position + Vector3.back * tileSize     // Hinten (Z-)
+            position + Vector3.right * tileSize, 
+            position + Vector3.left * tileSize,
+            position + Vector3.forward * tileSize,
+            position + Vector3.back * tileSize
         };
 
         for (int i = 0; i < potentialPositions.Length; i++)
@@ -124,8 +124,7 @@ public static class ObjectHelper
     {
         if (childModel == null) return;
         
-        Renderer renderer = childModel.GetComponent<Renderer>();
-        if (renderer != null)
+        if (childModel.TryGetComponent<Renderer>(out var renderer))
         {
             float objectHeight = renderer.bounds.size.y;
             float objectHalfHeight = objectHeight / 2f;

@@ -26,10 +26,18 @@ public class FishingCommand : PlayerCommandBase
             return false;
         }
 
-        if(!player.PlayerInventory.HasValidToolForSkill(SkillType.Fishing, player.PlayerSkills) ||
+        if (!player.PlayerInventory.HasValidToolForSkill(SkillType.Fishing, player.PlayerSkills) ||
             player.PlayerSkills.GetFishingSkill().CurrentLevel < _fishingSpot.GetRequiredLevelToInteract())
         {
             errorCode = CommandErrorCode.PlayerSkillRequirementNotMet;
+            return false;
+        }
+        
+        if (_fishingSpot.GetFishingCapacity() <= 0 ||
+            _fishingSpot.GetListOfPossibleFishesToCatch() == null ||
+            _fishingSpot.GetListOfPossibleFishesToCatch().Count <= 0)
+        {
+            errorCode = CommandErrorCode.NoTarget;
             return false;
         }
 

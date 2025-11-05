@@ -11,8 +11,17 @@ public class FishingSpot : MonoBehaviour, IHasInteractionTiles, IInteractable
     [SerializeField]
     private float _xpPerFishing = 5;
 
+    [SerializeField]
+    private float _fishingCapacity = 40;
+
+    [SerializeField]
+    private List<Fish> _possibleFishesToCatch;
+
     private void Start()
     {
+        if (_possibleFishesToCatch == null || _possibleFishesToCatch.Count == 0)
+            Debug.LogError($"Fishing Spot \"{transform.name}\" contains no fishes to catch!");
+        
         _interactionTiles = ObjectHelper.CollectInteractionTilesOfPosition(transform.position);
     }
 
@@ -24,6 +33,12 @@ public class FishingSpot : MonoBehaviour, IHasInteractionTiles, IInteractable
 
     public float GetXPPerFishing()
         => _xpPerFishing;
+
+    public float GetFishingCapacity()
+        => _fishingCapacity;
+
+    public List<Fish> GetListOfPossibleFishesToCatch()
+        => _possibleFishesToCatch;
 
     public void RecalculateInteractionTiles()
     {

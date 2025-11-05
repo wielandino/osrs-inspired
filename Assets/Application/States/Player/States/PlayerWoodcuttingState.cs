@@ -18,7 +18,6 @@ public class PlayerWoodcuttingState : PlayerBaseState
         _player = player;
         _treeWasChopped = false;
 
-        // Starte Coroutine statt while-Schleife
         _woodcuttingCoroutine = _player.StartCoroutine(CuttingWoodCoroutine());
     }
 

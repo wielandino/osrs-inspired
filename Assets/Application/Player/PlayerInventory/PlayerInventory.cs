@@ -7,8 +7,6 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] 
     private List<Item> _items = new();
 
-    public Item DebugItem;
-
     public List<Item> GetItems() => _items;
 
     public Item SelectedItem;
@@ -32,7 +30,14 @@ public class PlayerInventory : MonoBehaviour
     {
         //DEBUG!
         if (Input.GetKeyDown(KeyCode.Q))
-            AddItem(DebugItem);
+            AddAllItemsToUI();
+    }
+
+    // Only for debug!
+    private void AddAllItemsToUI()
+    {
+        foreach (var item in _items)
+            AddItem(item);
     }
 
     public void AddItem(Item item)
@@ -43,9 +48,8 @@ public class PlayerInventory : MonoBehaviour
     }
 
     public bool RemoveItem(Item item)
-    {
-        return _items.Remove(item);
-    }
+        => _items.Remove(item);
+    
     
     private void OnItemSelectedFromUI(IInventoryItemData itemData)
     {

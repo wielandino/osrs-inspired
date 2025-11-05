@@ -4108,6 +4108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26d0ac0f8e69b28ec8c45c4e65af1f1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishingInteraction
+  _requiredLevelToInteract: 1
+  _xpPerFishing: 5
 --- !u!1 &1083170654
 GameObject:
   m_ObjectHideFlags: 0
@@ -6459,6 +6461,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _items:
   - {fileID: 11400000, guid: f2764d815f6d8948988eeae1458911e2, type: 2}
+  - {fileID: 11400000, guid: e935a743a2fee2ecca453bfa894325ef, type: 2}
   DebugItem: {fileID: 11400000, guid: 66c0156b2300b5877acb3aaa08f1067d, type: 2}
   SelectedItem: {fileID: 0}
 --- !u!1 &1655115359

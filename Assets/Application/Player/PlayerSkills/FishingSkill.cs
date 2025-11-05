@@ -15,10 +15,10 @@ public class FishingSkill : PlayerSkill
     private readonly int _requiredXPIncreasePerLevel = 10; //In percantage     
 
     [SerializeField]
-    private int _chanceToCatchFishPerLevel = 30;
+    private float _chanceToCatchFishPerLevel = 0.30f;
 
     [SerializeField]
-    private float _increaseChanceToCatchPerLevel = 5;
+    private float _increaseChanceToCatchPerLevel = 0.5f;
 
     private void Start()
     {
@@ -37,12 +37,16 @@ public class FishingSkill : PlayerSkill
         this.ShowFloatingXP(_skillType, amount);
     }
 
+    public float GetChanceToCatchFishPerLevel()
+        => _chanceToCatchFishPerLevel;
+
     private void UpdatePlayerSkills(bool isLevelUp)
     {
         if (isLevelUp)
         {
             CurrentLevel++;
-            _requiredXPForLevelUp += _requiredXPForLevelUp / 100 * _requiredXPIncreasePerLevel;
+            _requiredXPForLevelUp = GetNewRequiredXPForSkill(_requiredXPForLevelUp);
+            _chanceToCatchFishPerLevel += _increaseChanceToCatchPerLevel;
         }
 
         this.UpdateUI(_skillType, currentXP: _currentXP, requiredXPForLevelUp: _requiredXPForLevelUp);

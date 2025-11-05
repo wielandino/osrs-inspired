@@ -7,6 +7,8 @@ public class Fish : Item
 
     public float XPPerCatch;
 
+    public float FishingSpotCapacityDrain;
+
     [Tooltip("Give this number in Percentage")]
     public float IncreasedFailureToCatch; 
 }

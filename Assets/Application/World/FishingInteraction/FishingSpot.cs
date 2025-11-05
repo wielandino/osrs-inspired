@@ -39,6 +39,11 @@ public class FishingSpot : MonoBehaviour, IHasInteractionTiles, IInteractable
         _interactionTiles = ObjectHelper.CollectInteractionTilesOfPosition(gameObject.transform.position);
     }
 
+    public void ReduceFishingCapacity(float amount)
+    {
+        _fishingCapacity -= amount;
+    }
+
     private void OnDrawGizmos()
     {
         if (!Application.isPlaying) return;

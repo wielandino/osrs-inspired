@@ -40,8 +40,7 @@ public class WoodcuttingSkill : PlayerSkill
         if (isLevelUp)
         {
             CurrentLevel++;
-            _requiredXPForLevelUp += _requiredXPForLevelUp / 100 * _requiredXPIncreasePerLevel;
-
+            _requiredXPForLevelUp = GetNewRequiredXPForSkill(_requiredXPForLevelUp);
             BonusDamage = CurrentLevel * DamageMultiplerPerLevel;
         }
 

@@ -20,6 +20,10 @@ public class PlayerSkill : MonoBehaviour
         FloatingXPController.Instance.ShowXPGain(skillType, xpAmount, transform);
     }
 
+    protected float GetNewRequiredXPForSkill(float currentRequiredXP)
+        => Mathf.Ceil((currentRequiredXP / 4 + 300 * 2) / 7 + currentRequiredXP);
+    
+
     protected float IncreaseXP(float amount, float currentXP)
         => currentXP + amount;
 

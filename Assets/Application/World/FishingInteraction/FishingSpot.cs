@@ -9,9 +9,6 @@ public class FishingSpot : MonoBehaviour, IHasInteractionTiles, IInteractable
     private int _requiredLevelToInteract = 1;
 
     [SerializeField]
-    private float _xpPerFishing = 5;
-
-    [SerializeField]
     private float _fishingCapacity = 40;
 
     [SerializeField]
@@ -30,9 +27,6 @@ public class FishingSpot : MonoBehaviour, IHasInteractionTiles, IInteractable
 
     public int GetRequiredLevelToInteract()
         => _requiredLevelToInteract;
-
-    public float GetXPPerFishing()
-        => _xpPerFishing;
 
     public float GetFishingCapacity()
         => _fishingCapacity;

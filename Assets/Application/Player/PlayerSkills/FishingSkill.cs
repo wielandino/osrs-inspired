@@ -15,7 +15,10 @@ public class FishingSkill : PlayerSkill
     private readonly int _requiredXPIncreasePerLevel = 10; //In percantage     
 
     [SerializeField]
-    private int _chanceToCatchFishPerLevel = 60;
+    private int _chanceToCatchFishPerLevel = 30;
+
+    [SerializeField]
+    private float _increaseChanceToCatchPerLevel = 5;
 
     private void Start()
     {

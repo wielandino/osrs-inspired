@@ -3,7 +3,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "FirestoneCallback", menuName = "Items/Callbacks/Tinderbox")]
 public class FirestoneCallback : ItemCallback
 {
-    [SerializeField] private int requiredFiremakingLevel = 1;
     
     public override bool CanCreateCommand(GameObject target, PlayerStateManager player)
     {

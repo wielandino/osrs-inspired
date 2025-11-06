@@ -10,8 +10,6 @@ public class WoodcuttingSkill : PlayerSkill
     [SerializeField]
     private float _requiredXPForLevelUp = 85;
 
-    private readonly int _requiredXPIncreasePerLevel = 10; //In percantage 
-
     public float BonusDamage { private set; get; } = 0.5f;
 
     public readonly float DamageMultiplerPerLevel = 0.5f;

@@ -8,7 +8,8 @@ public class TooltipTrigger : MonoBehaviour
 
     private void OnDisable()
     {
-        TooltipController.Instance.HideTooltip();
+        if (TooltipController.Instance != null)
+            TooltipController.Instance.HideTooltip();
     }
 
     private void OnMouseEnter()

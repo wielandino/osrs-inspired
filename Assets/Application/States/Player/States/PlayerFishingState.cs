@@ -15,8 +15,7 @@ public class PlayerFishingState : PlayerBaseState
     {
         Debug.Log("Entered PlayerFishingState");
 
-        ISkillTool fishingRod = null;
-
+        ISkillTool fishingRod;
         if (player.PlayerInventory.SelectedItem != null)
         {
             if (!ToolValidator.CanPlayerUseTool(player.PlayerInventory.SelectedItem,

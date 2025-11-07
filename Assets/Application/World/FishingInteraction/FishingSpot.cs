@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class FishingSpot : MonoBehaviour, IHasInteractionTiles, IInteractable
@@ -66,11 +67,19 @@ public class FishingSpot : MonoBehaviour, IHasInteractionTiles, IInteractable
         var moveCommand =
             new MoveCommand(PlayerMovementService.Instance.GetNearestInteractionTile(GetInteractionTiles()));
 
+        var fishingCommand =
+            new FishingCommand(this);
+
         if (player.IsInIdleState() &&
             player.PlayerInventory.HasValidToolForSkill(SkillType.Fishing, player.PlayerSkills))
         {
 
-            
+            options.Add(
+                new(
+                    "Fish",
+                    () => player.AddCommands(moveCommand, fishingCommand)
+                )
+            );
         }
 
         return options;

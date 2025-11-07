@@ -4024,7 +4024,7 @@ MonoBehaviour:
   _requiredLevelToInteract: 1
   _fishingCapacity: 40
   _possibleFishesToCatch:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 85fe19c8113f330d290d19b7414b4218, type: 2}
 --- !u!1 &1083170654
 GameObject:
   m_ObjectHideFlags: 0
@@ -8164,6 +8164,7 @@ GameObject:
   - component: {fileID: 2048886786}
   - component: {fileID: 2048886787}
   - component: {fileID: 2048886788}
+  - component: {fileID: 2048886789}
   m_Layer: 0
   m_Name: Skills
   m_TagString: Untagged
@@ -8229,6 +8230,23 @@ MonoBehaviour:
   _xpBarUI: {fileID: 1415007150}
   _currentXP: 0
   _requiredXPForLevelUp: 30
+--- !u!114 &2048886789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048886784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56385d5dbd5c84348b936a6d0ba0c37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Application::FishingSkill
+  _xpBarUI: {fileID: 1415007150}
+  _currentXP: 0
+  _requiredXPForLevelUp: 85
+  _chanceToCatchFishPerLevel: 0.3
+  _increaseChanceToCatchPerLevel: 0.5
 --- !u!1001 &2055768450
 PrefabInstance:
   m_ObjectHideFlags: 0

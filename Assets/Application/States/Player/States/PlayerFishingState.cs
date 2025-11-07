@@ -5,6 +5,8 @@ public class PlayerFishingState : PlayerBaseState
 {
     private FishingSpot _fishingSpot;
 
+    private Coroutine _fishingCoroutine;
+
     public void SetFishingSpot(FishingSpot fishingSpot)
     {
         _fishingSpot = fishingSpot;
@@ -23,7 +25,7 @@ public class PlayerFishingState : PlayerBaseState
             return;
         }
 
-        player.StartCoroutine(FishingCoroutine(player, fishingRod));
+        _fishingCoroutine = player.StartCoroutine(FishingCoroutine(player, fishingRod));
     }
 
     public override void UpdateState(PlayerStateManager player)
@@ -34,6 +36,7 @@ public class PlayerFishingState : PlayerBaseState
 
     public override void ExitState(PlayerStateManager player)
     {
+        player.StopCoroutine(_fishingCoroutine);
     }
 
     private IEnumerator FishingCoroutine(PlayerStateManager player, ISkillTool tool)

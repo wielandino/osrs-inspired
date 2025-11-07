@@ -24,7 +24,7 @@ public class Tile : MonoBehaviour, IInteractable
         options.Add(
             new(
                 "Walk here",
-                () => player.ReplaceCommands(moveCommand)
+                () => { player.AddCommands(moveCommand); }
             )
         );
 
@@ -33,7 +33,7 @@ public class Tile : MonoBehaviour, IInteractable
             options.Add(
                 new(
                     "Drop Treelog",
-                    () => player.ReplaceCommands(DropTreeLogCommand.Create(player, transform.position))
+                    () => player.AddCommands(DropTreeLogCommand.Create(player, transform.position))
                 )
             );
         }

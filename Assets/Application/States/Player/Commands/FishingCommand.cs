@@ -20,7 +20,8 @@ public class FishingCommand : PlayerCommandBase
             return false;
         }
 
-        if (!_fishingSpot.GetInteractionTiles().Contains(player.transform.position))
+        if (_fishingSpot.GetInteractionTiles() == null ||
+           !_fishingSpot.GetInteractionTiles().Contains(player.transform.position))
         {
             errorCode = CommandErrorCode.PlayerNotInInteractionTile;
             return false;

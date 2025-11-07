@@ -68,7 +68,7 @@ public class TreeLog : MonoBehaviour, IHasInteractionTiles, IInteractable
             options.Add(
                 new(
                     "Pick up",
-                    () => player.ReplaceCommands(moveCommand, carryTreeLogCommand)
+                    () => player.AddCommands(moveCommand, carryTreeLogCommand)
                 )
             );
         }
@@ -83,7 +83,7 @@ public class TreeLog : MonoBehaviour, IHasInteractionTiles, IInteractable
             options.Add(
                 new(
                     "Burn",
-                    () => player.ReplaceCommands(moveCommand, burnTreeLogCommand)
+                    () => player.AddCommands(moveCommand, burnTreeLogCommand)
                 )
             );
         }
@@ -93,7 +93,7 @@ public class TreeLog : MonoBehaviour, IHasInteractionTiles, IInteractable
             options.Add(
                 new(
                     "Drop Treelog",
-                    () => player.ReplaceCommands(DropTreeLogCommand.Create(player, transform.position))
+                    () => player.AddCommands(DropTreeLogCommand.Create(player, transform.position))
                 )
             );
         }

@@ -36,7 +36,7 @@ public class ToolValidator
         return skill switch
         {
             SkillType.Woodcutting => playerSkills.GetWoodcuttingSkill().CurrentLevel,
-            // Add Skills
+            SkillType.Fishing => playerSkills.GetFishingSkill().CurrentLevel,
             _ => 1
         };
     }

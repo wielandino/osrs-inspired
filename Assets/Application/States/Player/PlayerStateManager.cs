@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,7 +29,6 @@ public class PlayerStateManager : MonoBehaviour
     public bool IsInWoodcuttingState() => _currentState == WoodcuttingState;
     public bool IsInCarryingState() => _currentState == CarryingState;
     public bool IsInFishingState() => _currentState == FishingState;
-
 
     private void Start()
     {
@@ -71,18 +71,19 @@ public class PlayerStateManager : MonoBehaviour
             }
 
             if (_currentCommand.IsCommandStarted() && _currentCommand.IsComplete(this))
-                {
-                    Debug.LogWarning($"{_currentCommand.GetType().Name} is completed!");
+            {
+                Debug.LogWarning($"{_currentCommand.GetType().Name} is completed!");
 
-                    _currentCommand = null;
-                }  
+                _currentCommand = null;
+            }  
         }
     }
 
-    public void AddCommand(PlayerCommandBase newCommand)
+    private void AddCommand(PlayerCommandBase newCommand)
     {
         _commandQueue.Enqueue(newCommand);
     }
+
 
     public void ClearCommands()
     {
@@ -91,13 +92,12 @@ public class PlayerStateManager : MonoBehaviour
         _commandQueue.Clear();
     }
 
-    public void ReplaceCommands(params PlayerCommandBase[] commands)
+    public void AddCommands(params PlayerCommandBase[] commands)
     {
         ClearCommands();
 
         foreach (var command in commands)
             AddCommand(command);
-        
     }
 
     public void SwitchState(PlayerBaseState state)

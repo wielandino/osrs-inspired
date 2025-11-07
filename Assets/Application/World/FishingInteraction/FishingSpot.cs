@@ -23,7 +23,7 @@ public class FishingSpot : MonoBehaviour, IHasInteractionTiles, IInteractable
     }
 
     public List<Vector3> GetInteractionTiles()
-        => _interactionTiles;
+        => _interactionTiles ?? null;
 
     public int GetRequiredLevelToInteract()
         => _requiredLevelToInteract;

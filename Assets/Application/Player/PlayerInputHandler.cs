@@ -86,7 +86,7 @@ public class PlayerInputHandler : MonoBehaviour
                     return;
                     
                 var moveCommand = new MoveCommand(hit.point);
-                _playerStateManager.ReplaceCommands(moveCommand);
+                _playerStateManager.AddCommands(moveCommand);
             }
         }
         
@@ -108,7 +108,7 @@ public class PlayerInputHandler : MonoBehaviour
                 var moveCommand = new MoveCommand(nearestTile);
 
                 if (command != null)
-                    _playerStateManager.ReplaceCommands(moveCommand, command);
+                    _playerStateManager.AddCommands(moveCommand, command);
 
                 return; 
             }
@@ -129,7 +129,7 @@ public class PlayerInputHandler : MonoBehaviour
 
         if (carryTreeLogCommand.CanExecute(_playerStateManager, out CommandErrorCode errorCode))
         {
-            _playerStateManager.ReplaceCommands(carryTreeLogCommand);
+            _playerStateManager.AddCommands(carryTreeLogCommand);
         }
         else
         {
@@ -138,7 +138,7 @@ public class PlayerInputHandler : MonoBehaviour
                 Vector3 nearestTile = _playerMovementService.GetNearestInteractionTile(treeLog.InteractionTiles);
                 var moveCommand = new MoveCommand(nearestTile);
 
-                _playerStateManager.ReplaceCommands(moveCommand, carryTreeLogCommand);
+                _playerStateManager.AddCommands(moveCommand, carryTreeLogCommand);
             }
             else
             {
@@ -180,7 +180,7 @@ public class PlayerInputHandler : MonoBehaviour
 
         if (woodcuttingCommand.CanExecute(_playerStateManager, out CommandErrorCode errorCode))
         {
-            _playerStateManager.ReplaceCommands(woodcuttingCommand);
+            _playerStateManager.AddCommands(woodcuttingCommand);
         }
         else
         {
@@ -190,7 +190,7 @@ public class PlayerInputHandler : MonoBehaviour
                 Vector3 nearestTile = _playerMovementService.GetNearestInteractionTile(tree.InteractionTiles);
                 var moveCommand = new MoveCommand(nearestTile);
 
-                _playerStateManager.ReplaceCommands(moveCommand, woodcuttingCommand);
+                _playerStateManager.AddCommands(moveCommand, woodcuttingCommand);
             }
             else
             {

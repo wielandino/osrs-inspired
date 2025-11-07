@@ -23,7 +23,7 @@ public class IdleWithCarryingTreeLogState : PlayerCarryingBaseSubState
             if (hit.collider.TryGetComponent<Tile>(out var tile))
             {
                 var moveWithCarryingTreeLogCommand = new MoveCommand(hit.transform.position);
-                player.ReplaceCommands(moveWithCarryingTreeLogCommand);
+                player.AddCommands(moveWithCarryingTreeLogCommand);
             }
         }
     }

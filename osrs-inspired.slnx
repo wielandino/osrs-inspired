@@ -2,6 +2,6 @@
   <Project Path="Application.csproj" />
   <Project Path="AstarPathfindingProject.csproj" />
   <Project Path="PackageToolsEditor.csproj" />
-  <Project Path="AstarPathfindingProjectEditor.csproj" />
   <Project Path="EditMode.csproj" />
+  <Project Path="AstarPathfindingProjectEditor.csproj" />
 </Solution>

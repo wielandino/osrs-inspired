@@ -44,7 +44,8 @@ public class PlayerInventory : MonoBehaviour
     {
         _items.Add(item);
 
-        InventoryUIController.Instance.AddGridElement(item);
+        if (InventoryUIController.Instance != null)
+            InventoryUIController.Instance.AddGridElement(item);
     }
 
     public bool RemoveItem(Item item)

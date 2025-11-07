@@ -15,18 +15,15 @@ public class PlayerMoveState : PlayerBaseState
         Debug.Log("Entered PlayerMoveState");
         _player = player;
 
-        // Null-Check für PlayerMovementController
         if (player.PlayerMovementController == null)
         {
             Debug.LogError("PlayerMovementController is null! Make sure it's attached to the GameObject.");
             return;
         }
 
-        // Event Listener registrieren
         player.PlayerMovementController.OnMovementCompleted += OnMovementCompleted;
         player.PlayerMovementController.OnMovementCancelled += OnMovementCancelled;
 
-        // Bewegung starten
         player.PlayerMovementController.StartMovement(_targetPosition);
     }
 

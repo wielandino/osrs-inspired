@@ -102,7 +102,7 @@ public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
             options.Add(
                 new(
                     "Chop tree",
-                    () => player.ReplaceCommands(moveCommand, woodcuttingCommand)
+                    () => player.AddCommands(moveCommand, woodcuttingCommand)
                 )
             );
         }

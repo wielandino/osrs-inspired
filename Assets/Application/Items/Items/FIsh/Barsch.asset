@@ -22,4 +22,4 @@ MonoBehaviour:
   RequiredLevelToCatch: 1
   XPPerCatch: 5
   FishingSpotCapacityDrain: 1
-  IncreasedFailureToCatch: 90
+  IncreasedFailureToCatch: 0

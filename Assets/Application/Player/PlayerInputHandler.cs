@@ -72,14 +72,14 @@ public class PlayerInputHandler : MonoBehaviour
                 HandleTreeInteraction(tree);
                 return;
             }
-            else if (hit.collider.TryGetComponent<TreeLog>(out var treeLog) || 
-                     hit.collider.transform.parent.TryGetComponent(out treeLog))
-            {
-                if (treeLog.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
-                    treeLog = GetTopTreeLogAtPosition(hit.transform.position);
+            // else if (hit.collider.TryGetComponent<TreeLog>(out var treeLog) || 
+            //          hit.collider.transform.parent.TryGetComponent(out treeLog))
+            // {
+            //     if (treeLog.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+            //         treeLog = GetTopTreeLogAtPosition(hit.transform.position);
                     
-                HandleTreeLogInteraction(treeLog);        
-            }
+            //     HandleTreeLogInteraction(treeLog);        
+            // }
             else if (hit.collider.TryGetComponent<Tile>(out var tile))
             {
                 if (tile.GetTileType() != Tile.TileType.WalkableTile)

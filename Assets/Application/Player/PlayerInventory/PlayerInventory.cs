@@ -37,7 +37,7 @@ public class PlayerInventory : MonoBehaviour
     private void AddAllItemsToUI()
     {
         foreach (var item in _items)
-            AddItem(item);
+            InventoryUIController.Instance.AddGridElement(item);
     }
 
     public void AddItem(Item item)

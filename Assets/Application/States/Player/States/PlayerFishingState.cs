@@ -15,20 +15,7 @@ public class PlayerFishingState : PlayerBaseState
     {
         Debug.Log("Entered PlayerFishingState");
 
-        ISkillTool fishingRod;
-        if (player.PlayerInventory.SelectedItem != null)
-        {
-            if (!ToolValidator.CanPlayerUseTool(player.PlayerInventory.SelectedItem,
-                                                SkillType.Fishing,
-                                                player.PlayerSkills))
-                return;
-
-            fishingRod = player.PlayerInventory.SelectedItem as ISkillTool;
-        }
-        else
-        {
-            fishingRod = player.PlayerInventory.GetBestToolForSkill(SkillType.Fishing, player.PlayerSkills);
-        }
+        var fishingRod = GetFishingRod(player);
 
         if (fishingRod == null)
         {
@@ -51,27 +38,69 @@ public class PlayerFishingState : PlayerBaseState
 
     private IEnumerator FishingCoroutine(PlayerStateManager player, ISkillTool tool)
     {
-        var listOfPossibleFishes = _fishingSpot.GetListOfPossibleFishesToCatch();
-        int numberOfFishes = listOfPossibleFishes.Count;
-        float playerCatchChance = player.PlayerSkills.GetFishingSkill()
-                                        .GetChanceToCatchFishPerLevel();
-
         while (_fishingSpot.GetFishingCapacity() > 0)
         {
-            int fishIndexToCatch = Random.Range(0, numberOfFishes);
-            var fishToCatch = listOfPossibleFishes[fishIndexToCatch];
-            float playerCatchChanceValue =
-                Mathf.Clamp01(playerCatchChance - fishToCatch.IncreasedFailureToCatch + tool.EfficiencyBonus);
+            var fishToCatch = SelectRandomFish();
 
-            float calculatedCatchValue = Random.Range(0f, 1f);
+            TryFishingAttempt(player, tool, fishToCatch, out bool spotIsEmpty);
 
-            if (calculatedCatchValue < playerCatchChanceValue)
-            {
-                player.PlayerInventory.AddItem(fishToCatch);
-                _fishingSpot.ReduceFishingCapacity(fishToCatch.FishingSpotCapacityDrain);
-            }
+            if (spotIsEmpty)
+                break;
+
+            yield return new WaitForSeconds(3f);
+        }
+    }
+
+    public ISkillTool GetFishingRod(PlayerStateManager player)
+    {
+        if (player.PlayerInventory.SelectedItem != null)
+        {
+            if (!ToolValidator.CanPlayerUseTool(player.PlayerInventory.SelectedItem,
+                                                SkillType.Fishing,
+                                                player.PlayerSkills))
+                return null;
+
+            return player.PlayerInventory.SelectedItem as ISkillTool;
+        }
+        else
+        {
+            return player.PlayerInventory.GetBestToolForSkill(SkillType.Fishing, player.PlayerSkills);
+        }
+    }
+
+    public bool TryFishingAttempt(PlayerStateManager player, ISkillTool tool, Fish fish, out bool spotIsEmpty)
+    {
+        spotIsEmpty = _fishingSpot.GetFishingCapacity() <= 0;
+
+        if (spotIsEmpty)
+            return false;
+
+        float playerCatchChance = player.PlayerSkills.GetFishingSkill().GetChanceToCatchFishPerLevel();
+
+        float finalCatchChance = CalculateCatchChance(playerCatchChance,
+                                                      fish.IncreasedFailureToCatch,
+                                                      tool.EfficiencyBonus);
+
+        float roll = Random.Range(0f, 1f);
+        bool success = roll < finalCatchChance;
+
+        if (success)
+        {
+            player.PlayerInventory.AddItem(fish);
+            _fishingSpot.ReduceFishingCapacity(fish.FishingSpotCapacityDrain);
         }
 
-        yield return new WaitForSeconds(3f);
+        return success;
     }
+
+    public Fish SelectRandomFish()
+    {
+        var listOfPossibleFishes = _fishingSpot.GetListOfPossibleFishesToCatch();
+        int fishIndex = Random.Range(0, listOfPossibleFishes.Count);
+        return listOfPossibleFishes[fishIndex];
+    }
+
+     public float CalculateCatchChance(float baseChance, float fishDifficulty, float toolBonus)
+        => Mathf.Clamp01(baseChance - fishDifficulty + toolBonus);
+    
 }

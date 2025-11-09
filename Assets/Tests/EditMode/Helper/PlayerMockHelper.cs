@@ -13,6 +13,7 @@ public class PlayerMockHelper
         _playerStateManager.PlayerSkills = _playerGameObject.AddComponent<PlayerSkill>();
         _playerGameObject.AddComponent<FishingSkill>();
         _playerGameObject.AddComponent<WoodcuttingSkill>();
+        _playerGameObject.AddComponent<CookingSkill>();
         _playerStateManager.PlayerMovementController = _playerGameObject.AddComponent<PlayerMovementController>();
 
 

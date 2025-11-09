@@ -12,10 +12,8 @@ public class FishingCommandTests
     [SetUp]
     public void SetUp()
     {
-        // Player Mock
         _playerMock = new();
 
-        // FishingSpot Setup mit Standard-Konfiguration
         _fishingSpotObject = CreateFishingSpot();
         _fishingSpot = _fishingSpotObject.GetComponent<FishingSpot>();
     }
@@ -30,7 +28,6 @@ public class FishingCommandTests
         }
         _testObjects.Clear();
         
-        // Player Mock Cleanup (falls nötig)
         if (_playerMock != null && _playerMock.GetPlayerGameObject() != null)
             Object.DestroyImmediate(_playerMock.GetPlayerGameObject());
     }
@@ -157,7 +154,7 @@ public class FishingCommandTests
     private GameObject CreateFishingSpot()
     {
         var fishingSpotObject = new GameObject("TestFishingSpot");
-        _testObjects.Add(fishingSpotObject); // Für Cleanup registrieren
+        _testObjects.Add(fishingSpotObject);
         
         var fishingSpot = fishingSpotObject.AddComponent<FishingSpot>();
         fishingSpotObject.transform.position = Vector3.zero;

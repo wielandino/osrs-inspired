@@ -141,7 +141,7 @@ public class PlayerStateManager : MonoBehaviour
 
     public void SwitchToCookingState(TreeLog treeLog, CookableItem item)
     {
-        CookingState.SetTargetTreeLogAndItemToCook(treeLog, item);
+        CookingState.SetTargetTreeLogAndItemToCook(treeLog, item, this);
         SwitchState(CookingState);
     }
 

@@ -6,5 +6,6 @@ public enum CommandErrorCode
     PlayerNotInInteractionTile,
     PlayerSkillRequirementNotMet,
     PlayerAlreadyPerformingTask,
-    TreeLogNotInIdleState
+    TreeLogNotInIdleState,
+    FatalError
 }

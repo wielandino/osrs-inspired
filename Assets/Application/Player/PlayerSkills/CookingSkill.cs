@@ -10,9 +10,13 @@ public class CookingSkill : PlayerSkill
     public int CurrentLevel { private set; get; } = 1;
 
     [SerializeField]
-    private float _requiredXPForLevelUp = 85;
+    private float _requiredXPForLevelUp = 85;   
 
-    private readonly int _requiredXPIncreasePerLevel = 10; //In percantage 
+    [SerializeField]
+    private float _chanceToCookPerLevel = 0.30f;
+
+    [SerializeField]
+    private float _increaseChanceToCookPerLevel = 0.5f;
 
     private void Start()
     {
@@ -36,9 +40,13 @@ public class CookingSkill : PlayerSkill
         if (isLevelUp)
         {
             CurrentLevel++;
-            _requiredXPForLevelUp += _requiredXPForLevelUp / 100 * _requiredXPIncreasePerLevel;
+            _requiredXPForLevelUp = GetNewRequiredXPForSkill(_requiredXPForLevelUp);
+            _chanceToCookPerLevel += _increaseChanceToCookPerLevel;
         }
 
         this.UpdateUI(_skillType, currentXP: _currentXP, requiredXPForLevelUp: _requiredXPForLevelUp);
     }
+
+    public float GetChanceToCookPerLevel()
+        => _chanceToCookPerLevel;
 }

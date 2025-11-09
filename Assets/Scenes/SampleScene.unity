@@ -6185,14 +6185,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 995db22699289057f8f881d80632f3ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPanel: {fileID: 1830331378}
-  tooltipText: {fileID: 1083170656}
-  tooltipBackground: {fileID: 0}
-  offset: {x: 50, y: -50}
-  fadeSpeed: 5
-  padding: {x: 20, y: 10}
-  minSize: {x: 100, y: 40}
-  maxSize: {x: 400, y: 200}
+  TooltipPanel: {fileID: 1830331378}
+  TooltipText: {fileID: 1083170656}
+  TooltipBackground: {fileID: 0}
+  Offset: {x: 60, y: -40}
+  FadeSpeed: 5
+  Padding: {x: 20, y: 10}
+  MinSize: {x: 100, y: 40}
+  MaxSize: {x: 400, y: 200}
 --- !u!1001 &1610756564
 PrefabInstance:
   m_ObjectHideFlags: 0

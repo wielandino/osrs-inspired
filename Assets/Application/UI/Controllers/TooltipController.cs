@@ -7,32 +7,28 @@ public class TooltipController : MonoBehaviour
     public static TooltipController Instance;
 
     [Header("UI References")]
-    public GameObject tooltipPanel;
-    public TextMeshProUGUI tooltipText;
-    public Image tooltipBackground;
+    public GameObject TooltipPanel;
+    public TextMeshProUGUI TooltipText;
+    public Image TooltipBackground;
 
     [Header("Settings")]
-    public Vector2 offset = new(10f, -10f);
-    public float fadeSpeed = 5f;
+    public Vector2 Offset = new(10f, -10f);
+    public float FadeSpeed = 5f;
 
     [Header("Auto-Resize Settings")]
-    public Vector2 padding = new(20f, 10f);
-    public Vector2 minSize = new(100f, 40f);
-    public Vector2 maxSize = new(400f, 200f);
+    public Vector2 Padding = new(20f, 10f);
+    public Vector2 MinSize = new(100f, 40f);
+    public Vector2 MaxSize = new(400f, 200f);
 
-    private CanvasGroup canvasGroup;
+    private CanvasGroup _canvasGroup;
 
     private void Awake()
     {
-        // Singleton Pattern
         if (Instance == null)
-        {
             Instance = this;
-        }
         else
-        {
             Destroy(gameObject);
-        }
+        
     }
 
     private void OnDisable()
@@ -48,22 +44,25 @@ public class TooltipController : MonoBehaviour
 
     private void Start()
     {
-        canvasGroup = tooltipPanel.GetComponent<CanvasGroup>();
+        _canvasGroup = TooltipPanel.GetComponent<CanvasGroup>();
 
-        if (canvasGroup == null)
-            canvasGroup = tooltipPanel.AddComponent<CanvasGroup>();
+        if (_canvasGroup == null)
+            _canvasGroup = TooltipPanel.AddComponent<CanvasGroup>();
 
         HideTooltip();
     }
 
     public void ShowTooltip(string text, Color color)
     {
-        tooltipText.text = text;
-        tooltipText.color = color;
+        if (_canvasGroup == null)
+            return;
+
+        TooltipText.text = text;
+        TooltipText.color = color;
 
         ResizeTooltip();
 
-        tooltipPanel.SetActive(true);
+        TooltipPanel.SetActive(true);
         UpdateTooltipPosition();
 
         StopAllCoroutines();
@@ -72,19 +71,22 @@ public class TooltipController : MonoBehaviour
 
     public void HideTooltip()
     {
+        if (_canvasGroup == null)
+            return;
+            
         StopAllCoroutines();
         StartCoroutine(FadeTooltip(0f));
     }
 
     public void UpdateTooltipPosition()
     {
-        if (!tooltipPanel.activeInHierarchy) return;
+        if (!TooltipPanel.activeInHierarchy) return;
 
         Vector2 mousePos = Input.mousePosition;
 
-        RectTransform tooltipRect = tooltipPanel.GetComponent<RectTransform>();
+        RectTransform tooltipRect = TooltipPanel.GetComponent<RectTransform>();
 
-        Vector2 tooltipPos = mousePos + offset;
+        Vector2 tooltipPos = mousePos + Offset;
         tooltipRect.position = tooltipPos;
 
         ClampTooltipToScreen();
@@ -92,7 +94,7 @@ public class TooltipController : MonoBehaviour
 
     private void ClampTooltipToScreen()
     {
-        RectTransform rectTransform = tooltipPanel.GetComponent<RectTransform>();
+        RectTransform rectTransform = TooltipPanel.GetComponent<RectTransform>();
 
         Vector2 pos = rectTransform.position;
 
@@ -111,40 +113,40 @@ public class TooltipController : MonoBehaviour
 
     private System.Collections.IEnumerator FadeTooltip(float targetAlpha)
     {
-        float startAlpha = canvasGroup.alpha;
+        float startAlpha = _canvasGroup.alpha;
         float time = 0;
 
         while (time < 1f)
         {
-            time += Time.deltaTime * fadeSpeed;
-            canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, time);
+            time += Time.deltaTime * FadeSpeed;
+            _canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, time);
             yield return null;
         }
 
-        canvasGroup.alpha = targetAlpha;
+        _canvasGroup.alpha = targetAlpha;
 
         if (targetAlpha == 0f)
-            tooltipPanel.SetActive(false);
+            TooltipPanel.SetActive(false);
     }
 
     private void ResizeTooltip()
     {
-        RectTransform tooltipRect = tooltipPanel.GetComponent<RectTransform>();
+        RectTransform tooltipRect = TooltipPanel.GetComponent<RectTransform>();
 
-        tooltipText.text = tooltipText.text;
+        TooltipText.text = TooltipText.text;
 
-        tooltipText.ForceMeshUpdate();
+        TooltipText.ForceMeshUpdate();
 
-        Vector2 textSize = tooltipText.GetPreferredValues();
+        Vector2 textSize = TooltipText.GetPreferredValues();
 
-        if (textSize.x > (maxSize.x - padding.x))
-            textSize = tooltipText.GetPreferredValues(maxSize.x - padding.x, 0);
+        if (textSize.x > (MaxSize.x - Padding.x))
+            textSize = TooltipText.GetPreferredValues(MaxSize.x - Padding.x, 0);
         
 
-        Vector2 tooltipSize = textSize + padding;
+        Vector2 tooltipSize = textSize + Padding;
 
-        tooltipSize.x = Mathf.Clamp(tooltipSize.x, minSize.x, maxSize.x);
-        tooltipSize.y = Mathf.Clamp(tooltipSize.y, minSize.y, maxSize.y);
+        tooltipSize.x = Mathf.Clamp(tooltipSize.x, MinSize.x, MaxSize.x);
+        tooltipSize.y = Mathf.Clamp(tooltipSize.y, MinSize.y, MaxSize.y);
 
         tooltipRect.sizeDelta = tooltipSize;
     }

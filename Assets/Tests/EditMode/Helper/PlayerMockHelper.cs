@@ -15,10 +15,10 @@ public class PlayerMockHelper
         _playerGameObject.AddComponent<WoodcuttingSkill>();
         _playerStateManager.PlayerMovementController = _playerGameObject.AddComponent<PlayerMovementController>();
 
-        
 
 
-        _playerStateManager.SwitchState(_playerStateManager.IdleState);
+
+        _playerStateManager.SwitchToIdleState();
     }
 
     public GameObject GetPlayerGameObject()

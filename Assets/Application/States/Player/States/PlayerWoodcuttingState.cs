@@ -61,7 +61,7 @@ public class PlayerWoodcuttingState : PlayerBaseState
             treeStateManager.SwitchState(treeStateManager.DestroyedState);
         }
 
-        _player.SwitchState(_player.IdleState);
+        _player.SwitchToIdleState();
     }
 
     private void SpawnTreeLog()

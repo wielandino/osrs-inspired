@@ -19,6 +19,7 @@ public class PlayerStateManager : MonoBehaviour
     public PlayerWoodcuttingState WoodcuttingState = new();
     public PlayerCarryingState CarryingState = new();
     public PlayerFishingState FishingState = new();
+    public PlayerCookingState CookingState = new();
 
     private readonly Queue<PlayerCommandBase> _commandQueue = new();
     private PlayerCommandBase _currentCommand;
@@ -29,6 +30,7 @@ public class PlayerStateManager : MonoBehaviour
     public bool IsInWoodcuttingState() => _currentState == WoodcuttingState;
     public bool IsInCarryingState() => _currentState == CarryingState;
     public bool IsInFishingState() => _currentState == FishingState;
+    public bool IsInCookingState() => _currentState == CookingState;
 
     private void Start()
     {
@@ -100,12 +102,17 @@ public class PlayerStateManager : MonoBehaviour
             AddCommand(command);
     }
 
-    public void SwitchState(PlayerBaseState state)
+    private void SwitchState(PlayerBaseState state)
     {
         _currentState?.ExitState(this);
 
         _currentState = state;
         state.EnterState(this);
+    }
+
+    public void SwitchToIdleState()
+    {
+        SwitchState(IdleState);
     }
 
     public void SwitchToMoveState(Vector3 targetPosition)
@@ -130,6 +137,12 @@ public class PlayerStateManager : MonoBehaviour
     {
         FishingState.SetFishingSpot(fishingSpot);
         SwitchState(FishingState);
+    }
+
+    public void SwitchToCookingState(TreeLog treeLog, CookableItem item)
+    {
+        CookingState.SetTargetTreeLogAndItemToCook(treeLog, item);
+        SwitchState(CookingState);
     }
 
 }

@@ -40,7 +40,7 @@ public class TreeLogCarriedState : TreeLogBaseState
             Debug.Log($"Player drops TreeLog {treeLog.name}");
             
             treeLog.SwitchState(treeLog.IdleState);
-            player.SwitchState(player.IdleState);
+            player.SwitchToIdleState();
         }
     }
 }

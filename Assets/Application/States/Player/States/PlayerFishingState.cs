@@ -21,7 +21,7 @@ public class PlayerFishingState : PlayerBaseState
 
         if (fishingRod == null)
         {
-            player.SwitchState(player.IdleState);
+            player.SwitchToIdleState();
             return;
         }
 
@@ -31,7 +31,7 @@ public class PlayerFishingState : PlayerBaseState
     public override void UpdateState(PlayerStateManager player)
     {
         if (_fishingSpot.GetFishingCapacity() <= 0)
-            player.SwitchState(player.IdleState);
+            player.SwitchToIdleState();
     }
 
     public override void ExitState(PlayerStateManager player)

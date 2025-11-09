@@ -46,7 +46,7 @@ public class PlayerCarryingState : PlayerBaseState
     public override void UpdateState(PlayerStateManager player)
     {
         if (_carriedTreeLog == null)
-            player.SwitchState(player.IdleState);
+            player.SwitchToIdleState();
         
 
         _currentSubState.UpdateState(this, player);
@@ -69,7 +69,7 @@ public class PlayerCarryingState : PlayerBaseState
 
         GridManager.Instance.UpdateGraphOfObject(_carriedTreeLog.CurrentActiveStateObject.GetComponent<Collider>());
 
-        player.SwitchState(player.IdleState);
+        player.SwitchToIdleState();
     }
 
     public override void ExitState(PlayerStateManager player)

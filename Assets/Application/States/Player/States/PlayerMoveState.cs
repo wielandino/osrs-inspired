@@ -42,11 +42,11 @@ public class PlayerMoveState : PlayerBaseState
 
     private void OnMovementCompleted()
     {
-        _player.SwitchState(_player.IdleState);
+        _player.SwitchToIdleState();
     }
 
     private void OnMovementCancelled()
     {
-        _player.SwitchState(_player.IdleState);
+        _player.SwitchToIdleState();
     }
 }

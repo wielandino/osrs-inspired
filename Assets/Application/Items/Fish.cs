@@ -1,8 +1,9 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Fish", menuName = "ScriptableObjects/Items/Fish")]
-public class Fish : Item
+public class Fish : CookableItem
 {
+    [Header("Fishing Skill Configuration")]
     public int RequiredLevelToCatch;
 
     public float XPPerCatch;

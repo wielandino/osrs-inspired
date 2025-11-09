@@ -38,4 +38,7 @@ public class PlayerSkill : MonoBehaviour
 
     public FishingSkill GetFishingSkill()
         => gameObject.GetComponent<FishingSkill>();
+
+    public CookingSkill GetCookingSkill()
+        => gameObject.GetComponent<CookingSkill>();
 }

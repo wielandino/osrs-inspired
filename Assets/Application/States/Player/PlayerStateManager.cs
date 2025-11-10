@@ -20,6 +20,7 @@ public class PlayerStateManager : MonoBehaviour
     public PlayerCarryingState CarryingState = new();
     public PlayerFishingState FishingState = new();
     public PlayerCookingState CookingState = new();
+    public PlayerCraftingState CraftingState = new();
 
     private readonly Queue<PlayerCommandBase> _commandQueue = new();
     private PlayerCommandBase _currentCommand;
@@ -31,6 +32,7 @@ public class PlayerStateManager : MonoBehaviour
     public bool IsInCarryingState() => _currentState == CarryingState;
     public bool IsInFishingState() => _currentState == FishingState;
     public bool IsInCookingState() => _currentState == CookingState;
+    public bool IsInCraftingState() => _currentState == CraftingState;
 
     private void Start()
     {
@@ -143,6 +145,12 @@ public class PlayerStateManager : MonoBehaviour
     {
         CookingState.SetTargetTreeLogAndItemToCook(treeLog, item, this);
         SwitchState(CookingState);
+    }
+
+    public void SwitchToCraftingState(CraftingRecipe recipe)
+    {
+        CraftingState.SetCraftingRecipe(recipe, this);
+        SwitchState(CraftingState);
     }
 
 }

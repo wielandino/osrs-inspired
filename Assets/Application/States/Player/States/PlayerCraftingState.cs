@@ -14,8 +14,20 @@ public class PlayerCraftingState : PlayerBaseState
 
     public void SetCraftingRecipe(CraftingRecipe craftingRecipe, PlayerStateManager player)
     {
+        if (craftingRecipe == null)
+            return;
+        
+        
+        if (craftingRecipe.PrimaryIngredient.ItemToCombine == null || 
+            craftingRecipe.SecondaryIngredient.ItemToCombine == null)
+            return;
+        
+        
+        if (craftingRecipe.ReturnItem == null)
+            return;
+    
+        
         _craftingRecipe = craftingRecipe;
-
         CollectAllCraftingItemsFromPlayerInventory(player);
     }
 
@@ -83,7 +95,7 @@ public class PlayerCraftingState : PlayerBaseState
                 if (_craftingRecipe.ReturnItem != null)
                     player.PlayerInventory.AddItem(_craftingRecipe.ReturnItem);
 
-                //player.PlayerSkills.GetCraftingSkill().AddExperience(_craftingRecipe.XPDrop);
+                player.PlayerSkills.GetCraftingSkill().IncreaseCraftingXP(_craftingRecipe.XPDrop);
             }
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -7,6 +8,8 @@ public class OSRSInventoryGridElement : InventoryGridElement, IInventoryGridElem
     private IInventoryItemData _itemData;
     private InventoryItemContextMenu _contextMenuPlugin;
     private InventoryItemSelect _selectItemPlugin;
+    
+    public static Action<IInventoryItemData[]> OnItemCombined;
 
     public void Initialize(IInventoryItemData itemData)
     {
@@ -29,6 +32,9 @@ public class OSRSInventoryGridElement : InventoryGridElement, IInventoryGridElem
         _contextMenuPlugin.ClearContextOptions();
         _contextMenuPlugin.AddContextOption("Select", _selectItemPlugin.AddSelectedItem, priority: 100);
         _contextMenuPlugin.AddContextOption("Destroy", DestroyItem, priority: 90);
+
+        if (_selectItemPlugin.GetSelectedItems().Count > 0)
+            _contextMenuPlugin.AddContextOption("Combine", CombineSelectedItems, priority: 80);
         
     }
 
@@ -77,6 +83,11 @@ public class OSRSInventoryGridElement : InventoryGridElement, IInventoryGridElem
     private void DestroyItem()
     {
         _inventoryUIController.RemoveGridElement(_gridElement);
+    }
+
+    private void CombineSelectedItems()
+    {
+        
     }
 
     private void OnDisable()

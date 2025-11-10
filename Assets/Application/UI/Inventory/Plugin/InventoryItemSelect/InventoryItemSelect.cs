@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InventoryItemSelect : MonoBehaviour, IInventoryPlugin
@@ -37,4 +38,7 @@ public class InventoryItemSelect : MonoBehaviour, IInventoryPlugin
     {
         Container.ClearAllSelectedItems();
     }
+
+    public List<IInventoryGridElement> GetSelectedItems()
+        => Container.GetSelectedItems();
 }

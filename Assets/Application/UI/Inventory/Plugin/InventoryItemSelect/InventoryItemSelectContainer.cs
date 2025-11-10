@@ -30,4 +30,7 @@ public class InventoryItemSelectContainer
         _selectedItems.Clear();
     }
 
+    public List<IInventoryGridElement> GetSelectedItems()
+        => _selectedItems;
+
 }

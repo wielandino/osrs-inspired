@@ -23,5 +23,6 @@ public class Player : MonoBehaviour
     public SimpleGroundSnap GetSimpleGroundSnap()
         => gameObject.GetComponent<SimpleGroundSnap>();
     
-
+    public PlayerStateManager GetPlayerStateManager()
+        => gameObject.GetComponent<PlayerStateManager>();
 }

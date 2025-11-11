@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
@@ -9,7 +10,7 @@ public class OSRSInventoryGridElement : InventoryGridElement, IInventoryGridElem
     private InventoryItemContextMenu _contextMenuPlugin;
     private InventoryItemSelect _selectItemPlugin;
     
-    public static Action<IInventoryItemData[]> OnItemCombined;
+    public static Action<IInventoryItemData, IInventoryItemData> OnItemCombined;
 
     public void Initialize(IInventoryItemData itemData)
     {
@@ -87,7 +88,10 @@ public class OSRSInventoryGridElement : InventoryGridElement, IInventoryGridElem
 
     private void CombineSelectedItems()
     {
-        
+        var primaryItem = GetItemData();
+        var secondaryItem = _selectItemPlugin.GetSelectedItems().First().GetItemData();
+
+        OnItemCombined?.Invoke(primaryItem, secondaryItem);
     }
 
     private void OnDisable()

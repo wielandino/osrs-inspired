@@ -24,6 +24,7 @@ public class PlayerInventory : MonoBehaviour
             InventoryUIController.Instance.OnGridElementRemoved += OnItemRemovedFromUI;
 
         InventoryItemSelect.OnItemSelected += OnItemSelectedFromUI;
+        OSRSInventoryGridElement.OnItemCombined += OnItemCombinedFromUI;
     }
 
     private void Update()
@@ -50,19 +51,70 @@ public class PlayerInventory : MonoBehaviour
 
     public bool RemoveItem(Item item)
         => _items.Remove(item);
-    
-    
+
+
+    private void OnItemCombinedFromUI(IInventoryItemData primaryItem, IInventoryItemData secondaryItem)
+    {
+        if (!TryGetItemFromInventory(primaryItem, out Item primaryItemInInventory))
+            return;
+        
+
+        if (!TryGetItemFromInventory(secondaryItem, out Item secondaryItemInInventory))
+            return;
+        
+
+        if (!TryGetPlayerStateManager(out PlayerStateManager playerStateManager))
+            return;
+        
+        var craftingCommand = new CraftingCommand(primaryItemInInventory, secondaryItemInInventory);
+        playerStateManager.AddCommands(craftingCommand);
+    }
+
+    private bool TryGetItemFromInventory(IInventoryItemData itemData, out Item foundItem)
+    {
+        foundItem = null;
+
+        if (itemData == null)
+            return false;
+
+        if (itemData is not Item itemCasted)
+            return false;
+
+        foundItem = _items.FirstOrDefault(x => x == itemCasted);
+        return foundItem != null;
+    }
+
+    private bool TryGetPlayerStateManager(out PlayerStateManager stateManager)
+    {
+        stateManager = null;
+
+        if (Player.Instance == null)
+            return false;
+
+        stateManager = Player.Instance.GetPlayerStateManager();
+        return stateManager != null;
+    }
+
+    private bool IsItemFromUIInInventory(IInventoryItemData itemData)
+    {
+        if (itemData is not Item)
+            return false;
+
+        var itemInList = _items.Where(x => x == itemData as Item).FirstOrDefault();
+
+        if (itemInList == null)
+            return false;
+
+        return true;
+    }
+
     private void OnItemSelectedFromUI(IInventoryItemData itemData)
     {
-        if (itemData is Item item)
-        {
-            var itemInList = _items.Where(x => x == item).FirstOrDefault();
+        if (!IsItemFromUIInInventory(itemData))
+            return;
 
-            if (itemInList == null)
-                return;
-
-            SelectedItem = itemInList;
-        }
+        var itemInList = _items.Where(x => x == itemData as Item).First();
+        SelectedItem = itemInList;
     }
 
     private void OnItemRemovedFromUI(IInventoryItemData itemData)

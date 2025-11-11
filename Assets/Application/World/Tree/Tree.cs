@@ -117,4 +117,7 @@ public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
     {
         InteractionTiles = ObjectHelper.CollectInteractionTilesOfPosition(gameObject.transform.position);
     }
+
+    public TreeStateManager GetStateManager()
+        => _treeStateManager;
 }

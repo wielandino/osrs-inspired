@@ -41,7 +41,7 @@ public class TreeClickStrategy : IClickStrategy
             return;
 
         Vector3 nearestTile = _movementService.GetNearestInteractionTile(tree.InteractionTiles);
-        var command = selectedItem.Callback.ExecuteCallback(tree.gameObject, _playerStateManager);
+        var command = selectedItem.Callback.ExecuteCallback(tree.gameObject, _playerStateManager, selectedItem);
 
         if (command != null)
         {

@@ -59,7 +59,7 @@ public class TreeLogClickStrategy : IClickStrategy
             return;
 
         Vector3 nearestTile = _movementService.GetNearestInteractionTile(treeLog.InteractionTiles);
-        var command = selectedItem.Callback.ExecuteCallback(treeLog.gameObject, playerState);
+        var command = selectedItem.Callback.ExecuteCallback(treeLog.gameObject, playerState, selectedItem);
         
         if (command != null)
         {

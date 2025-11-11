@@ -8,8 +8,8 @@ public class PlayerInputHandler : MonoBehaviour
 {
     private PlayerStateManager _playerStateManager;
     private PlayerMovementService _playerMovementService;
-    
-    
+
+
     private List<IClickStrategy> _clickStrategies;
     private PlayerInputActions _playerInputActions;
 
@@ -63,6 +63,8 @@ public class PlayerInputHandler : MonoBehaviour
                 break;
             }
         }
+
+        DeSelectItemIfNeeded();
     }
 
     private bool TryGetRaycastHit(out RaycastHit hit)
@@ -75,11 +77,11 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (EventSystem.current.IsPointerOverGameObject())
             return;
-            
+
         var mousePosition = _playerInputActions.Gameplay.MousePosition.ReadValue<Vector2>();
         var ray = Camera.main.ScreenPointToRay(mousePosition);
 
-        if(Physics.Raycast(ray, out var hitInfo))
+        if (Physics.Raycast(ray, out var hitInfo))
         {
             if (hitInfo.collider.TryGetComponent<IInteractable>(out var interactable) ||
                 hitInfo.collider.transform.parent.TryGetComponent(out interactable))
@@ -91,5 +93,11 @@ public class PlayerInputHandler : MonoBehaviour
 
             return;
         }
+    }
+
+    private void DeSelectItemIfNeeded()
+    {
+        if (_playerStateManager.PlayerInventory.SelectedItem != null)
+            _playerStateManager.PlayerInventory.DeSelectCurrentItem();
     }
 }

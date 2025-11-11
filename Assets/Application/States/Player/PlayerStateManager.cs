@@ -123,9 +123,9 @@ public class PlayerStateManager : MonoBehaviour
         SwitchState(MoveState);
     }
 
-    public void SwitchToWoodcuttingState(Tree tree)
+    public void SwitchToWoodcuttingState(Tree tree, ISkillTool woodcuttingAxe)
     {
-        WoodcuttingState.SetTargetTree(tree);
+        WoodcuttingState.InititalWoodcuttingState(tree, woodcuttingAxe);
         SwitchState(WoodcuttingState);
     }
 

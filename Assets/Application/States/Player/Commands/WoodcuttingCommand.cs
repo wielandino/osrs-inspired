@@ -1,10 +1,12 @@
 public class WoodcuttingCommand : PlayerCommandBase
 {
     private readonly Tree _targetTree;
+    private readonly ISkillTool _woodcuttingAxe;
 
-    public WoodcuttingCommand(Tree tree)
+    public WoodcuttingCommand(Tree tree, ISkillTool woodcuttingAxe)
     {
         _targetTree = tree;
+        _woodcuttingAxe = woodcuttingAxe;
     }
 
     public override void Cancel(PlayerStateManager player)
@@ -42,7 +44,7 @@ public class WoodcuttingCommand : PlayerCommandBase
         }
 
         if (player.PlayerSkills.GetWoodcuttingSkill().CurrentLevel < _targetTree.GetRequiredLevelToCut() ||
-            !player.PlayerInventory.HasValidToolForSkill(SkillType.Woodcutting, player.PlayerSkills))
+            !_woodcuttingAxe.CanPlayerUseForSkill(SkillType.Woodcutting, player.PlayerSkills.GetWoodcuttingSkill().CurrentLevel))
         {
             errorCode = CommandErrorCode.PlayerSkillRequirementNotMet;
             return false;
@@ -53,7 +55,7 @@ public class WoodcuttingCommand : PlayerCommandBase
 
     public override void ExecuteInternal(PlayerStateManager player)
     {
-        player.SwitchToWoodcuttingState(_targetTree);
+        player.SwitchToWoodcuttingState(_targetTree, _woodcuttingAxe);
     }
 
     public override bool IsComplete(PlayerStateManager player)

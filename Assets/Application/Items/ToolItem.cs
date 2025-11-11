@@ -16,7 +16,7 @@ public class ToolItem : Item, ISkillTool
     public float EfficiencyBonus => _efficiencyBonus;
     public float DurabilityMax => _durabilityMax;
 
-    public bool CanUseForSkill(SkillType skill, int playerLevel)
+    public bool CanPlayerUseForSkill(SkillType skill, int playerLevel)
     {
         if (_requiredSkill == skill && playerLevel >= _requiredLevel)
             return true;

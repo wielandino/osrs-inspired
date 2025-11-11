@@ -96,8 +96,11 @@ public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
 
         if(_treeStateManager.IsInIdleState())
         {
+            var bestWoodcuttingAxe = player.PlayerInventory
+                                          .GetBestToolForSkill(SkillType.Woodcutting, player.PlayerSkills);
+
             var moveCommand = new MoveCommand(transform.position);
-            var woodcuttingCommand = new WoodcuttingCommand(this);
+            var woodcuttingCommand = new WoodcuttingCommand(this, bestWoodcuttingAxe);
 
             options.Add(
                 new(

@@ -7,10 +7,12 @@ public class PlayerWoodcuttingState : PlayerBaseState
     private PlayerStateManager _player;
     private Coroutine _woodcuttingCoroutine;
     private bool _treeWasChopped = false;
+    private ISkillTool _woodcuttingAxe;
 
-    public void SetTargetTree(Tree tree)
+    public void InititalWoodcuttingState(Tree tree, ISkillTool woodcuttingAxe)
     {
         _currentTree = tree;
+        _woodcuttingAxe = woodcuttingAxe;
     }
 
     public override void EnterState(PlayerStateManager player)
@@ -36,12 +38,13 @@ public class PlayerWoodcuttingState : PlayerBaseState
 
     private IEnumerator CuttingWoodCoroutine()
     {
-        var bestTool = _player.PlayerInventory.GetBestToolForSkill(SkillType.Woodcutting, _player.PlayerSkills);
+        Debug.Log($"Cutting Wood with EffiencyBonus '{_woodcuttingAxe.EfficiencyBonus}'");
+        var tool = _woodcuttingAxe;
         var treeStateManager = _currentTree.GetComponent<TreeStateManager>();
 
         while (_currentTree.CurrentHealth > 0 && !treeStateManager.IsInDestroyedState())
         {
-            float damage = _player.PlayerSkills.GetWoodcuttingSkill().BonusDamage + bestTool.EfficiencyBonus;
+            float damage = _player.PlayerSkills.GetWoodcuttingSkill().BonusDamage + tool.EfficiencyBonus;
             _currentTree.CurrentHealth -= damage;
 
             if (_currentTree.CurrentHealth <= 0)

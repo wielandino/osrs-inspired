@@ -10,6 +10,7 @@ public class InventoryUIController : MonoBehaviour
     public GameObject InventoryPanel;
     public GameObject GridContainer;
     public InventoryGridElement GridElementPrefab;
+
     private readonly List<InventoryGridElement> _gridElements = new();
 
     private bool _isPanelActive;
@@ -98,5 +99,9 @@ public class InventoryUIController : MonoBehaviour
         InventoryPanel.SetActive(!_isPanelActive);
         _isPanelActive = !_isPanelActive;
     }
+
+    public InventoryGridElement GetInventoryGridElementByItemData(IInventoryItemData inventoryItemData)
+        => _gridElements.FirstOrDefault(x =>
+                x.gameObject.GetComponent<IInventoryGridElement>().GetItemData() == inventoryItemData);
     
 }

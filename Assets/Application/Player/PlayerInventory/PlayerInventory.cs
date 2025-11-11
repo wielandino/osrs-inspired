@@ -50,7 +50,19 @@ public class PlayerInventory : MonoBehaviour
     }
 
     public bool RemoveItem(Item item)
-        => _items.Remove(item);
+    {
+        var isItemRemoved = _items.Remove(item);
+
+        if (isItemRemoved)
+        {
+            var gridElementToRemove = InventoryUIController.Instance.GetInventoryGridElementByItemData(item);
+            
+            if (gridElementToRemove != null)
+                InventoryUIController.Instance.RemoveGridElement(gridElementToRemove);
+        }
+
+        return isItemRemoved;
+    }
 
 
     private void OnItemCombinedFromUI(IInventoryItemData primaryItem, IInventoryItemData secondaryItem)
@@ -119,7 +131,7 @@ public class PlayerInventory : MonoBehaviour
 
     private void OnItemRemovedFromUI(IInventoryItemData itemData)
     {
-        if (itemData is Item item)
+        if (itemData is Item item && _items.Where(x => x == item) != null)
             _items.Remove(item);
     }
 }

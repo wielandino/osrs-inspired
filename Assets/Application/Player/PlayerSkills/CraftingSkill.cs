@@ -13,7 +13,7 @@ public class CraftingSkill : PlayerSkill
     private float _requiredXPForLevelUp = 85;   
 
     [SerializeField]
-    private float _chanceToCraftPerLevel = 0.30f;
+    private float _playerCraftChance = 0.30f;
 
     [SerializeField]
     private float _increaseChanceToCraftPerLevel = 0.5f;
@@ -41,12 +41,12 @@ public class CraftingSkill : PlayerSkill
         {
             CurrentLevel++;
             _requiredXPForLevelUp = GetNewRequiredXPForSkill(_requiredXPForLevelUp);
-            _chanceToCraftPerLevel += _increaseChanceToCraftPerLevel;
+            _playerCraftChance += _increaseChanceToCraftPerLevel;
         }
 
         this.UpdateUI(_skillType, currentXP: _currentXP, requiredXPForLevelUp: _requiredXPForLevelUp);
     }
 
-    public float GetChanceToCraftPerLevel()
-        => _chanceToCraftPerLevel;
+    public float GetPlayerCraftChance()
+        => _playerCraftChance;
 }

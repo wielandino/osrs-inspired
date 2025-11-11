@@ -17,7 +17,6 @@ public class PlayerCraftingState : PlayerBaseState
         if (craftingRecipe == null)
             return;
         
-        
         if (craftingRecipe.PrimaryIngredient.ItemToCombine == null || 
             craftingRecipe.SecondaryIngredient.ItemToCombine == null)
             return;
@@ -116,7 +115,7 @@ public class PlayerCraftingState : PlayerBaseState
 
     public bool TryCraftAttempt(PlayerStateManager player)
     {
-        float playerCraftChance = player.PlayerSkills.GetCraftingSkill().GetChanceToCraftPerLevel();
+        float playerCraftChance = player.PlayerSkills.GetCraftingSkill().GetPlayerCraftChance();
         float finalCraftChance = CalculateCraftChance(playerCraftChance, _craftingRecipe.IncreasedFailureChance);
         float roll = Random.Range(0f, 1f);
         

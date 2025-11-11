@@ -21,8 +21,8 @@ public class CraftingRecipeDatabase : ScriptableObject
     public CraftingRecipe FindRecipe(Item itemOne, Item itemTwo)
     {
         return _allRecipes.FirstOrDefault(recipe =>
-            (recipe.PrimaryIngredient.ItemToCombine == itemOne && recipe.PrimaryIngredient.ItemToCombine == itemTwo) ||
-            (recipe.SecondaryIngredient.ItemToCombine == itemTwo && recipe.SecondaryIngredient.ItemToCombine == itemOne)
+            (recipe.PrimaryIngredient.ItemToCombine == itemOne && recipe.SecondaryIngredient.ItemToCombine == itemTwo) ||
+            (recipe.PrimaryIngredient.ItemToCombine == itemTwo && recipe.SecondaryIngredient.ItemToCombine == itemOne)
         );
     }
     

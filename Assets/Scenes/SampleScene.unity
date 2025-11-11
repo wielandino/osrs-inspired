@@ -8227,6 +8227,7 @@ GameObject:
   - component: {fileID: 2048886788}
   - component: {fileID: 2048886789}
   - component: {fileID: 2048886790}
+  - component: {fileID: 2048886791}
   m_Layer: 0
   m_Name: Skills
   m_TagString: Untagged
@@ -8326,6 +8327,23 @@ MonoBehaviour:
   _requiredXPForLevelUp: 85
   _chanceToCookPerLevel: 0.3
   _increaseChanceToCookPerLevel: 0.5
+--- !u!114 &2048886791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048886784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abd0d927834052e65af3efe231b67687, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Application::CraftingSkill
+  _xpBarUI: {fileID: 1415007150}
+  _currentXP: 0
+  _requiredXPForLevelUp: 85
+  _playerCraftChance: 0.3
+  _increaseChanceToCraftPerLevel: 0.5
 --- !u!1001 &2055768450
 PrefabInstance:
   m_ObjectHideFlags: 0

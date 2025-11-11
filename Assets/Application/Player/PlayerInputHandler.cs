@@ -64,7 +64,7 @@ public class PlayerInputHandler : MonoBehaviour
             return;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            
+
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             if (hit.collider.TryGetComponent<Tree>(out var tree))
@@ -72,24 +72,26 @@ public class PlayerInputHandler : MonoBehaviour
                 HandleTreeInteraction(tree);
                 return;
             }
-            else if (hit.collider.TryGetComponent<TreeLog>(out var treeLog) || 
+            else if (hit.collider.TryGetComponent<TreeLog>(out var treeLog) ||
                      hit.collider.transform.parent.TryGetComponent(out treeLog))
             {
                 if (treeLog.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
                     treeLog = GetTopTreeLogAtPosition(hit.transform.position);
-                    
-                HandleTreeLogInteraction(treeLog);        
+
+                HandleTreeLogInteraction(treeLog);
             }
             else if (hit.collider.TryGetComponent<Tile>(out var tile))
             {
                 if (tile.GetTileType() != Tile.TileType.WalkableTile)
                     return;
-                    
+
                 var moveCommand = new MoveCommand(hit.point);
                 _playerStateManager.AddCommands(moveCommand);
             }
         }
-        
+
+        if (_playerStateManager.PlayerInventory.SelectedItem != null)
+            _playerStateManager.PlayerInventory.DeSelectCurrentItem();
     }
 
     private void HandleTreeLogInteraction(TreeLog treeLog)

@@ -134,4 +134,12 @@ public class PlayerInventory : MonoBehaviour
         if (itemData is Item item && _items.Where(x => x == item) != null)
             _items.Remove(item);
     }
+
+    public void DeSelectCurrentItem()
+    {
+        if (SelectedItem != null)
+            SelectedItem = null;
+    }
+
+    
 }

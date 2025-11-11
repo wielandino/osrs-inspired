@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TooltipTrigger : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class TooltipTrigger : MonoBehaviour
 
     private void OnMouseEnter()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+            
         TooltipController.Instance.ShowTooltip(tooltipText, tooltipColor);
     }
 

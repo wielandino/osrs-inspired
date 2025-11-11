@@ -11,7 +11,7 @@ public abstract class ItemCallback : ScriptableObject
             command = CreateCommand(target, player);
 
 
-        player.PlayerInventory.SelectedItem = null;
+        player.PlayerInventory.DeSelectCurrentItem();
         
         return command;
     }

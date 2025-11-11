@@ -82,7 +82,10 @@ public class OSRSInventoryGridElement : InventoryGridElement, IInventoryGridElem
 
     private void AddCombineContextMenuOption(IInventoryItemData itemData)
     {
-        _contextMenuPlugin.AddContextOption("Combine", CombineSelectedItems, priority: 80);
+        if(_contextMenuPlugin.GetContextMenuOptions()
+                             .Where(x => x.Label == "Combine")
+                             .FirstOrDefault() == null)
+                                _contextMenuPlugin.AddContextOption("Combine", CombineSelectedItems, priority: 80);
     }
 
     private void RemoveCombineContextMenuOption()

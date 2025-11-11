@@ -17,7 +17,7 @@ public class FirestoneCallback : ItemCallback
         if (sourceItem is not ISkillTool tool)
             return false;
 
-        if (!ToolValidator.CanToolBeUsedForSkill(sourceItem, SkillType.Woodcutting))
+        if (!ToolValidator.CanToolBeUsedForSkill(sourceItem, SkillType.Firemaking))
             return false;
 
         return true;

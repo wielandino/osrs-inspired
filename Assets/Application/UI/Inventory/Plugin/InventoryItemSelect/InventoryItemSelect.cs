@@ -5,6 +5,7 @@ using UnityEngine;
 public class InventoryItemSelect : MonoBehaviour, IInventoryPlugin
 {
     public static Action<IInventoryItemData> OnItemSelected;
+    public static Action OnItemSelectedCleared;
     private static InventoryItemSelectContainer _container;
 
     private static InventoryItemSelectContainer Container
@@ -37,6 +38,7 @@ public class InventoryItemSelect : MonoBehaviour, IInventoryPlugin
     public void ClearAllSelectedItems()
     {
         Container.ClearAllSelectedItems();
+        OnItemSelectedCleared?.Invoke();
     }
 
     public List<IInventoryGridElement> GetSelectedItems()

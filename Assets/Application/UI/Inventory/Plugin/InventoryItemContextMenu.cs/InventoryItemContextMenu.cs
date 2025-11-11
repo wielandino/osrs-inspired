@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class InventoryItemContextMenu : MonoBehaviour, IInventoryPlugin
@@ -24,6 +25,14 @@ public class InventoryItemContextMenu : MonoBehaviour, IInventoryPlugin
         });
 
         _contextMenuOptions.Sort((a, b) => b.Priority.CompareTo(a.Priority));
+    }
+
+    public void RemoveContextOption(InventoryItemContextMenuOptions contextMenuOption)
+    {
+        var contextMenuOptionInList = _contextMenuOptions.Where(x => x == contextMenuOption).FirstOrDefault();
+
+        if (contextMenuOptionInList != null)
+            _contextMenuOptions.Remove(contextMenuOptionInList);
     }
 
     public List<InventoryItemContextMenuOptions> GetContextMenuOptions()

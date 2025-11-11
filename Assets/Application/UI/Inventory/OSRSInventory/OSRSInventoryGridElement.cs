@@ -20,6 +20,9 @@ public class OSRSInventoryGridElement : InventoryGridElement, IInventoryGridElem
         _selectItemPlugin = gameObject.GetComponent<InventoryItemSelect>();
 
         SetupContextMenu();
+
+        InventoryItemSelect.OnItemSelected += AddCombineContextMenuOption;
+        InventoryItemSelect.OnItemSelectedCleared += RemoveCombineContextMenuOption;
     }
 
     public IInventoryItemData GetItemData()
@@ -33,10 +36,6 @@ public class OSRSInventoryGridElement : InventoryGridElement, IInventoryGridElem
         _contextMenuPlugin.ClearContextOptions();
         _contextMenuPlugin.AddContextOption("Select", _selectItemPlugin.AddSelectedItem, priority: 100);
         _contextMenuPlugin.AddContextOption("Destroy", DestroyItem, priority: 90);
-
-        if (_selectItemPlugin.GetSelectedItems().Count > 0)
-            _contextMenuPlugin.AddContextOption("Combine", CombineSelectedItems, priority: 80);
-        
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -79,6 +78,21 @@ public class OSRSInventoryGridElement : InventoryGridElement, IInventoryGridElem
         }
 
         return contextMenuOptions;
+    }
+
+    private void AddCombineContextMenuOption(IInventoryItemData itemData)
+    {
+        _contextMenuPlugin.AddContextOption("Combine", CombineSelectedItems, priority: 80);
+    }
+
+    private void RemoveCombineContextMenuOption()
+    {
+        var contextMenuOption = _contextMenuPlugin.GetContextMenuOptions()
+                                                  .Where(x => x.Label == "Combine")
+                                                  .FirstOrDefault();
+
+        if (contextMenuOption != null)
+            _contextMenuPlugin.RemoveContextOption(contextMenuOption);
     }
     
     private void DestroyItem()

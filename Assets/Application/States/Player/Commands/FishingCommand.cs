@@ -1,10 +1,11 @@
 public class FishingCommand : PlayerCommandBase
 {
     private readonly FishingSpot _fishingSpot;
-
-    public FishingCommand(FishingSpot fishingSpot)
+    private readonly ISkillTool _fishingRod;
+    public FishingCommand(FishingSpot fishingSpot, ISkillTool fishingRod)
     {
         _fishingSpot = fishingSpot;
+        _fishingRod = fishingRod;
     }
 
     public override bool CanExecute(PlayerStateManager player)
@@ -27,7 +28,7 @@ public class FishingCommand : PlayerCommandBase
             return false;
         }
 
-        if (!player.PlayerInventory.HasValidToolForSkill(SkillType.Fishing, player.PlayerSkills) ||
+        if (!_fishingRod.CanPlayerUseForSkill(SkillType.Fishing, player.PlayerSkills.GetFishingSkill().CurrentLevel) ||
             player.PlayerSkills.GetFishingSkill().CurrentLevel < _fishingSpot.GetRequiredLevelToInteract())
         {
             errorCode = CommandErrorCode.PlayerSkillRequirementNotMet;

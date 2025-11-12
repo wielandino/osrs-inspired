@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class FishingSpot : MonoBehaviour, IHasInteractionTiles, IInteractable
+public class FishingSpot : MonoBehaviour, IHasInteractionTiles, ITooltipProvider
 {
     private List<Vector3> _interactionTiles;
 
@@ -60,28 +59,20 @@ public class FishingSpot : MonoBehaviour, IHasInteractionTiles, IInteractable
         }
     }
 
-    public List<ContextMenuOption> GetContextMenuOptions(PlayerStateManager player)
+    public string GetTooltipText()
     {
-        var options = new List<ContextMenuOption>();
+        string toolTipText = "<color=white>Examine</color> <color=yellow>fishing place</color>";
 
-        var moveCommand =
-            new MoveCommand(PlayerMovementService.Instance.GetNearestInteractionTile(GetInteractionTiles()));
+        var selectedItem = PlayerInventory.Instance.SelectedItem;
 
-        var fishingCommand =
-            new FishingCommand(this);
-
-        if (player.IsInIdleState() &&
-            player.PlayerInventory.HasValidToolForSkill(SkillType.Fishing, player.PlayerSkills))
+        if ((selectedItem != null && 
+            ToolValidator.CanToolBeUsedForSkill(selectedItem, SkillType.Fishing)) ||
+            PlayerInventory.Instance.HasValidToolForSkill(SkillType.Fishing, PlayerSkill.Instance))
         {
-
-            options.Add(
-                new(
-                    "Fish",
-                    () => player.AddCommands(moveCommand, fishingCommand)
-                )
-            );
+            if (GetFishingCapacity() > 0)
+                toolTipText = "<color=white>Fish on</color> <color=yellow>fishing place</color>";
         }
-
-        return options;
+        
+        return toolTipText;
     }
 }

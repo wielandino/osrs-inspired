@@ -18,7 +18,7 @@ MonoBehaviour:
     good, but it is a start I guess...
   IsStackable: 0
   Icon: {fileID: 0}
-  Callback: {fileID: 0}
+  Callback: {fileID: 11400000, guid: 046ba0d2a31942dcebd0604ed2f334a7, type: 2}
   ItemType: 1
   _requiredSkill: 3
   _requiredLevel: 0

@@ -41,7 +41,8 @@ public class PlayerInputHandler : MonoBehaviour
         {
             new TreeClickStrategy(_playerMovementService, _playerStateManager),
             new TileClickStrategy(_playerStateManager),
-            new TreeLogClickStrategy(_playerMovementService, _playerStateManager)
+            new TreeLogClickStrategy(_playerMovementService, _playerStateManager),
+            new FishingSpotClickStrategy(_playerMovementService, _playerStateManager)
         };
 
         _clickStrategies = _clickStrategies.OrderBy(s => s.Priority).ToList();

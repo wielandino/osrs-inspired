@@ -3971,6 +3971,7 @@ GameObject:
   - component: {fileID: 1081987254}
   - component: {fileID: 1081987255}
   - component: {fileID: 1081987256}
+  - component: {fileID: 1081987257}
   m_Layer: 0
   m_Name: FishingInteraction
   m_TagString: Untagged
@@ -4030,6 +4031,20 @@ MonoBehaviour:
   _fishingCapacity: 40
   _possibleFishesToCatch:
   - {fileID: 11400000, guid: 85fe19c8113f330d290d19b7414b4218, type: 2}
+--- !u!114 &1081987257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081987253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3d32ecbbf074d88d9eaca1de9a7cc87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Application::TooltipTrigger
+  _fallbackTooltipText: <color=white>White</color> <color=yellow>Yellow</color>
+  tooltipColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &1083170654
 GameObject:
   m_ObjectHideFlags: 0
@@ -6350,6 +6365,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c11357bca755affc3acc92d78aabe196, type: 2}
   - {fileID: 11400000, guid: 66c0156b2300b5877acb3aaa08f1067d, type: 2}
   - {fileID: 11400000, guid: 85fe19c8113f330d290d19b7414b4218, type: 2}
+  - {fileID: 11400000, guid: e935a743a2fee2ecca453bfa894325ef, type: 2}
   SelectedItem: {fileID: 0}
 --- !u!1 &1655115359
 GameObject:

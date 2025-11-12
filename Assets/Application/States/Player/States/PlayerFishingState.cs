@@ -91,6 +91,7 @@ public class PlayerFishingState : PlayerBaseState
         {
             player.PlayerInventory.AddItem(fish);
             _fishingSpot.ReduceFishingCapacity(fish.FishingSpotCapacityDrain);
+            player.PlayerSkills.GetFishingSkill().IncreaseFishingXP(fish.XPPerCatch);
         }
 
         return success;

@@ -37,7 +37,8 @@ public class FishingCommandTests
     {
         // Arrange
         _playerMock.GetPlayerGameObject().transform.position = new(100, 0, 100); // Weit weg!
-        var fishingCommand = new FishingCommand(_fishingSpot);
+        var fishingRod = ItemMockHelper.GetFishingRodLevel1();
+        var fishingCommand = new FishingCommand(_fishingSpot, fishingRod);
 
         // Act
         bool canExecute = fishingCommand.CanExecute(_playerMock.GetPlayerStateManager(), out CommandErrorCode errorCode);
@@ -45,22 +46,6 @@ public class FishingCommandTests
         // Assert
         Assert.IsFalse(canExecute, "Command sollte nicht ausführbar sein wenn Player zu weit weg ist");
         Assert.AreEqual(CommandErrorCode.PlayerNotInInteractionTile, errorCode);
-    }
-
-    [Test]
-    public void Command_Should_Return_False_When_Player_Has_No_Tool()
-    {
-        // Arrange
-        _playerMock.GetPlayerGameObject().transform.position = new(1, 0, 0);
-
-        var fishingCommand = new FishingCommand(_fishingSpot);
-
-        // Act
-        bool canExecute = fishingCommand.CanExecute(_playerMock.GetPlayerStateManager(), out CommandErrorCode errorCode);
-
-        // Assert
-        Assert.IsFalse(canExecute, "Command sollte nicht ausführbar sein ohne Tool");
-        Assert.AreEqual(CommandErrorCode.PlayerSkillRequirementNotMet, errorCode);
     }
 
     [Test]
@@ -74,7 +59,7 @@ public class FishingCommandTests
         
         SetAvailableFishes(new List<Fish>(), _fishingSpot);
         
-        var fishingCommand = new FishingCommand(_fishingSpot);
+        var fishingCommand = new FishingCommand(_fishingSpot, fishingRod);
 
         // Act
         bool canExecute = fishingCommand.CanExecute(_playerMock.GetPlayerStateManager(), out CommandErrorCode errorCode);
@@ -95,7 +80,7 @@ public class FishingCommandTests
         
         SetFishingSpotCapacity(0f, _fishingSpot);
         
-        var fishingCommand = new FishingCommand(_fishingSpot);
+        var fishingCommand = new FishingCommand(_fishingSpot, fishingRod);
 
         // Act
         bool canExecute = fishingCommand.CanExecute(_playerMock.GetPlayerStateManager(), out CommandErrorCode errorCode);
@@ -114,7 +99,7 @@ public class FishingCommandTests
         var fishingRod = ItemMockHelper.GetFishingRodLevel1();
         _playerMock.GetPlayerStateManager().PlayerInventory.AddItem(fishingRod);
         
-        var fishingCommand = new FishingCommand(_fishingSpot);
+        var fishingCommand = new FishingCommand(_fishingSpot, fishingRod);
 
         // Act
         bool canExecute = fishingCommand.CanExecute(_playerMock.GetPlayerStateManager(), out CommandErrorCode errorCode);
@@ -141,7 +126,7 @@ public class FishingCommandTests
         {
             // Arrange
             _playerMock.GetPlayerGameObject().transform.position = tile;
-            var fishingCommand = new FishingCommand(_fishingSpot);
+            var fishingCommand = new FishingCommand(_fishingSpot, fishingRod);
 
             // Act
             bool canExecute = fishingCommand.CanExecute(_playerMock.GetPlayerStateManager(), out CommandErrorCode errorCode);

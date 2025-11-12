@@ -84,11 +84,9 @@ public static class ObjectHelper
             
             foreach (Collider col in overlapping)
             {
-                // Prüfe ob es ein Objekt mit Interaktionstiles ist
                 if (col.TryGetComponent<IHasInteractionTiles>(out var interactableObject))
-                {
                     interactableObject.RecalculateInteractionTiles();
-                }
+                
             }
         }
     }

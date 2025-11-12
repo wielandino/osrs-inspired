@@ -125,19 +125,16 @@ public class TreeLogClickStrategy : IClickStrategy
         if (treeLog == null)
             return options;
 
-        // Pick up Option
         if (CanPickUp(treeLog))
         {
             options.Add(CreatePickUpOption(treeLog));
         }
 
-        // Burn Option
         if (CanBurn(treeLog))
         {
             options.Add(CreateBurnOption(treeLog));
         }
 
-        // Drop Option
         if (CanDrop(treeLog))
         {
             options.Add(CreateDropOption(treeLog));

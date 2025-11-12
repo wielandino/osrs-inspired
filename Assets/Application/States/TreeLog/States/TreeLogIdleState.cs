@@ -4,8 +4,8 @@ public class TreeLogIdleState : TreeLogBaseState
 {
     public override void EnterState(TreeLogStateManager treeLog)
     {
-        treeLog.AttachedTreeLog.TreeLogIdleStateObject.gameObject.SetActive(true);
-        treeLog.AttachedTreeLog.TreeLogBurningStateObject.gameObject.SetActive(false);
+        treeLog.AttachedTreeLog.TreeLogIdleStateObject.SetActive(true);
+        treeLog.AttachedTreeLog.TreeLogBurningStateObject.SetActive(false);
 
         Debug.Log($"TreeLog entered Idle state");   
 

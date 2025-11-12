@@ -54,6 +54,15 @@ public class TreeLog : MonoBehaviour, IHasInteractionTiles
         ObjectHelper.SetChildModelLocalYPosition(TreeLogBurningStateObject);
     }
 
+    public void ChangeLayerOfObjectAndModelObjects(string layerMask)
+    {
+        gameObject.layer = LayerMask.NameToLayer(layerMask);
+
+        foreach (Transform child in transform.GetComponentsInChildren<Transform>(true))  
+                child.gameObject.layer = LayerMask.NameToLayer(layerMask);
+        
+    }
+
     public bool IsInteractable()
         => _isInteractable;
 

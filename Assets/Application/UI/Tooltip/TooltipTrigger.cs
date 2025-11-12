@@ -4,7 +4,9 @@ using UnityEngine.EventSystems;
 public class TooltipTrigger : MonoBehaviour
 {
     [Header("Tooltip Settings")]
-    public string tooltipText = "Beispiel Tooltip";
+    
+    [SerializeField]
+    private string _fallbackTooltipText = "<color=white>White</color> <color=yellow>Yellow</color>";
     public Color tooltipColor = Color.yellow;
 
     private void OnDisable()
@@ -17,8 +19,22 @@ public class TooltipTrigger : MonoBehaviour
     {
         if (EventSystem.current.IsPointerOverGameObject())
             return;
-            
+
+
+        string tooltipText = GetTooltipText();
+
+        if (string.IsNullOrEmpty(tooltipText))
+            tooltipText = _fallbackTooltipText;
+
         TooltipController.Instance.ShowTooltip(tooltipText, tooltipColor);
+    }
+    
+    private string GetTooltipText()
+    {
+        if (TryGetComponent<ITooltipProvider>(out var tooltipProvider))
+            return tooltipProvider.GetTooltipText();
+        
+        return _fallbackTooltipText;
     }
 
     private void OnMouseExit()

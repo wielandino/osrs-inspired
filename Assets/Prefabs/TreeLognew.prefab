@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1270526047055693197}
   - component: {fileID: 6285282745651232861}
   - component: {fileID: 6775584612205029869}
+  - component: {fileID: 7622516555820056678}
   m_Layer: 7
   m_Name: TreeLogIdle
   m_TagString: Untagged
@@ -124,8 +125,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3d32ecbbf074d88d9eaca1de9a7cc87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TooltipTrigger
-  tooltipText: <color=white>Pick up</color> <color=yellow>treelog</color>
+  _fallbackTooltipText: <color=white>White</color> <color=yellow>Yellow</color>
   tooltipColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+--- !u!114 &7622516555820056678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046111668812493791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4dabf597f28ac7828214c47280f563c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Application::TreeLogIdle
+  _treeLog: {fileID: 4803695373387988385}
 --- !u!1 &5750280356892098762
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,6 +153,7 @@ GameObject:
   - component: {fileID: 1447689516083341199}
   - component: {fileID: 8927141061680704218}
   - component: {fileID: 4648865560438245903}
+  - component: {fileID: 5528728119666900678}
   m_Layer: 7
   m_Name: TreeLogBurning
   m_TagString: Untagged
@@ -254,6 +269,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Application::TreeLogBurning
   _treeLog: {fileID: 4803695373387988385}
+--- !u!114 &5528728119666900678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5750280356892098762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3d32ecbbf074d88d9eaca1de9a7cc87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Application::TooltipTrigger
+  _fallbackTooltipText: <color=white>White</color> <color=yellow>Yellow</color>
+  tooltipColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &8723091059573754753
 GameObject:
   m_ObjectHideFlags: 0

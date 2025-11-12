@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tree : MonoBehaviour, IHasInteractionTiles
+public class Tree : MonoBehaviour, IHasInteractionTiles, ITooltipProvider
 {
     [Header("Tree Stats")]
     public float MaxHealth;
@@ -97,4 +97,18 @@ public class Tree : MonoBehaviour, IHasInteractionTiles
 
     public TreeStateManager GetStateManager()
         => _treeStateManager;
+
+    public string GetTooltipText()
+    {
+        string toolTipText = "<color=white>Examine</color> <color=yellow>Tree</color>";
+        
+        var selectedItem = PlayerInventory.Instance.SelectedItem;
+
+        if ((selectedItem != null && ToolValidator.CanToolBeUsedForSkill(selectedItem, SkillType.Woodcutting)) ||
+            PlayerInventory.Instance.HasValidToolForSkill(SkillType.Woodcutting, PlayerSkill.Instance))
+                toolTipText = "<color=white>Chop down</color> <color=yellow>Tree</color>";
+        
+
+        return toolTipText;
+    }
 }

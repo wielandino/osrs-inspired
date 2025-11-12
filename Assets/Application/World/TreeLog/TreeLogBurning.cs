@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TreeLogBurning : MonoBehaviour
+public class TreeLogBurning : MonoBehaviour, ITooltipProvider
 {
     [SerializeField]
     private TreeLog _treeLog;
@@ -10,8 +10,15 @@ public class TreeLogBurning : MonoBehaviour
         _treeLog.CanBeStacked = false;
     }
 
-    private void OnDisable()
+    public string GetTooltipText()
     {
-        _treeLog.CanBeStacked = true;
+        string toolTipText = "<color=white>Burning</color> <color=yellow>treelog</color>";
+
+        var selectedItem = PlayerInventory.Instance.SelectedItem;
+
+        if (selectedItem != null && selectedItem is CookableItem)
+            toolTipText = $"<color=white>Cook</color> <color=yellow>{selectedItem.Name}</color>";
+        
+        return toolTipText;
     }
 }

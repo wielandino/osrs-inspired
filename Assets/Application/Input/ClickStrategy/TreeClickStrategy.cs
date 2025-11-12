@@ -33,7 +33,15 @@ public class TreeClickStrategy : IClickStrategy
         }
 
         // If there is no tool get the best Woodcutting Axe that the player can use
-        ExecuteWithBestTool(tree);
+        if (_playerStateManager.PlayerInventory.HasValidToolForSkill(SkillType.Woodcutting,
+                                                                     _playerStateManager.PlayerSkills))
+        {
+            ExecuteWithBestTool(tree);
+            return;
+        }
+
+        // Examine
+        Debug.Log("This is a tree");
     }
 
     private void ExecuteToolCallback(Tree tree, Item selectedItem)

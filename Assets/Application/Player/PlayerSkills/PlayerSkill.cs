@@ -2,6 +2,20 @@ using UnityEngine;
 
 public class PlayerSkill : MonoBehaviour
 {
+    public static PlayerSkill Instance;
+
+    private void OnEnable()
+    {
+        if (Instance == null)
+            Instance = this;
+    }
+
+    private void OnDisable()
+    {
+        if (Instance != null)
+            Instance = null;
+    }
+
     [SerializeField]
     private XPBar _xpBarUI;
 

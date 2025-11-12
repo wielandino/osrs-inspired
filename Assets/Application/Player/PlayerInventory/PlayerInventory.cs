@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
+    public static PlayerInventory Instance;
+
     [SerializeField] 
     private List<Item> _items = new();
 
@@ -20,11 +22,26 @@ public class PlayerInventory : MonoBehaviour
 
     private void OnEnable()
     {
+        if (Instance == null)
+            Instance = this;
+
         if (InventoryUIController.Instance != null)
             InventoryUIController.Instance.OnGridElementRemoved += OnItemRemovedFromUI;
 
         InventoryItemSelect.OnItemSelected += OnItemSelectedFromUI;
         OSRSInventoryGridElement.OnItemCombined += OnItemCombinedFromUI;
+    }
+
+    private void OnDisable()
+    {
+        if (Instance != null)
+            Instance = null;
+
+        if (InventoryUIController.Instance != null)
+            InventoryUIController.Instance.OnGridElementRemoved -= OnItemRemovedFromUI;
+
+        InventoryItemSelect.OnItemSelected -= OnItemSelectedFromUI;
+        OSRSInventoryGridElement.OnItemCombined -= OnItemCombinedFromUI;
     }
 
     private void Start()

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
+public class Tree : MonoBehaviour, IHasInteractionTiles
 {
     [Header("Tree Stats")]
     public float MaxHealth;
@@ -88,29 +88,6 @@ public class Tree : MonoBehaviour, IInteractable, IHasInteractionTiles
 
         if (_treeTrunkModel != null)
             _treeTrunkModel.SetActive(true);
-    }
-
-    public List<ContextMenuOption> GetContextMenuOptions(PlayerStateManager player)
-    {
-        var options = new List<ContextMenuOption>();
-
-        if(_treeStateManager.IsInIdleState())
-        {
-            var bestWoodcuttingAxe = player.PlayerInventory
-                                          .GetBestToolForSkill(SkillType.Woodcutting, player.PlayerSkills);
-
-            var moveCommand = new MoveCommand(transform.position);
-            var woodcuttingCommand = new WoodcuttingCommand(this, bestWoodcuttingAxe);
-
-            options.Add(
-                new(
-                    "Chop tree",
-                    () => player.AddCommands(moveCommand, woodcuttingCommand)
-                )
-            );
-        }
-        
-        return options;
     }
 
     public void RecalculateInteractionTiles()

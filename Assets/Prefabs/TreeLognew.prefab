@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: 5881871184669336515}
   - component: {fileID: 1447689516083341199}
   - component: {fileID: 8927141061680704218}
+  - component: {fileID: 4648865560438245903}
   m_Layer: 7
   m_Name: TreeLogBurning
   m_TagString: Untagged
@@ -240,6 +241,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.6510556, y: 1.5090919, z: 2.7056603}
   m_Center: {x: 0.0011006594, y: -0.011276633, z: 0.018936574}
+--- !u!114 &4648865560438245903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5750280356892098762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a430dd662bea7e86b3d5c4d7e64cdb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Application::TreeLogBurning
+  _treeLog: {fileID: 4803695373387988385}
 --- !u!1 &8723091059573754753
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,3 +319,5 @@ MonoBehaviour:
   TreeLogBurningStateObject: {fileID: 5750280356892098762}
   CurrentActiveStateObject: {fileID: 2046111668812493791}
   _isInteractable: 1
+  XPDropPerFiremaking: 5
+  CanBeStacked: 1

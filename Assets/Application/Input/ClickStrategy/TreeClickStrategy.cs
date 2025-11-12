@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TreeClickStrategy : IClickStrategy
@@ -51,14 +52,14 @@ public class TreeClickStrategy : IClickStrategy
 
         _playerStateManager.PlayerInventory.DeSelectCurrentItem();
     }
-    
+
     private void ExecuteWithBestTool(Tree tree)
     {
         if (!_playerStateManager.PlayerInventory.HasValidToolForSkill(SkillType.Woodcutting,
                                                                       _playerStateManager.PlayerSkills))
             return;
 
-        var bestAxe = _playerStateManager.PlayerInventory.GetBestToolForSkill(SkillType.Woodcutting, 
+        var bestAxe = _playerStateManager.PlayerInventory.GetBestToolForSkill(SkillType.Woodcutting,
                                                                       _playerStateManager.PlayerSkills
         );
 
@@ -74,5 +75,51 @@ public class TreeClickStrategy : IClickStrategy
             var moveCommand = new MoveCommand(nearestTile);
             _playerStateManager.AddCommands(moveCommand, woodcuttingCommand);
         }
+    }
+
+    public List<ContextMenuOption> GetContextMenuOptions(RaycastHit hit)
+    {
+        var options = new List<ContextMenuOption>();
+
+        if (!hit.collider.TryGetComponent<Tree>(out var tree))
+            return options;
+
+        if (CanChopTree(tree))
+            options.Add(CreateChopTreeOption(tree));
+
+        options.Add(new ContextMenuOption(
+            "Examine",
+            () => Debug.Log($"A tree.")
+        ));
+
+        return options;
+    }
+
+    private bool CanChopTree(Tree tree)
+    {
+        return tree.GetStateManager().IsInIdleState() &&
+               _playerStateManager.PlayerInventory.HasValidToolForSkill(
+                   SkillType.Woodcutting,
+                   _playerStateManager.PlayerSkills
+               );
+    }
+    
+    private ContextMenuOption CreateChopTreeOption(Tree tree)
+    {
+        var bestAxe = _playerStateManager.PlayerInventory.GetBestToolForSkill(
+            SkillType.Woodcutting, 
+            _playerStateManager.PlayerSkills
+        );
+
+        return new ContextMenuOption(
+            "Chop tree",
+            () => {
+                var moveCommand = new MoveCommand(
+                    _movementService.GetNearestInteractionTile(tree.InteractionTiles)
+                );
+                var woodcuttingCommand = new WoodcuttingCommand(tree, bestAxe);
+                _playerStateManager.AddCommands(moveCommand, woodcuttingCommand);
+            }
+        );
     }
 }

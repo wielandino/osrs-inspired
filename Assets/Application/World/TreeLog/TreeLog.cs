@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TreeLog : MonoBehaviour, IHasInteractionTiles, IInteractable
+public class TreeLog : MonoBehaviour, IHasInteractionTiles
 {
     private TreeLogStateManager _stateManager;
     
@@ -15,6 +15,8 @@ public class TreeLog : MonoBehaviour, IHasInteractionTiles, IInteractable
 
     public bool _isInteractable;
     public float XPDropPerFiremaking = 5f;
+
+    public bool CanBeStacked = true;
 
     private void Awake()
     {
@@ -55,56 +57,33 @@ public class TreeLog : MonoBehaviour, IHasInteractionTiles, IInteractable
     public bool IsInteractable()
         => _isInteractable;
 
-    public List<ContextMenuOption> GetContextMenuOptions(PlayerStateManager player)
+
+    public bool IsTreeLogStacked()
     {
-        var options = new List<ContextMenuOption>();
-
-        var carryTreeLogCommand = new CarryTreeLogCommand(this);
-        var moveCommand =
-            new MoveCommand(PlayerMovementService.Instance.GetNearestInteractionTile(InteractionTiles));
-
-        if (!player.IsInCarryingState())
+        Vector3 position = transform.position;
+        Vector3 rayStart = new(position.x, 50f, position.z);
+        Ray ray = new(rayStart, Vector3.down);
+        
+        RaycastHit[] hits = Physics.RaycastAll(ray, 100f, LayerMask.GetMask("Obstacle"));
+        
+        int treeLogCount = 0;
+        
+        foreach (RaycastHit hit in hits)
         {
-            options.Add(
-                new(
-                    "Pick up",
-                    () => player.AddCommands(moveCommand, carryTreeLogCommand)
-                )
-            );
+            if (hit.collider.TryGetComponent<TreeLog>(out _) ||
+                hit.collider.transform.parent.TryGetComponent<TreeLog>(out _))
+            {
+                treeLogCount++;
+            }
         }
-
-        if (player.IsInIdleState() &&
-            player.PlayerInventory.HasValidToolForSkill(SkillType.Firemaking, player.PlayerSkills) &&
-            !GetStateManager().IsInBurningState())
-        {
-
-            var burnTreeLogCommand = new BurnTreeLogCommand(this);
-
-            options.Add(
-                new(
-                    "Burn",
-                    () => player.AddCommands(moveCommand, burnTreeLogCommand)
-                )
-            );
-        }
-
-        if (player.IsInCarryingState())
-        {
-            options.Add(
-                new(
-                    "Drop Treelog",
-                    () => player.AddCommands(DropTreeLogCommand.Create(player, transform.position))
-                )
-            );
-        }
-
-        return options;
+        
+        return treeLogCount > 1;
     }
 
     private void OnDrawGizmos()
     {
         if (!Application.isPlaying) return;
-        
+
         Gizmos.color = Color.green;
         Vector3 tileSize = new(_tileSize, 0.1f, _tileSize);
 

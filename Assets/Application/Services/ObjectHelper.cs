@@ -123,16 +123,40 @@ public static class ObjectHelper
     public static void SetChildModelLocalYPosition(GameObject childModel)
     {
         if (childModel == null) return;
-        
+
         if (childModel.TryGetComponent<Renderer>(out var renderer))
         {
             float objectHeight = renderer.bounds.size.y;
             float objectHalfHeight = objectHeight / 2f;
-            
+
             Vector3 localPos = childModel.transform.localPosition;
             localPos.y = objectHalfHeight;
             childModel.transform.localPosition = localPos;
-            
+
         }
+    }
+    
+    public static bool HasObstacleAtPosition(Vector3 position, out Collider collider)
+    {
+        collider = null;
+
+        Vector3 rayStart = new(position.x, 50f, position.z);
+        Ray ray = new(rayStart, Vector3.down);
+        
+        RaycastHit[] hits = Physics.RaycastAll(ray, 100f, LayerMask.GetMask("Obstacle"));
+        
+        if (hits.Length == 0)
+            return false;
+        
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider)
+            {
+                collider = hit.collider;
+                return true;
+            }
+        }
+        
+        return true;
     }
 }

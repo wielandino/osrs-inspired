@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tile : MonoBehaviour, IInteractable
+public class Tile : MonoBehaviour
 {
     public enum TileType
     {
@@ -14,30 +14,4 @@ public class Tile : MonoBehaviour, IInteractable
 
     public TileType GetTileType()
         => _tileType;
-
-    public List<ContextMenuOption> GetContextMenuOptions(PlayerStateManager player)
-    {
-        var options = new List<ContextMenuOption>();
-
-        var moveCommand = new MoveCommand(transform.position);
-
-        options.Add(
-            new(
-                "Walk here",
-                () => { player.AddCommands(moveCommand); }
-            )
-        );
-
-        if (player.IsInCarryingState())
-        {
-            options.Add(
-                new(
-                    "Drop Treelog",
-                    () => player.AddCommands(DropTreeLogCommand.Create(player, transform.position))
-                )
-            );
-        }
-
-        return options;
-    }
 }

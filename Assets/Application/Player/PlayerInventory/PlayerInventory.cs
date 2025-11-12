@@ -27,11 +27,9 @@ public class PlayerInventory : MonoBehaviour
         OSRSInventoryGridElement.OnItemCombined += OnItemCombinedFromUI;
     }
 
-    private void Update()
+    private void Start()
     {
-        //DEBUG!
-        if (Input.GetKeyDown(KeyCode.Q))
-            AddAllItemsToUI();
+        AddAllItemsToUI();
     }
 
     // Only for debug!

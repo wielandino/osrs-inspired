@@ -76,22 +76,29 @@ public class PlayerInputHandler : MonoBehaviour
     private void OnRightClick(InputAction.CallbackContext context)
     {
         if (EventSystem.current.IsPointerOverGameObject())
-            return;
-
+        return;
+        
         var mousePosition = _playerInputActions.Gameplay.MousePosition.ReadValue<Vector2>();
         var ray = Camera.main.ScreenPointToRay(mousePosition);
 
-        if (Physics.Raycast(ray, out var hitInfo))
-        {
-            if (hitInfo.collider.TryGetComponent<IInteractable>(out var interactable) ||
-                hitInfo.collider.transform.parent.TryGetComponent(out interactable))
-            {
-                ContextMenuPanel.Instance
-                    .ShowContextMenuForObject(interactable.GetContextMenuOptions(_playerStateManager),
-                                              mousePosition);
-            }
-
+        if (!Physics.Raycast(ray, out var hitInfo))
             return;
+
+        var allOptions = new List<ContextMenuOption>();
+
+        foreach (var strategy in _clickStrategies)
+        {
+            if (strategy.CanHandle(hitInfo))
+            {
+                var options = strategy.GetContextMenuOptions(hitInfo);
+                allOptions.AddRange(options);
+                break; // Nur die erste passende Strategy
+            }
+        }
+
+        if (allOptions.Count > 0)
+        {
+            ContextMenuPanel.Instance.ShowContextMenuForObject(allOptions, mousePosition);
         }
     }
 

@@ -96,8 +96,9 @@ public class TreeClickStrategy : IClickStrategy
             options.Add(CreateChopTreeOption(tree));
 
         options.Add(new ContextMenuOption(
-            "Examine",
-            () => Debug.Log($"A tree.")
+            displayText: "Examine",
+            onExecute: () => Debug.Log($"A tree."),
+            label: tree.TreeName
         ));
 
         return options;
@@ -120,14 +121,16 @@ public class TreeClickStrategy : IClickStrategy
         );
 
         return new ContextMenuOption(
-            "Chop tree",
-            () => {
+            displayText: $"Chop {tree.TreeName}",
+            onExecute: () => {
                 var moveCommand = new MoveCommand(
                     _movementService.GetNearestInteractionTile(tree.InteractionTiles)
                 );
                 var woodcuttingCommand = new WoodcuttingCommand(tree, bestAxe);
                 _playerStateManager.AddCommands(moveCommand, woodcuttingCommand);
-            }
+            },
+
+            label: tree.TreeName
         );
     }
 }

@@ -77,23 +77,27 @@ public class TileClickStrategy : IClickStrategy
     private ContextMenuOption CreateWalkHereOption(Vector3 position)
     {
         return new ContextMenuOption(
-            "Walk here",
-            () => {
+            displayText: "Walk here",
+            onExecute: () => {
                 var moveCommand = new MoveCommand(position);
                 _playerStateManager.AddCommands(moveCommand);
-            }
+            },
+
+            label: "Tile"
         );
     }
 
     private ContextMenuOption CreateDropTreeLogOption(Vector3 position)
     {
         return new ContextMenuOption(
-            "Drop Treelog",
-            () => {
+            displayText: "Drop TreelogTreelog",
+            onExecute: () => {
                 _playerStateManager.AddCommands(
                     DropTreeLogCommand.Create(_playerStateManager, position)
                 );
-            }
+            },
+
+            label: "Tile"
         );
     }
 }

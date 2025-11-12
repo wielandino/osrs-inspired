@@ -100,9 +100,12 @@ public class FishingSpotClickStrategy : IClickStrategy
             options.Add(CreateFishSpotOption(fishingSpot, bestFishingRod));
 
         options.Add(new ContextMenuOption(
-            "Examine",
-            () => Debug.Log($"A Fishing place.")
+            displayText: "Examine",
+            onExecute: () => Debug.Log($"A Fishing place."),
+            label: "Fishing place"
         ));
+
+
 
         return options;
     }
@@ -117,15 +120,17 @@ public class FishingSpotClickStrategy : IClickStrategy
     private ContextMenuOption CreateFishSpotOption(FishingSpot fishingSpot, ISkillTool bestFishingRod)
     {
         return new ContextMenuOption(
-            "Fishing",
-            () =>
+            displayText: "Fishing",
+            onExecute: () =>
                 {
                     var moveCommand = new MoveCommand(
                         _movementService.GetNearestInteractionTile(fishingSpot.GetInteractionTiles())
                     );
                     var fishingCommand = new FishingCommand(fishingSpot, bestFishingRod);
                     _playerStateManager.AddCommands(moveCommand, fishingCommand);
-                }
+                },
+
+            label: "Fishing place"
         );
     }
 }

@@ -93,7 +93,7 @@ public class PlayerInputHandler : MonoBehaviour
             {
                 var options = strategy.GetContextMenuOptions(hitInfo);
                 allOptions.AddRange(options);
-                break; // Nur die erste passende Strategy
+                break;
             }
         }
 

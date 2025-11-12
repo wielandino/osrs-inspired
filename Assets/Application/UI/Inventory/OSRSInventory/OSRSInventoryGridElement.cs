@@ -72,7 +72,8 @@ public class OSRSInventoryGridElement : InventoryGridElement, IInventoryGridElem
             {
                 contextMenuOptions.Add(new(
                     displayText: contextMenuItemOption.Label,
-                    onExecute: contextMenuItemOption.Callback
+                    onExecute: contextMenuItemOption.Callback,
+                    label: contextMenuItemOption.Label
                 ));
             }
         }

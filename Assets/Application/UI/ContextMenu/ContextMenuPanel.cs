@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ContextMenuPanel : MonoBehaviour, IPointerExitHandler
 {
@@ -10,6 +13,21 @@ public class ContextMenuPanel : MonoBehaviour, IPointerExitHandler
     public GameObject GridContainer;
     public GameObject GridElementPrefab;
 
+    public GameObject TitleElement;
+
+    [Header("Resize Settings")]
+
+    [SerializeField]
+    private float _minPanelWidth = 120f;
+
+    [SerializeField]
+    private float _paddingVertical = 10f;
+
+    [SerializeField]
+    private float _paddingHorizontal = 15f;
+
+    [SerializeField]
+    private float _buttonHeight = 15f;
 
     private void Start()
     {
@@ -20,8 +38,9 @@ public class ContextMenuPanel : MonoBehaviour, IPointerExitHandler
     public void ShowContextMenuForObject(List<ContextMenuOption> options, Vector2 screenPosition)
     {
         ClearOptions();
-
         MenuPanel.transform.position = screenPosition;
+
+        float maxTextWidth = _minPanelWidth;
 
         foreach (var option in options)
         {
@@ -36,9 +55,44 @@ public class ContextMenuPanel : MonoBehaviour, IPointerExitHandler
                 option.OnExecute();
                 HideContextMenu();
             });
+
+            createdContextMenuGridElement.ContextMenuText.ForceMeshUpdate();
+            var textWidth = createdContextMenuGridElement.ContextMenuText.preferredWidth;
+
+            if (textWidth > maxTextWidth)
+            {
+                maxTextWidth = textWidth;
+            }
         }
 
+        TitleElement.GetComponent<ContextMenuGridElement>().ContextMenuText.text = options[0].Label;
+
+        Canvas.ForceUpdateCanvases();
+        ResizeMenu(maxTextWidth, options.Count);
+
         MenuPanel.SetActive(true);
+    }
+
+    private void ResizeMenu(float maxTextWidth, int buttonCount)
+    {
+        float finalPanelHeight = (buttonCount * (_buttonHeight + _buttonHeight)) + _paddingVertical;
+        float finalPanelWidth = maxTextWidth + _paddingHorizontal;
+
+        GridContainer.GetComponent<GridLayoutGroup>().cellSize = new(finalPanelWidth, _buttonHeight);
+        TitleElement.GetComponent<RectTransform>().sizeDelta = new(finalPanelWidth, 15f);
+        MenuPanel.GetComponent<RectTransform>().sizeDelta = new(finalPanelWidth, finalPanelHeight);
+        GridContainer.GetComponent<RectTransform>().sizeDelta = new(finalPanelWidth, finalPanelHeight);
+
+        foreach (Transform gridElement in GridContainer.transform)
+        {
+            if (gridElement.gameObject == TitleElement)
+                continue;
+
+            var rectTransformOfbutton =
+                gridElement.GetComponent<ContextMenuGridElement>().ContextMenuButton.GetComponent<RectTransform>();
+
+            rectTransformOfbutton.sizeDelta = new(maxTextWidth, _buttonHeight);
+        }
     }
 
     public void HideContextMenu()
@@ -51,7 +105,8 @@ public class ContextMenuPanel : MonoBehaviour, IPointerExitHandler
     {
         foreach(Transform gridElement in GridContainer.transform)
         {
-            Destroy(gridElement.gameObject);
+            if(gridElement.gameObject != TitleElement)
+                Destroy(gridElement.gameObject);
         }
     }
 

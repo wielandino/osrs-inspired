@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Tree : MonoBehaviour, IHasInteractionTiles, ITooltipProvider
 {
+    public string TreeName = "Tree";
+
     [Header("Tree Stats")]
     public float MaxHealth;
 

@@ -247,55 +247,63 @@ public class TreeLogClickStrategy : IClickStrategy
     private ContextMenuOption CreateCookOption(TreeLog treeLog)
     {
         return new ContextMenuOption(
-            "Cook",
-            () =>
+            displayText: "Cook",
+            onExecute: () =>
                 {
                     var cookCommand =
                         new CookingCommand(treeLog, _playerStateManager.PlayerInventory.SelectedItem as CookableItem);
-                        
+
                     var moveCommand = new MoveCommand(
                         _movementService.GetNearestInteractionTile(treeLog.InteractionTiles)
                     );
                     _playerStateManager.AddCommands(moveCommand, cookCommand);
-                }
+                },
+
+            label: "Treelog"
         );
     }
 
     private ContextMenuOption CreatePickUpOption(TreeLog treeLog)
     {
         return new ContextMenuOption(
-            "Pick up",
-            () =>
+            displayText: "Pick up",
+            onExecute: () =>
                 {
                     var carryCommand = new CarryTreeLogCommand(treeLog);
                     var moveCommand = new MoveCommand(
                         _movementService.GetNearestInteractionTile(treeLog.InteractionTiles)
                     );
                     _playerStateManager.AddCommands(moveCommand, carryCommand);
-                }
+                },
+
+            label: "Treelog"
         );
     }
 
     private ContextMenuOption CreateBurnOption(TreeLog treeLog)
     {
         return new ContextMenuOption(
-            "Burn",
-            () =>
+            displayText: "Burn",
+            onExecute: () =>
                 {
                     var burnCommand = new BurnTreeLogCommand(treeLog);
                     var moveCommand = new MoveCommand(
                         _movementService.GetNearestInteractionTile(treeLog.InteractionTiles)
                     );
                     _playerStateManager.AddCommands(moveCommand, burnCommand);
-                }
+                },
+
+            label: "Treelog"
         );
     }
     
     private ContextMenuOption CreateDropOption(TreeLog treeLog)
     {
         return new ContextMenuOption(
-            "Drop Treelog",
-            () => _playerStateManager.AddCommands(DropTreeLogCommand.Create(_playerStateManager, treeLog.transform.position))
+            displayText: "Drop Treelog",
+            () => _playerStateManager.AddCommands(DropTreeLogCommand.Create(_playerStateManager, treeLog.transform.position)),
+
+            label: "Treelog"
         );
     }
 }

@@ -17,11 +17,12 @@ MonoBehaviour:
   Description: Was ein dicker Barsch!
   IsStackable: 0
   Icon: {fileID: 0}
-  Callback: {fileID: 0}
+  Callback: {fileID: 11400000, guid: 8f2595cf386a968fc8fde4c08d652714, type: 2}
   ItemType: 4
   ReturnItem: {fileID: 11400000, guid: b0b3e4ad259f9b6adaa74cc30309cb62, type: 2}
   RequiredCookingLevel: 0
   IncreasedFailureToCook: 0
+  XPDrop: 5
   RequiredLevelToCatch: 1
   XPPerCatch: 5
   FishingSpotCapacityDrain: 1

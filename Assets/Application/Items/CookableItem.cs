@@ -6,4 +6,5 @@ public class CookableItem : Item
     public Item ReturnItem;
     public int RequiredCookingLevel;
     public float IncreasedFailureToCook;
+    public float XPDrop;
 }

@@ -11,11 +11,12 @@ public class CookableItemCallback : ItemCallback
         if (!treeLog.GetStateManager().IsInBurningState())
             return false;
 
+        if (sourceItem is not CookableItem)
+            return false;
+
         return true;
     }
 
     public override PlayerCommandBase CreateCommand(GameObject target, PlayerStateManager player, Item sourceItem)
-    {
-        throw new System.NotImplementedException();
-    }
+        => new CookingCommand(target.GetComponent<TreeLog>(), sourceItem as CookableItem);
 }

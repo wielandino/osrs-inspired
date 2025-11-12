@@ -3,7 +3,7 @@ using UnityEngine;
 public class TreeLogBurningState : TreeLogBaseState
 {
     private float _burnTime;
-    private const float MAX_BURN_TIME = 5f; // 30 Sekunden brennen
+    private const float MAX_BURN_TIME = 30f; // 30 Sekunden brennen
 
     public override void EnterState(TreeLogStateManager treeLog)
     {

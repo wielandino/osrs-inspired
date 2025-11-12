@@ -41,20 +41,48 @@ public class TreeLogClickStrategy : IClickStrategy
 
         var selectedItem = _playerStateManager.PlayerInventory.SelectedItem;
 
-        if (selectedItem != null && 
-            ToolValidator.CanToolBeUsedForSkill(selectedItem, SkillType.Firemaking))
+        if (selectedItem != null)
         {
-            if(!treeLog.IsTreeLogStacked())
+            if (ToolValidator.CanToolBeUsedForSkill(selectedItem, SkillType.Firemaking))
             {
-                ExecuteFiremaking(treeLog, selectedItem);
-                return;
+                if (!treeLog.IsTreeLogStacked() && treeLog.GetStateManager().IsInIdleState())
+                {
+                    ExecuteFiremaking(treeLog, selectedItem);
+                    return;
+                }
+            }
+
+            if (treeLog.GetStateManager().IsInBurningState())
+            {
+                if (selectedItem is CookableItem)
+                {
+                    ExecuteCooking(treeLog, selectedItem);
+                    return;
+                }
             }
         }
-
+        
         if (_playerStateManager.IsInIdleState() && treeLog.GetStateManager().IsInIdleState())
-        {
             ExecuteCarrying(treeLog);
+        
+    }
+
+    private void ExecuteCooking(TreeLog treeLog, Item selectedItem)
+    {
+        if (selectedItem?.Callback == null ||
+            selectedItem?.Callback is not CookableItemCallback)
+            return;
+
+        Vector3 nearestTile = _movementService.GetNearestInteractionTile(treeLog.InteractionTiles);
+        var command = selectedItem.Callback.ExecuteCallback(treeLog.gameObject, _playerStateManager, selectedItem);
+
+        if (command != null)
+        {
+            var moveCommand = new MoveCommand(nearestTile);
+            _playerStateManager.AddCommands(moveCommand, command);
         }
+
+        _playerStateManager.PlayerInventory.DeSelectCurrentItem();
     }
 
     private void ExecuteFiremaking(TreeLog treeLog, Item selectedItem)
@@ -70,7 +98,7 @@ public class TreeLogClickStrategy : IClickStrategy
             var moveCommand = new MoveCommand(nearestTile);
             _playerStateManager.AddCommands(moveCommand, command);
         }
-        
+
         _playerStateManager.PlayerInventory.DeSelectCurrentItem();
     }
 
@@ -126,19 +154,19 @@ public class TreeLogClickStrategy : IClickStrategy
             return options;
 
         if (CanPickUp(treeLog))
-        {
             options.Add(CreatePickUpOption(treeLog));
-        }
+        
 
         if (CanBurn(treeLog))
-        {
             options.Add(CreateBurnOption(treeLog));
-        }
+        
 
         if (CanDrop(treeLog))
-        {
             options.Add(CreateDropOption(treeLog));
-        }
+
+
+        if (CanCook(treeLog))
+            options.Add(CreateCookOption(treeLog));
 
         return options;
     }
@@ -156,6 +184,24 @@ public class TreeLogClickStrategy : IClickStrategy
             treeLog = GetTopTreeLogAtPosition(hit.transform.position);
 
         return treeLog;
+    }
+
+    private bool CanCook(TreeLog treeLog)
+    {
+        if (!treeLog.GetStateManager().IsInBurningState())
+            return false;
+
+        var selectedItem = _playerStateManager.PlayerInventory.SelectedItem;
+
+        if (selectedItem is not CookableItem)
+            return false;
+
+        var cookingCommand = new CookingCommand(treeLog, selectedItem as CookableItem);
+
+        if (!cookingCommand.CanExecute(_playerStateManager))
+            return false;
+
+        return true;
     }
 
     private bool CanPickUp(TreeLog treeLog)
@@ -198,18 +244,35 @@ public class TreeLogClickStrategy : IClickStrategy
         return true;
     }
 
+    private ContextMenuOption CreateCookOption(TreeLog treeLog)
+    {
+        return new ContextMenuOption(
+            "Cook",
+            () =>
+                {
+                    var cookCommand =
+                        new CookingCommand(treeLog, _playerStateManager.PlayerInventory.SelectedItem as CookableItem);
+                        
+                    var moveCommand = new MoveCommand(
+                        _movementService.GetNearestInteractionTile(treeLog.InteractionTiles)
+                    );
+                    _playerStateManager.AddCommands(moveCommand, cookCommand);
+                }
+        );
+    }
+
     private ContextMenuOption CreatePickUpOption(TreeLog treeLog)
     {
         return new ContextMenuOption(
             "Pick up",
             () =>
-            {
-                var carryCommand = new CarryTreeLogCommand(treeLog);
-                var moveCommand = new MoveCommand(
-                    _movementService.GetNearestInteractionTile(treeLog.InteractionTiles)
-                );
-                _playerStateManager.AddCommands(moveCommand, carryCommand);
-            }
+                {
+                    var carryCommand = new CarryTreeLogCommand(treeLog);
+                    var moveCommand = new MoveCommand(
+                        _movementService.GetNearestInteractionTile(treeLog.InteractionTiles)
+                    );
+                    _playerStateManager.AddCommands(moveCommand, carryCommand);
+                }
         );
     }
 
@@ -218,13 +281,13 @@ public class TreeLogClickStrategy : IClickStrategy
         return new ContextMenuOption(
             "Burn",
             () =>
-            {
-                var burnCommand = new BurnTreeLogCommand(treeLog);
-                var moveCommand = new MoveCommand(
-                    _movementService.GetNearestInteractionTile(treeLog.InteractionTiles)
-                );
-                _playerStateManager.AddCommands(moveCommand, burnCommand);
-            }
+                {
+                    var burnCommand = new BurnTreeLogCommand(treeLog);
+                    var moveCommand = new MoveCommand(
+                        _movementService.GetNearestInteractionTile(treeLog.InteractionTiles)
+                    );
+                    _playerStateManager.AddCommands(moveCommand, burnCommand);
+                }
         );
     }
     

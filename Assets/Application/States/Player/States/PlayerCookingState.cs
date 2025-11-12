@@ -62,9 +62,12 @@ public class PlayerCookingState : PlayerBaseState
             
             _itemsToCookOfSameType.RemoveAt(0);
             player.PlayerInventory.RemoveItem(currentItem);
-            
+
             if (success && currentItem.ReturnItem != null)
+            {
                 player.PlayerInventory.AddItem(currentItem.ReturnItem);
+                player.PlayerSkills.GetCookingSkill().IncreaseCookingXP(currentItem.XPDrop);
+            }
         }
     }
 

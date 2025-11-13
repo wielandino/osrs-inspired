@@ -14,6 +14,10 @@ public class FishingSpot : MonoBehaviour, IHasInteractionTiles, ITooltipProvider
     [SerializeField]
     private List<Fish> _possibleFishesToCatch;
 
+    [Header("Needs Settings")]
+    public float EnergyDrain;
+    public float HungerDrain;
+
     private void Start()
     {
         if (_possibleFishesToCatch == null || _possibleFishesToCatch.Count == 0)

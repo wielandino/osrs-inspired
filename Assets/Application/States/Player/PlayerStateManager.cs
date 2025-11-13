@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +10,7 @@ public class PlayerStateManager : MonoBehaviour
     public PlayerMovementController PlayerMovementController;
     public PlayerSkill PlayerSkills;
     public PlayerInventory PlayerInventory;
+    public PlayerNeeds PlayerNeeds;
 
     private PlayerBaseState _currentState;
 

@@ -4,19 +4,21 @@ using UnityEngine;
 public class TreeLog : MonoBehaviour, IHasInteractionTiles
 {
     private TreeLogStateManager _stateManager;
-    
     public List<Vector3> InteractionTiles = new();
-    private float _tileSize;
-    
+    public float XPDropPerFiremaking = 5f;
+    public bool CanBeStacked = true;
+
+    [Header("Model Objects")]
     public GameObject TreeLogIdleStateObject;
     public GameObject TreeLogBurningStateObject;
-
     public GameObject CurrentActiveStateObject;
 
-    public bool _isInteractable;
-    public float XPDropPerFiremaking = 5f;
+    
+    [Header("Needs Settings")]
+    public float CarryEnergyDrain;
+    public float CarryHungerDrain;
 
-    public bool CanBeStacked = true;
+    private float _tileSize;
 
     private void Awake()
     {
@@ -31,7 +33,7 @@ public class TreeLog : MonoBehaviour, IHasInteractionTiles
 
     public void OnInteract(PlayerStateManager player)
     {
-        if (!_isInteractable || GetStateManager() == null)
+        if (GetStateManager() == null)
             return;
 
         GetStateManager().OnInteractInCurrentState(player);
@@ -62,10 +64,6 @@ public class TreeLog : MonoBehaviour, IHasInteractionTiles
                 child.gameObject.layer = LayerMask.NameToLayer(layerMask);
         
     }
-
-    public bool IsInteractable()
-        => _isInteractable;
-
 
     public bool IsTreeLogStacked()
     {

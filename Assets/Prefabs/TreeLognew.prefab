@@ -344,9 +344,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TreeLog
   InteractionTiles: []
+  XPDropPerFiremaking: 5
+  CanBeStacked: 1
   TreeLogIdleStateObject: {fileID: 2046111668812493791}
   TreeLogBurningStateObject: {fileID: 5750280356892098762}
   CurrentActiveStateObject: {fileID: 2046111668812493791}
-  _isInteractable: 1
-  XPDropPerFiremaking: 5
-  CanBeStacked: 1
+  CarryEnergyDrain: 5
+  CarryHungerDrain: 0

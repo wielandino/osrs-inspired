@@ -36,9 +36,6 @@ public class TreeLogClickStrategy : IClickStrategy
         if (treeLog.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
             treeLog = GetTopTreeLogAtPosition(hit.transform.position);
 
-        if (!treeLog.IsInteractable())
-            return;
-
         var selectedItem = _playerStateManager.PlayerInventory.SelectedItem;
 
         if (selectedItem != null)
@@ -207,7 +204,6 @@ public class TreeLogClickStrategy : IClickStrategy
     private bool CanPickUp(TreeLog treeLog)
     {
         return !_playerStateManager.IsInCarryingState() &&
-               treeLog.IsInteractable() &&
                _playerStateManager.IsInIdleState() &&
                treeLog.GetStateManager().IsInIdleState();
     }

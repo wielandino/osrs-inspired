@@ -41,6 +41,10 @@ public class Tree : MonoBehaviour, IHasInteractionTiles, ITooltipProvider
 
     private TreeStateManager _treeStateManager;
 
+    [Header("Needs Settings")]
+    public float EnergyDrain;
+    public float HungerDrain;
+
     private void Start()
     {
         _treeStateManager = gameObject.GetComponent<TreeStateManager>();

@@ -1,55 +1,41 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class NeedsUIController : MonoBehaviour
 {
-    public static NeedsUIController Instance;
+    [SerializeField] 
+    private PlayerNeeds _playerNeeds;
+
+    [SerializeField] 
+    private List<NeedsUIBar> _needBars = new();
     
-    [SerializeField]
-    private NeedsUIPanel _energyPanel;
-    [SerializeField]
-    private NeedsUIPanel _hungerPanel;
-    
-    private void OnEnable()
-    {
-        if (Instance == null)
-            Instance = this;
-    }
-    
-    private void OnDisable()
-    {
-        if (Instance != null)
-            Instance = null;
-    }
+    private readonly Dictionary<NeedType, NeedsUIBar> _barLookup = new();
     
     private void Start()
     {
-        if (_energyPanel == null)
-            Debug.LogError("No Energybar attached!");
-        if (_hungerPanel == null)
-            Debug.LogError("No Hungerbar attached!");
+        if (_playerNeeds == null)
+        {
+            Debug.LogError("PlayerNeeds not assigned!");
+            return;
+        }
+        
+        foreach (var bar in _needBars)
+            if (bar != null)
+                _barLookup[bar.NeedType] = bar;
+        
+        _playerNeeds.OnNeedChanged += OnNeedValueChanged;
     }
     
-    public void AddValueToHungerBar(float amount)
+    private void OnDestroy()
     {
-        if (_hungerPanel != null)
-            _hungerPanel.GetNeedsUIBar().AddValueToBar(amount);
+        if (_playerNeeds != null)
+            _playerNeeds.OnNeedChanged -= OnNeedValueChanged;
     }
     
-    public void DecreaseValueFromHungerBar(float amount)
+    private void OnNeedValueChanged(NeedType type, float current, float max)
     {
-        if (_hungerPanel != null)
-            _hungerPanel.GetNeedsUIBar().DecreaseValueFromBar(amount);
-    }
-    
-    public void AddValueToEnergyBar(float amount)
-    {
-        if (_energyPanel != null)
-            _energyPanel.GetNeedsUIBar().AddValueToBar(amount);
-    }
-    
-    public void DecreaseValueFromEnergyBar(float amount)
-    {
-        if (_energyPanel != null)
-            _energyPanel.GetNeedsUIBar().DecreaseValueFromBar(amount);
+        if (_barLookup.TryGetValue(type, out NeedsUIBar bar))
+            bar.UpdateBar(current, max);
+        
     }
 }

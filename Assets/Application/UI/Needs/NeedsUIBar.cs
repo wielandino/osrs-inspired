@@ -3,71 +3,53 @@ using UnityEngine.UI;
 
 public class NeedsUIBar : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField] 
+    private NeedType _needType;
+
+    [SerializeField] 
     private Image _fillImage;
     
-    private float _currentPercentage = 1f;
-    
-    [Header("Optional: Smooth Animation")]
-    [SerializeField]
+    [Header("Smooth Animation")]
+
+    [SerializeField] 
     private bool _useSmoothTransition = true;
-    [SerializeField]
+    
+    [SerializeField] 
     private float _transitionSpeed = 5f;
     
-    private float _targetPercentage = 1f;
+    private float _currentFillAmount = 1f;
+    private float _targetFillAmount = 1f;
+    
+    public NeedType NeedType => _needType;
     
     private void Start()
     {
         if (_fillImage == null)
-        {
-            Debug.LogError("Fill Image not assigned in NeedsUIBar!");
-            return;
-        }
-        
-        UpdateBarVisual();
+            Debug.LogError("Fill Image not assigned!");
     }
     
     private void Update()
     {
         if (_useSmoothTransition && _fillImage != null)
         {
-            _currentPercentage = Mathf.Lerp(_currentPercentage, _targetPercentage, Time.deltaTime * _transitionSpeed);
-            _fillImage.fillAmount = _currentPercentage;
+            _currentFillAmount = Mathf.Lerp(_currentFillAmount, _targetFillAmount, Time.deltaTime * _transitionSpeed);
+            _fillImage.fillAmount = _currentFillAmount;
         }
     }
     
-    public void AddValueToBar(float amount)
+    public void UpdateBar(float currentValue, float maxValue)
     {
+        float targetPercentage = maxValue > 0 ? currentValue / maxValue : 0f;
+        
         if (_useSmoothTransition)
         {
-            _targetPercentage = Mathf.Clamp01(_targetPercentage + amount);
+            _targetFillAmount = Mathf.Clamp01(targetPercentage);
         }
         else
         {
-            _currentPercentage = Mathf.Clamp01(_currentPercentage + amount);
-            UpdateBarVisual();
+            _currentFillAmount = Mathf.Clamp01(targetPercentage);
+            if (_fillImage != null)
+                _fillImage.fillAmount = _currentFillAmount;
         }
     }
-    
-    public void DecreaseValueFromBar(float amount)
-    {
-        if (_useSmoothTransition)
-        {
-            _targetPercentage = Mathf.Clamp01(_targetPercentage - amount);
-        }
-        else
-        {
-            _currentPercentage = Mathf.Clamp01(_currentPercentage - amount);
-            UpdateBarVisual();
-        }
-    }
-    
-    private void UpdateBarVisual()
-    {
-        if (_fillImage != null)
-            _fillImage.fillAmount = _currentPercentage;
-    }
-    
-    public float GetCurrentPercentage()
-        => _currentPercentage;
 }

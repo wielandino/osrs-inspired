@@ -45,6 +45,9 @@ public class PlayerCarryingState : PlayerBaseState
 
     public override void UpdateState(PlayerStateManager player)
     {
+        if (player.PlayerNeeds.IsNeedDepleted(NeedType.Energy))
+            player.SwitchToIdleState();
+
         if (_carriedTreeLog == null)
             player.SwitchToIdleState();
         

@@ -732,6 +732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdca183f0e49a7c3898b17d80b9429ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Application::NeedsUIBar
+  _needType: 1
   _fillImage: {fileID: 150528240}
   _useSmoothTransition: 1
   _transitionSpeed: 5
@@ -4218,6 +4219,8 @@ MonoBehaviour:
   _fishingCapacity: 40
   _possibleFishesToCatch:
   - {fileID: 11400000, guid: 85fe19c8113f330d290d19b7414b4218, type: 2}
+  EnergyDrain: 0
+  HungerDrain: 0
 --- !u!114 &1081987257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5028,6 +5031,7 @@ GameObject:
   - component: {fileID: 1195369885}
   - component: {fileID: 1195369886}
   - component: {fileID: 1195369887}
+  - component: {fileID: 1195369888}
   m_Layer: 0
   m_Name: Mesh
   m_TagString: Player
@@ -5078,6 +5082,7 @@ MonoBehaviour:
   PlayerMovementController: {fileID: 0}
   PlayerSkills: {fileID: 2048886786}
   PlayerInventory: {fileID: 1631706039}
+  PlayerNeeds: {fileID: 1195369888}
   CommandCounts: 0
 --- !u!114 &1195369883
 MonoBehaviour:
@@ -5164,6 +5169,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab5254aa558105475b8e721b83dddb7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
+--- !u!114 &1195369888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195369876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 267c63501652db52783b01e14a0b57d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Application::PlayerNeeds
+  _needConfigs:
+  - Type: 0
+    MaxValue: 80
+  - Type: 1
+    MaxValue: 80
 --- !u!1 &1247557762
 GameObject:
   m_ObjectHideFlags: 0
@@ -5978,6 +6000,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdca183f0e49a7c3898b17d80b9429ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Application::NeedsUIBar
+  _needType: 0
   _fillImage: {fileID: 1337826082}
   _useSmoothTransition: 1
   _transitionSpeed: 5
@@ -7525,8 +7548,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0a3b6d62c199a5e4a184fd25c05b301, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Application::NeedsUIController
-  _energyPanel: {fileID: 828630565}
-  _hungerPanel: {fileID: 1986074623}
+  _playerNeeds: {fileID: 1195369888}
+  _needBars:
+  - {fileID: 1337826084}
+  - {fileID: 150528242}
 --- !u!1 &1794283020
 GameObject:
   m_ObjectHideFlags: 0

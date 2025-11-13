@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class MoveWithCarryingTreeLogState : PlayerCarryingBaseSubState
@@ -7,6 +8,8 @@ public class MoveWithCarryingTreeLogState : PlayerCarryingBaseSubState
 
     private PlayerCarryingState _parentState;
     private PlayerStateManager _player;
+
+    private Coroutine _drainEnergyCoroutine;
 
     public void SetTargetPosition(Vector3 TargetPosition)
     {
@@ -24,6 +27,8 @@ public class MoveWithCarryingTreeLogState : PlayerCarryingBaseSubState
         player.PlayerMovementController.OnMovementCancelled += OnMovementCancelled;
 
         player.PlayerMovementController.StartMovement(_targetPosition);
+        
+        _drainEnergyCoroutine = player.StartCoroutine(DrainEnergyWhileMovingCoroutine(parentState, player));
     }
 
     public override void UpdateState(PlayerCarryingState parentState, PlayerStateManager player)
@@ -32,6 +37,8 @@ public class MoveWithCarryingTreeLogState : PlayerCarryingBaseSubState
 
     public override void ExitState(PlayerCarryingState parentState, PlayerStateManager player)
     {
+        player.StopCoroutine(_drainEnergyCoroutine);
+        
         player.PlayerMovementController.OnMovementCompleted -= OnMovementCompleted;
         player.PlayerMovementController.OnMovementCancelled -= OnMovementCancelled;
 
@@ -46,5 +53,14 @@ public class MoveWithCarryingTreeLogState : PlayerCarryingBaseSubState
     private void OnMovementCancelled()
     {
         _parentState.SwitchToIdleSubState(_player);
+    }
+
+    private IEnumerator DrainEnergyWhileMovingCoroutine(PlayerCarryingState parentState, PlayerStateManager player)
+    {
+        while(!player.PlayerNeeds.IsNeedDepleted(NeedType.Energy))
+        {
+            player.PlayerNeeds.ModifyNeed(NeedType.Energy, -parentState.GetCarriedTreeLog().CarryEnergyDrain);
+            yield return new WaitForSeconds(2f);
+        }
     }
 }

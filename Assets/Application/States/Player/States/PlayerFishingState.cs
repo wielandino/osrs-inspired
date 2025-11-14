@@ -30,7 +30,8 @@ public class PlayerFishingState : PlayerBaseState
 
     public override void UpdateState(PlayerStateManager player)
     {
-        if (_fishingSpot.GetFishingCapacity() <= 0)
+        if (_fishingSpot.GetFishingCapacity() <= 0 ||
+            player.PlayerNeeds.GetNeedValue(NeedType.Energy) <= _fishingSpot.EnergyDrain)
             player.SwitchToIdleState();
     }
 
@@ -41,11 +42,14 @@ public class PlayerFishingState : PlayerBaseState
 
     private IEnumerator FishingCoroutine(PlayerStateManager player, ISkillTool tool)
     {
-        while (_fishingSpot.GetFishingCapacity() > 0)
+        while (_fishingSpot.GetFishingCapacity() > 0 &&
+               player.PlayerNeeds.GetNeedValue(NeedType.Energy) > _fishingSpot.EnergyDrain)
         {
             var fishToCatch = SelectRandomFish();
 
             TryFishingAttempt(player, tool, fishToCatch, out bool spotIsEmpty);
+
+            player.PlayerNeeds.ModifyNeed(NeedType.Energy, -_fishingSpot.EnergyDrain);
 
             if (spotIsEmpty)
                 break;

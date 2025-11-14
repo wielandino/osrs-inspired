@@ -5816,7 +5816,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9096017723353911689, guid: ddee54692db7869d18fb3a57bf27ed1d, type: 3}
       propertyPath: MaxHealth
-      value: 0.5
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9096017723353911689, guid: ddee54692db7869d18fb3a57bf27ed1d, type: 3}
+      propertyPath: EnergyDrain
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 9096017723353911689, guid: ddee54692db7869d18fb3a57bf27ed1d, type: 3}
       propertyPath: RespawnTime

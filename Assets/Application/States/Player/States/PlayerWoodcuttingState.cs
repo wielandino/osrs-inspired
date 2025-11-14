@@ -25,6 +25,8 @@ public class PlayerWoodcuttingState : PlayerBaseState
 
     public override void UpdateState(PlayerStateManager player)
     {
+        if(_player.PlayerNeeds.GetNeedValue(NeedType.Energy) <= _currentTree.EnergyDrain)
+            player.SwitchToIdleState();
     }
 
     public override void ExitState(PlayerStateManager player)
@@ -38,14 +40,17 @@ public class PlayerWoodcuttingState : PlayerBaseState
 
     private IEnumerator CuttingWoodCoroutine()
     {
-        Debug.Log($"Cutting Wood with EffiencyBonus '{_woodcuttingAxe.EfficiencyBonus}'");
         var tool = _woodcuttingAxe;
         var treeStateManager = _currentTree.GetComponent<TreeStateManager>();
 
-        while (_currentTree.CurrentHealth > 0 && !treeStateManager.IsInDestroyedState())
+        while (_currentTree.CurrentHealth > 0 &&
+               !treeStateManager.IsInDestroyedState() &&
+               _player.PlayerNeeds.GetNeedValue(NeedType.Energy) > _currentTree.EnergyDrain)
         {
             float damage = _player.PlayerSkills.GetWoodcuttingSkill().BonusDamage + tool.EfficiencyBonus;
             _currentTree.CurrentHealth -= damage;
+
+            _player.PlayerNeeds.ModifyNeed(NeedType.Energy, -_currentTree.EnergyDrain);
 
             if (_currentTree.CurrentHealth <= 0)
             {

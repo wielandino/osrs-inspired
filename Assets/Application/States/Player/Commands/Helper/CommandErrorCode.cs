@@ -7,5 +7,6 @@ public enum CommandErrorCode
     PlayerSkillRequirementNotMet,
     PlayerAlreadyPerformingTask,
     TreeLogNotInIdleState,
-    FatalError
+    FatalError,
+    PlayerNoEnergy
 }

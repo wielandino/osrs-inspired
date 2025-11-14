@@ -15,6 +15,12 @@ public class FishingCommand : PlayerCommandBase
     {
         errorCode = CommandErrorCode.Default;
 
+        if (player.PlayerNeeds.GetNeedValue(NeedType.Energy) <= _fishingSpot.EnergyDrain)
+        {
+            errorCode = CommandErrorCode.PlayerNoEnergy;
+            return false;
+        }
+
         if (!player.IsInIdleState())
         {
             errorCode = CommandErrorCode.PlayerNotInIdleState;

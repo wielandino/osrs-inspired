@@ -19,6 +19,12 @@ public class CarryTreeLogCommand : PlayerCommandBase
     {
         errorCode = CommandErrorCode.Default;
 
+        if (player.PlayerNeeds.GetNeedValue(NeedType.Energy) <= _treeLog.CarryEnergyDrain)
+        {
+            errorCode = CommandErrorCode.PlayerNoEnergy;
+            return false;
+        }
+
         if (player.IsInCarryingState())
         {
             errorCode = CommandErrorCode.PlayerAlreadyPerformingTask;

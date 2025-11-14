@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,12 +19,18 @@ public class FishingSpot : MonoBehaviour, IHasInteractionTiles, ITooltipProvider
     public float EnergyDrain;
     public float HungerDrain;
 
+    public event Action<float> OnCapacityChanged;
+    public event Action OnSpotDepleted;
+    public event Action OnSpotReplenished;
+
     private void Start()
     {
         if (_possibleFishesToCatch == null || _possibleFishesToCatch.Count == 0)
             Debug.LogError($"Fishing Spot \"{transform.name}\" contains no fishes to catch!");
         
         _interactionTiles = ObjectHelper.CollectInteractionTilesOfPosition(transform.position);
+
+        OnCapacityChanged?.Invoke(_fishingCapacity);
     }
 
     public List<Vector3> GetInteractionTiles()
@@ -45,7 +52,11 @@ public class FishingSpot : MonoBehaviour, IHasInteractionTiles, ITooltipProvider
 
     public void ReduceFishingCapacity(float amount)
     {
+        float oldCapacity = _fishingCapacity;
         _fishingCapacity -= amount;
+
+        if (oldCapacity > 0 && _fishingCapacity <= 0)
+            OnSpotDepleted?.Invoke();
     }
 
     private void OnDrawGizmos()

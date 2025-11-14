@@ -4160,6 +4160,8 @@ GameObject:
   - component: {fileID: 1081987255}
   - component: {fileID: 1081987256}
   - component: {fileID: 1081987257}
+  - component: {fileID: 1081987259}
+  - component: {fileID: 1081987258}
   m_Layer: 0
   m_Name: FishingInteraction
   m_TagString: Untagged
@@ -4235,6 +4237,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: Application::TooltipTrigger
   _fallbackTooltipText: <color=white>White</color> <color=yellow>Yellow</color>
   tooltipColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+--- !u!114 &1081987258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081987253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6efed4c8ce4a40aa9b3b85bcdc95b926, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Application::FloatingIcon
+  heightAboveObject: 1
+  iconSize: 1.5
+  enableBobbing: 1
+  bobbingSpeed: 1
+  bobbingAmount: 0.2
+  rotateTowardsCamera: 1
+--- !u!114 &1081987259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081987253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b97a9addb0fed421f987905325aba470, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Application::FishingSpotUI
+  fishingSpot: {fileID: 0}
+  floatingIcon: {fileID: 0}
+  activeIcon: {fileID: 21300000, guid: babf54db95dcbff52adb292a8d92c55c, type: 3}
+  depletedIcon: {fileID: 0}
+  activeColor: {r: 1, g: 1, b: 1, a: 1}
+  depletedColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+  hideWhenDepleted: 1
 --- !u!1 &1083170654
 GameObject:
   m_ObjectHideFlags: 0

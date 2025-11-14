@@ -11,6 +11,7 @@ public class PlayerCarryingState : PlayerBaseState
 
     public bool IsInIdleState() => _currentSubState == IdleWithCarryingTreeLogState;
 
+    private bool _blockingStateExecutes;
 
     public PlayerCarryingState()
     {
@@ -45,8 +46,12 @@ public class PlayerCarryingState : PlayerBaseState
 
     public override void UpdateState(PlayerStateManager player)
     {
-        if (player.PlayerNeeds.IsNeedDepleted(NeedType.Energy))
-            player.SwitchToIdleState();
+        if (player.PlayerNeeds.IsNeedDepleted(NeedType.Energy) && !_blockingStateExecutes)
+        {
+            player.AddCommands(DropTreeLogCommand.Create(player, player.transform.position));
+            _blockingStateExecutes = true;
+            return;
+        }
 
         if (_carriedTreeLog == null)
             player.SwitchToIdleState();
@@ -55,7 +60,10 @@ public class PlayerCarryingState : PlayerBaseState
         _currentSubState.UpdateState(this, player);
     }
 
-    public void DropTreeLog(PlayerStateManager player, DropTreeLogCommand command, Vector3 targetPosition)
+    public bool IsStateExecutesBlocked()
+        => _blockingStateExecutes;
+
+    public void DropTreeLog(PlayerStateManager player, Vector3 targetPosition)
     {
         _carriedTreeLog.transform.SetParent(null);
         _carriedTreeLog.GetStateManager().ClearCarriedByPlayer();

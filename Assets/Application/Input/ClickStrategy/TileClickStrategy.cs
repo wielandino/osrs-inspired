@@ -90,7 +90,7 @@ public class TileClickStrategy : IClickStrategy
     private ContextMenuOption CreateDropTreeLogOption(Vector3 position)
     {
         return new ContextMenuOption(
-            displayText: "Drop TreelogTreelog",
+            displayText: "Drop Treelog",
             onExecute: () => {
                 _playerStateManager.AddCommands(
                     DropTreeLogCommand.Create(_playerStateManager, position)

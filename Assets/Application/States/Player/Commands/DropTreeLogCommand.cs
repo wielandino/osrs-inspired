@@ -36,7 +36,7 @@ public class DropTreeLogCommand : PlayerCommandBase
         throw new System.NotImplementedException();
     }
 
-     public override bool CanExecute(PlayerStateManager player)
+    public override bool CanExecute(PlayerStateManager player)
     {
         if (!player.IsInCarryingState())
             return false;
@@ -46,10 +46,10 @@ public class DropTreeLogCommand : PlayerCommandBase
             return false;
         
         var listOfInteractionTiles = ObjectHelper.CollectInteractionTilesOfPosition(_targetPosition);
+
         if (listOfInteractionTiles.Count > 0)
-        {
             return PlayerMovementService.Instance.IsPlayerInInteractionTile(listOfInteractionTiles);
-        }
+        
         
         return true;
     }
@@ -57,7 +57,7 @@ public class DropTreeLogCommand : PlayerCommandBase
     public override void ExecuteInternal(PlayerStateManager player)
     {
         var carriedTreeLog = player.CarryingState.GetCarriedTreeLog();
-        player.CarryingState.DropTreeLog(player, this, _targetPosition);
+        player.CarryingState.DropTreeLog(player, _targetPosition);
 
         _isComplete =
             player.IsInIdleState() &&

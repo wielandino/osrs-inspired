@@ -28,7 +28,8 @@ public class MoveWithCarryingTreeLogState : PlayerCarryingBaseSubState
 
         player.PlayerMovementController.StartMovement(_targetPosition);
         
-        _drainEnergyCoroutine = player.StartCoroutine(DrainEnergyWhileMovingCoroutine(parentState, player));
+        if(!parentState.IsStateExecutesBlocked())
+            _drainEnergyCoroutine = player.StartCoroutine(DrainEnergyWhileMovingCoroutine(parentState, player));
     }
 
     public override void UpdateState(PlayerCarryingState parentState, PlayerStateManager player)

@@ -56,7 +56,7 @@ public class PlayerCookingState : PlayerBaseState
         {
             CookableItem currentItem = _itemsToCookOfSameType[0];
             
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(1.5f);
             
             bool success = TryCookingAttempt(player, currentItem);
             

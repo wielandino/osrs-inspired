@@ -36,6 +36,15 @@ public class OSRSInventoryGridElement : InventoryGridElement, IInventoryGridElem
         _contextMenuPlugin.ClearContextOptions();
         _contextMenuPlugin.AddContextOption("Select", _selectItemPlugin.AddSelectedItem, priority: 100);
         _contextMenuPlugin.AddContextOption("Destroy", DestroyItem, priority: 90);
+
+        if (PlayerInventory.Instance.TryGetItemFromInventory(_itemData, out var item))
+        {
+            if (item is ConsumeableItem)
+            {
+                var consumeAbleItem = item as ConsumeableItem;
+                _contextMenuPlugin.AddContextOption("Consume", consumeAbleItem.ConsumeItem, 70);
+            }
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -73,7 +82,7 @@ public class OSRSInventoryGridElement : InventoryGridElement, IInventoryGridElem
                 contextMenuOptions.Add(new(
                     displayText: contextMenuItemOption.Label,
                     onExecute: contextMenuItemOption.Callback,
-                    label: contextMenuItemOption.Label
+                    label: _itemData.ItemName
                 ));
             }
         }
@@ -83,9 +92,9 @@ public class OSRSInventoryGridElement : InventoryGridElement, IInventoryGridElem
 
     private void AddCombineContextMenuOption(IInventoryItemData itemData)
     {
-        if(_contextMenuPlugin.GetContextMenuOptions()
-                             .Where(x => x.Label == "Combine")
-                             .FirstOrDefault() == null)
+        if (_contextMenuPlugin.GetContextMenuOptions()
+                              .Where(x => x.Label == "Combine")
+                              .FirstOrDefault() == null)
                                 _contextMenuPlugin.AddContextOption("Combine", CombineSelectedItems, priority: 80);
     }
 

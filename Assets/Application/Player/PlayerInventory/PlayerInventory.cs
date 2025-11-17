@@ -97,7 +97,7 @@ public class PlayerInventory : MonoBehaviour
         playerStateManager.AddCommands(craftingCommand);
     }
 
-    private bool TryGetItemFromInventory(IInventoryItemData itemData, out Item foundItem)
+    public bool TryGetItemFromInventory(IInventoryItemData itemData, out Item foundItem)
     {
         foundItem = null;
 

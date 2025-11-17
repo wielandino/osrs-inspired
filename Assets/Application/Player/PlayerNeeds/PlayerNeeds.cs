@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class PlayerNeeds : MonoBehaviour
 {
+    public static PlayerNeeds Instance;
+
     [SerializeField] 
     private List<NeedConfig> _needConfigs = new();
     
     private readonly Dictionary<NeedType, Need> _needs = new();
     
     public event Action<NeedType, float, float> OnNeedChanged; // type, current, max
-    
+
     private void Awake()
     {
         foreach (var config in _needConfigs)
@@ -24,7 +26,19 @@ public class PlayerNeeds : MonoBehaviour
             OnNeedChanged?.Invoke(kvp.Key, kvp.Value.CurrentValue, kvp.Value.MaxValue);
         
     }
-    
+
+    private void OnEnable()
+    {
+        if (Instance == null)
+            Instance = this;
+    }
+
+    private void OnDisable()
+    {
+        if (Instance != null)
+            Instance = null;
+    }
+
     public void ModifyNeed(NeedType type, float amount)
     {
         if (!_needs.ContainsKey(type))

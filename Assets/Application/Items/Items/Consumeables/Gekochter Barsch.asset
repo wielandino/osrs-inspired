@@ -19,4 +19,7 @@ MonoBehaviour:
   Icon: {fileID: 0}
   Callback: {fileID: 0}
   ItemType: 0
-  SomePropertie: 0
+  EnergyDrain: 0
+  EnergyIncrease: 10
+  HungerDrain: 5
+  HungerIncrease: 0

@@ -4221,7 +4221,7 @@ MonoBehaviour:
   _fishingCapacity: 40
   _possibleFishesToCatch:
   - {fileID: 11400000, guid: 85fe19c8113f330d290d19b7414b4218, type: 2}
-  EnergyDrain: 0
+  EnergyDrain: 5
   HungerDrain: 0
 --- !u!114 &1081987257
 MonoBehaviour:

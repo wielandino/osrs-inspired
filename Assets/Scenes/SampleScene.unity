@@ -2295,8 +2295,55 @@ Transform:
   m_Children:
   - {fileID: 741490423}
   - {fileID: 92365516}
+  - {fileID: 1075376218}
+  - {fileID: 653895656}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &653895655
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 653895656}
+  - component: {fileID: 653895657}
+  m_Layer: 0
+  m_Name: TileDeformTester
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &653895656
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653895655}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 619509892}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &653895657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653895655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a8ab0aed9fea8fbf987843082c06ea3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Application::SingleTileDeformTest
+  testTilePrefab: {fileID: 2055502703920845218, guid: a5c344119bd031df9b411eefa95813cb, type: 3}
 --- !u!1001 &664355878
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4038,6 +4085,83 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7691433989427973282, guid: 7bd72b0d81dfb0f3daf302de198633da, type: 3}
   m_PrefabInstance: {fileID: 6885402909456899714}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1075376217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1075376218}
+  - component: {fileID: 1075376219}
+  - component: {fileID: 1075376220}
+  - component: {fileID: 1075376221}
+  m_Layer: 0
+  m_Name: TerrainGridManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1075376218
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075376217}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 619509892}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1075376219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075376217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4cedc895b2f00d2aa34498858a50f30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Application::TerrainGridManager
+  gridSize: {x: 16, y: 16}
+  tileSize: 1
+  tileDatabase: {fileID: 11400000, guid: eec0ba2b30ee9711694cfb8553b4626b, type: 2}
+  tilesParent: {fileID: 0}
+--- !u!114 &1075376220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075376217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c645e849090a818a8d796a1820d8096, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Application::TerrainTester
+  info: "Rechtsklick auf diese Komponente \u2192 Kontext-Men\xFC"
+--- !u!114 &1075376221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075376217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ca3ddaeee19029fe84cc945c2a113f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Application::MeshDebugger
+  tileToDebug: {fileID: 83723487344944838, guid: 0ef02e7c3a7a871e48667e788a711f4d, type: 3}
+  analyzeNow: 0
 --- !u!1 &1076371863
 GameObject:
   m_ObjectHideFlags: 0
@@ -6747,7 +6871,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1628713652
 Transform:
   m_ObjectHideFlags: 0

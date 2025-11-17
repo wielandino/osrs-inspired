@@ -14,6 +14,9 @@ public class TerrainCell
     
     [Header("Tile Reference")]
     public GameObject placedTile;
+
+    [Header("Tile Type")]
+    public TileType tileType = TileType.Grass;
     
     public TerrainCell(Vector2Int position)
     {

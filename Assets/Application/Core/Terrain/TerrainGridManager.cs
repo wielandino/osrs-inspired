@@ -93,7 +93,7 @@ public class TerrainGridManager : MonoBehaviour
             DestroyImmediate(cell.placedTile);
         
         
-        GameObject tilePrefab = tileDatabase.GetRandomGrassTile();
+        GameObject tilePrefab = tileDatabase.GetRandomTile(cell.tileType);
         if (tilePrefab == null)
             return;
         

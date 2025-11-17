@@ -4147,7 +4147,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c645e849090a818a8d796a1820d8096, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Application::TerrainTester
-  info: "Rechtsklick auf diese Komponente \u2192 Kontext-Men\xFC"
 --- !u!114 &1075376221
 MonoBehaviour:
   m_ObjectHideFlags: 0

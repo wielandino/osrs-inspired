@@ -7,11 +7,31 @@ public class TerrainTileDatabase : ScriptableObject
     [Header("Grass Tiles")]
     public List<TerrainTileData> grassTiles = new();
     
-    public GameObject GetRandomGrassTile()
+    [Header("Stone Tiles")]
+    public List<TerrainTileData> stoneTiles = new();
+
+    public GameObject GetRandomTile(TileType type)
     {
-        if (grassTiles.Count == 0) return null;
+        List<TerrainTileData> tiles = GetTileList(type);
         
-        int randomIndex = Random.Range(0, grassTiles.Count);
-        return grassTiles[randomIndex].tilePrefab;
+        if (tiles == null || tiles.Count == 0)
+        {
+            Debug.LogWarning($"Keine Tiles vom Typ {type} in der Database!");
+            return null;
+        }
+        
+        // Zufälliges Tile auswählen
+        int randomIndex = Random.Range(0, tiles.Count);
+        return tiles[randomIndex].tilePrefab;
+    }
+    
+    private List<TerrainTileData> GetTileList(TileType type)
+    {
+        return type switch
+        {
+            TileType.Grass => grassTiles,
+            TileType.Stone => stoneTiles,
+            _ => grassTiles,
+        };
     }
 }

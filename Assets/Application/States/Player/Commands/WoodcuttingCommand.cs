@@ -43,7 +43,7 @@ public class WoodcuttingCommand : PlayerCommandBase
             return false;
         }
 
-        if (!_targetTree.InteractionTiles.Contains(player.transform.position))
+        if (!ObjectHelper.IsPlayerOnInteractionTile(_targetTree.InteractionTiles, player.transform.position))
         {
             errorCode = CommandErrorCode.PlayerNotInInteractionTile;
             return false;

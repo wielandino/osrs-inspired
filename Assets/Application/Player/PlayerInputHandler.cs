@@ -98,9 +98,8 @@ public class PlayerInputHandler : MonoBehaviour
         }
 
         if (allOptions.Count > 0)
-        {
             ContextMenuPanel.Instance.ShowContextMenuForObject(allOptions, mousePosition);
-        }
+        
     }
 
     private void DeSelectItemIfNeeded()

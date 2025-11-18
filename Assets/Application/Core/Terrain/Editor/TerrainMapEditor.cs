@@ -22,22 +22,20 @@ public class TerrainMapEditor : EditorWindow
     
     private EditMode currentMode = EditMode.None;
     
-    // Separate Brush Settings für Height und Tile Painting
     private float heightBrushSize = 2f;
     private float heightBrushStrength = 0.5f;
     
-    private float tileBrushSize = 0f;  // Separat für Tile Painting!
+    private float tileBrushSize = 0f;
     
     private bool isPainting = false;
     
-    // Tile Type Painting
     private TileType selectedTileType = TileType.Grass;
     
-    // References
     private TerrainGridManager terrainManager;
     
     private void OnEnable()
     {
+        terrainManager = FindFirstObjectByType<TerrainGridManager>();
         SceneView.duringSceneGui += OnSceneGUI;
     }
     
@@ -51,7 +49,6 @@ public class TerrainMapEditor : EditorWindow
         GUILayout.Label("Terrain Map Editor", EditorStyles.boldLabel);
         EditorGUILayout.Space();
         
-        // Terrain Manager Reference
         EditorGUILayout.LabelField("Setup", EditorStyles.boldLabel);
         terrainManager = (TerrainGridManager)EditorGUILayout.ObjectField(
             "Terrain Manager", 
@@ -68,13 +65,11 @@ public class TerrainMapEditor : EditorWindow
         
         EditorGUILayout.Space();
         
-        // Edit Mode Selection
         EditorGUILayout.LabelField("Edit Mode", EditorStyles.boldLabel);
         currentMode = (EditMode)EditorGUILayout.EnumPopup("Mode", currentMode);
         
         EditorGUILayout.Space();
         
-        // Mode-spezifische Settings
         if (currentMode == EditMode.PaintTileType)
         {
             // TILE PAINTING SETTINGS
@@ -90,7 +85,6 @@ public class TerrainMapEditor : EditorWindow
             
             EditorGUILayout.Space();
             
-            // TILE BRUSH SETTINGS (Separat!)
             EditorGUILayout.LabelField("Tile Brush Settings", EditorStyles.boldLabel);
             tileBrushSize = EditorGUILayout.Slider("Brush Size", tileBrushSize, 0f, 10f);
             
@@ -149,6 +143,19 @@ public class TerrainMapEditor : EditorWindow
         }
         
         EditorGUILayout.Space();
+
+        EditorGUILayout.LabelField("Save/Load", EditorStyles.boldLabel);
+
+        if (GUILayout.Button("💾 Save Terrain Data", GUILayout.Height(30)))
+        {
+            terrainManager.SaveTerrainData();
+            EditorUtility.DisplayDialog("Saved", "Terrain data saved successfully!", "OK");
+        }
+
+        if (GUILayout.Button("📂 Load Terrain Data"))
+        {
+            terrainManager.LoadTerrainData();
+        }
         
         // Info
         string infoText = "Halte SHIFT und klicke in die Scene View.\n";
@@ -179,26 +186,22 @@ public class TerrainMapEditor : EditorWindow
         
         if (Physics.Raycast(ray, out hit, 1000f))
         {
-            // Brush Color basierend auf Mode
             Color brushColor = currentMode == EditMode.PaintTileType 
                 ? GetTileTypeColor(selectedTileType) 
                 : Color.green;
             
             if (currentMode == EditMode.PaintTileType)
             {
-                // QUADRAT-BRUSH für Tile Painting
                 DrawSquareBrush(hit.point, tileBrushSize, brushColor);
             }
             else
             {
-                // KREIS-BRUSH für Height Editing
                 Handles.color = new Color(brushColor.r, brushColor.g, brushColor.b, 0.3f);
                 Handles.DrawSolidDisc(hit.point, Vector3.up, heightBrushSize);
                 Handles.color = brushColor;
                 Handles.DrawWireDisc(hit.point, Vector3.up, heightBrushSize);
             }
             
-            // Paint beim Klicken
             if (e.type == EventType.MouseDown && e.button == 0 && e.shift)
             {
                 isPainting = true;
@@ -223,27 +226,21 @@ public class TerrainMapEditor : EditorWindow
             }
         }
         
-        // Force Scene View Repaint
         if (currentMode != EditMode.None)
         {
             sceneView.Repaint();
         }
     }
-    
-    /// <summary>
-    /// Zeichnet einen quadratischen Brush für Tile Painting
-    /// </summary>
+
     private void DrawSquareBrush(Vector3 center, float size, Color color)
     {
         Vector2Int gridPos = terrainManager.WorldToGrid(center);
         Vector3 worldCenter = terrainManager.GridToWorld(gridPos, center.y);
         
-        float tileSize = 2f; // Deine Tiles sind 2x2 Units
+        float tileSize = 2f;
         
-        // Bei Size = 0: Zeige nur ein einzelnes Tile
         if (size < 0.1f)
         {
-            // Zeichne einzelnes Tile-Quadrat
             Vector3[] cellVerts = new Vector3[4];
             cellVerts[0] = worldCenter + new Vector3(-1, 0, -1);
             cellVerts[1] = worldCenter + new Vector3(1, 0, -1);
@@ -254,11 +251,9 @@ public class TerrainMapEditor : EditorWindow
             return;
         }
         
-        // Ansonsten: Größerer Brush
         float totalSize = (size * 2 + 1) * tileSize;
-        Vector3 halfExtents = new Vector3(totalSize / 2f, 0.1f, totalSize / 2f);
+        Vector3 halfExtents = new(totalSize / 2f, 0.1f, totalSize / 2f);
         
-        // Zeichne gefülltes Quadrat
         Handles.color = new Color(color.r, color.g, color.b, 0.3f);
         Vector3[] verts = new Vector3[4];
         verts[0] = worldCenter + new Vector3(-halfExtents.x, 0, -halfExtents.z);
@@ -267,7 +262,6 @@ public class TerrainMapEditor : EditorWindow
         verts[3] = worldCenter + new Vector3(-halfExtents.x, 0, halfExtents.z);
         Handles.DrawSolidRectangleWithOutline(verts, new Color(color.r, color.g, color.b, 0.3f), color);
         
-        // Zeichne Grid im Brush-Bereich
         Handles.color = new Color(color.r, color.g, color.b, 0.5f);
         int gridRadius = Mathf.CeilToInt(size);
         
@@ -284,7 +278,7 @@ public class TerrainMapEditor : EditorWindow
                 cellVerts[1] = cellWorldPos + new Vector3(1, 0, -1);
                 cellVerts[2] = cellWorldPos + new Vector3(1, 0, 1);
                 cellVerts[3] = cellWorldPos + new Vector3(-1, 0, 1);
-                cellVerts[4] = cellVerts[0]; // Schließe das Quadrat
+                cellVerts[4] = cellVerts[0];
                 
                 Handles.DrawPolyLine(cellVerts);
             }
@@ -295,19 +289,17 @@ public class TerrainMapEditor : EditorWindow
     {
         if (terrainManager == null) return;
         
-        // Konvertiere World Position zu Grid Position
         Vector2Int gridPos = terrainManager.WorldToGrid(worldPosition);
         
         if (currentMode == EditMode.PaintTileType)
         {
-            PaintTileTypeInArea(gridPos, tileBrushSize);  // Verwende tileBrushSize!
+            PaintTileTypeInArea(gridPos, tileBrushSize);
         }
         else
         {
             HeightGrid heightGrid = terrainManager.GetHeightGrid();
             if (heightGrid == null) return;
             
-            // Bestimme Stärke basierend auf Mode
             float amount = heightBrushStrength * 0.1f;
             
             switch (currentMode)
@@ -325,14 +317,12 @@ public class TerrainMapEditor : EditorWindow
                     break;
             }
             
-            // Regeneriere betroffene Tiles
             RegenerateAffectedTiles(gridPos, heightBrushSize);
         }
     }
     
     private void PaintTileTypeInArea(Vector2Int center, float radius)
     {
-        // Bei Brush Size = 0: Nur das Center-Tile malen
         if (radius < 0.1f)
         {
             TerrainCell cell = terrainManager.GetCell(center);
@@ -344,7 +334,6 @@ public class TerrainMapEditor : EditorWindow
             return;
         }
         
-        // Ansonsten: Bereich malen
         int radiusInt = Mathf.CeilToInt(radius);
         
         for (int x = -radiusInt; x <= radiusInt; x++)
@@ -356,10 +345,8 @@ public class TerrainMapEditor : EditorWindow
                 TerrainCell cell = terrainManager.GetCell(gridPos);
                 if (cell != null)
                 {
-                    // Setze Tile Type
                     cell.tileType = selectedTileType;
                     
-                    // Regeneriere Tile
                     terrainManager.PlaceTile(gridPos);
                 }
             }
@@ -380,10 +367,8 @@ public class TerrainMapEditor : EditorWindow
                 
                 if (cell != null)
                 {
-                    // Aktualisiere Höhenwerte
                     heightGrid.UpdateCellHeights(cell);
                     
-                    // Regeneriere Tile
                     terrainManager.PlaceTile(gridPos);
                 }
             }
@@ -396,12 +381,11 @@ public class TerrainMapEditor : EditorWindow
         
         HeightGrid heightGrid = terrainManager.GetHeightGrid();
         
-        // Aktualisiere alle Cells
         for (int x = 0; x < 16; x++)
         {
             for (int z = 0; z < 16; z++)
             {
-                Vector2Int gridPos = new Vector2Int(x, z);
+                Vector2Int gridPos = new(x, z);
                 TerrainCell cell = terrainManager.GetCell(gridPos);
                 if (cell != null)
                 {
@@ -415,14 +399,11 @@ public class TerrainMapEditor : EditorWindow
     
     private Color GetTileTypeColor(TileType type)
     {
-        switch (type)
+        return type switch
         {
-            case TileType.Grass:
-                return new Color(0.2f, 0.8f, 0.2f);
-            case TileType.Stone:
-                return new Color(0.5f, 0.5f, 0.5f);
-            default:
-                return Color.white;
-        }
+            TileType.Grass => new Color(0.2f, 0.8f, 0.2f),
+            TileType.Stone => new Color(0.5f, 0.5f, 0.5f),
+            _ => Color.white,
+        };
     }
 }

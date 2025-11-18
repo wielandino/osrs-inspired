@@ -54,4 +54,33 @@ public class HeightGrid
             }
         }
     }
+
+    public SerializableTerrainData ExportData()
+    {
+        SerializableTerrainData data = new SerializableTerrainData(Vector2Int.zero);
+        
+        foreach (var kvp in heightPoints)
+        {
+            data.heightPoints.Add(new HeightPoint(kvp.Key, kvp.Value));
+        }
+        
+        return data;
+    }
+
+    public void ImportData(SerializableTerrainData data)
+    {
+        heightPoints.Clear();
+        
+        foreach (var point in data.heightPoints)
+        {
+            SetHeight(point.position, point.height);
+        }
+        
+        Debug.Log($"Imported {data.heightPoints.Count} height points");
+    }
+
+    public int GetPointCount()
+    {
+        return heightPoints.Count;
+    }
 }

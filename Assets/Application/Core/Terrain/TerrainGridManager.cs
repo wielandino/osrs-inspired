@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteAlways]
 public class TerrainGridManager : MonoBehaviour
 {
     public static TerrainGridManager Instance;
     
+    [Header("Persistent Data")]
+    [SerializeField] private SerializableTerrainData terrainData;
+
     [Header("Grid Settings")]
     [SerializeField] 
     private Vector2Int gridSize = new(50, 50);
@@ -23,41 +27,83 @@ public class TerrainGridManager : MonoBehaviour
     [Header("Height System")]
     private HeightGrid heightGrid;
     
+    private void Start()
+    {
+        // Lade gespeicherte Daten beim Start (Play-Mode)
+        if (Application.isPlaying && terrainData != null && terrainData.heightPoints.Count > 0)
+        {
+            LoadTerrainData();
+            Debug.Log("Auto-loaded terrain data in Play mode");
+        }
+    }
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
         }
-        else
+        else if (Instance != this)
         {
+            if (!Application.isPlaying)
+            {
+                Debug.LogWarning("Mehrere TerrainGridManager in der Szene!");
+                return;
+            }
             Destroy(gameObject);
             return;
         }
         
-        InitializeGrid();
+        if (terrainGrid == null || terrainGrid.Count == 0)
+        {
+            InitializeGrid();
+        }
     }
     
+    private void OnEnable()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        
+        if (terrainGrid == null || terrainGrid.Count == 0)
+        {
+            InitializeGrid();
+        }
+    }
+
     private void InitializeGrid()
     {
         if (tilesParent == null)
         {
-            GameObject parent = new GameObject("Terrain_Tiles");
+            GameObject parent = new("Terrain_Tiles");
             parent.transform.SetParent(transform);
             tilesParent = parent.transform;
         }
         
-        heightGrid = new HeightGrid();
-
+        heightGrid ??= new HeightGrid();
+        
+        if (terrainData != null && terrainData.heightPoints != null && terrainData.heightPoints.Count > 0)
+        {
+            LoadTerrainData();
+        }
+        
         for (int x = 0; x < gridSize.x; x++)
         {
             for (int z = 0; z < gridSize.y; z++)
             {
                 Vector2Int gridPos = new(x, z);
                 TerrainCell cell = new(gridPos);
+                
+                // NEU: Aktualisiere Cell mit Höhenwerten aus dem HeightGrid!
+                heightGrid.UpdateCellHeights(cell);
+                
                 terrainGrid.Add(gridPos, cell);
             }
         }
+        
+        Debug.Log($"Terrain Grid initialisiert: {gridSize.x}x{gridSize.y} = {terrainGrid.Count} Cells");
     }
 
     public HeightGrid GetHeightGrid()
@@ -105,6 +151,10 @@ public class TerrainGridManager : MonoBehaviour
         cell.placedTile = tile;
 
         TerrainMeshDeformer.DeformTileMesh(tile, cell, tileSize);
+
+        #if UNITY_EDITOR
+        MarkDirty();
+        #endif
     }
     
     public void GenerateAllTiles()
@@ -124,9 +174,134 @@ public class TerrainGridManager : MonoBehaviour
         {
             if (kvp.Value.placedTile != null)
             {
-                Destroy(kvp.Value.placedTile);
+                DestroyImmediate(kvp.Value.placedTile);
                 kvp.Value.placedTile = null;
             }
         }
+
+        if (!Application.isPlaying)
+        {
+            UnityEditor.EditorUtility.SetDirty(Instance);
+            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(
+                UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene()
+            );
+        }
     }
+
+    public float GetTerrainHeightAtWorldPosition(Vector3 worldPosition)
+    {
+        if (heightGrid == null)
+        {
+            Debug.LogWarning("HeightGrid nicht initialisiert!");
+            return 0f;
+        }
+        
+        Vector2Int gridPos = WorldToGrid(worldPosition);
+        
+        TerrainCell cell = GetCell(gridPos);
+        if (cell == null)
+        {
+            return 0f;
+        }
+        
+        return GetInterpolatedHeightInCell(cell, worldPosition);
+    }
+
+    private float GetInterpolatedHeightInCell(TerrainCell cell, Vector3 worldPosition)
+    {
+        
+        Vector3 cellWorldPos = GridToWorld(cell.gridPosition, 0f);
+        
+        float localX = (worldPosition.x - cellWorldPos.x) / tileSize; 
+        float localZ = (worldPosition.z - cellWorldPos.z) / tileSize;
+        
+        localX = Mathf.Clamp01(localX);
+        localZ = Mathf.Clamp01(localZ);
+        
+        float heightSouth = Mathf.Lerp(cell.heightSouthWest, cell.heightSouthEast, localX);
+        float heightNorth = Mathf.Lerp(cell.heightNorthWest, cell.heightNorthEast, localX);
+        
+        float finalHeight = Mathf.Lerp(heightSouth, heightNorth, localZ);
+        
+        return finalHeight;
+    }
+
+    public bool IsPositionInGrid(Vector3 worldPosition)
+    {
+        Vector2Int gridPos = WorldToGrid(worldPosition);
+        return GetCell(gridPos) != null;
+    }
+
+    public void SaveTerrainData()
+    {
+        if (heightGrid == null)
+        {
+            Debug.LogWarning("HeightGrid ist null, kann nicht speichern!");
+            return;
+        }
+        
+        terrainData = heightGrid.ExportData();
+        terrainData.gridSize = gridSize;
+        
+        #if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+        UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(
+            UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene()
+        );
+        #endif
+        
+        Debug.Log($"Terrain data saved! {terrainData.heightPoints.Count} height points");
+    }
+
+    public void LoadTerrainData()
+    {
+        if (terrainData == null)
+        {
+            Debug.Log("terrainData ist null");
+            return;
+        }
+        
+        if (terrainData.heightPoints == null)
+        {
+            Debug.Log("terrainData.heightPoints ist null");
+            return;
+        }
+        
+        if (terrainData.heightPoints.Count == 0)
+        {
+            Debug.Log("Keine Terrain-Daten zum Laden vorhanden");
+            return;
+        }
+        
+        if (heightGrid == null)
+        {
+            heightGrid = new HeightGrid();
+            Debug.Log("HeightGrid wurde neu erstellt");
+        }
+        
+        heightGrid.ImportData(terrainData);
+        
+        Debug.Log($"Terrain data loaded! {terrainData.heightPoints.Count} height points");
+    }
+
+    #if UNITY_EDITOR
+    [ContextMenu("Initialize Grid")]
+    public void EditorInitializeGrid()
+    {
+        InitializeGrid();
+        UnityEditor.EditorUtility.SetDirty(this);
+        Debug.Log("Grid manuell initialisiert!");
+    }
+
+    private void MarkDirty()
+    {
+        if (!Application.isPlaying)
+        {
+            UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(
+                UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene()
+            );
+        }
+    }
+    #endif
 }

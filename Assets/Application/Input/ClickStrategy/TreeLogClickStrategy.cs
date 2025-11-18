@@ -17,8 +17,10 @@ public class TreeLogClickStrategy : IClickStrategy
 
     public bool CanHandle(RaycastHit hit)
     {
-        return hit.collider.TryGetComponent<TreeLog>(out _) || 
-               hit.collider.transform.parent.TryGetComponent<TreeLog>(out _);
+        return hit.collider != null &&
+           (hit.collider.TryGetComponent<TreeLog>(out _) ||
+            hit.collider.transform.parent is Transform p &&
+            p.TryGetComponent<TreeLog>(out _));
     }
 
     public void Handle(RaycastHit hit)

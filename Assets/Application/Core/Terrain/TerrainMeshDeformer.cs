@@ -5,7 +5,7 @@ public static class TerrainMeshDeformer
     public static void DeformTileMesh(GameObject tile, TerrainCell cell, float tileSize = 1f)
     {
         MeshFilter meshFilter = tile.GetComponent<MeshFilter>();
-        if (meshFilter == null || meshFilter.mesh == null)
+        if (meshFilter == null || meshFilter.sharedMesh == null)
         {
             Debug.LogWarning($"Tile {tile.name} hat keinen MeshFilter!");
             return;
@@ -57,6 +57,5 @@ public static class TerrainMeshDeformer
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
         
-        Debug.Log($"Mesh verformt für {tile.name} - NW:{cell.heightNorthWest}, NE:{cell.heightNorthEast}, SW:{cell.heightSouthWest}, SE:{cell.heightSouthEast}");
     }
 }

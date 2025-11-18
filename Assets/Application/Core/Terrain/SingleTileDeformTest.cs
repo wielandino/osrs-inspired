@@ -21,10 +21,8 @@ public class SingleTileDeformTest : MonoBehaviour
     private void DeformTileNorthHigh()
     {
         if (spawnedTile == null)
-        {
-            Debug.LogError("Spawne zuerst ein Tile!");
             return;
-        }
+        
 
         TerrainCell testCell = new(Vector2Int.zero)
         {
@@ -41,11 +39,8 @@ public class SingleTileDeformTest : MonoBehaviour
     private void DeformTilePyramid()
     {
         if (spawnedTile == null)
-        {
-            Debug.LogError("Spawne zuerst ein Tile!");
             return;
-        }
-
+        
         TerrainCell testCell = new(Vector2Int.zero)
         {
             heightNorthWest = 0f,

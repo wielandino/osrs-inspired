@@ -16,7 +16,7 @@ public class TerrainTileDatabase : ScriptableObject
         
         if (tiles == null || tiles.Count == 0)
         {
-            Debug.LogWarning($"Keine Tiles vom Typ {type} in der Database!");
+            Debug.LogWarning($"No Tiles of {type} in database!");
             return null;
         }
         

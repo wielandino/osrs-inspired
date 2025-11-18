@@ -17,10 +17,8 @@ public class HeightGrid
     public float GetHeight(Vector2Int point)
     {
         if (heightPoints.ContainsKey(point))
-        {
             return heightPoints[point];
-        }
-
+        
         return 0f;
     }
 
@@ -57,12 +55,11 @@ public class HeightGrid
 
     public SerializableTerrainData ExportData()
     {
-        SerializableTerrainData data = new SerializableTerrainData(Vector2Int.zero);
+        SerializableTerrainData data = new(Vector2Int.zero);
         
         foreach (var kvp in heightPoints)
-        {
             data.heightPoints.Add(new HeightPoint(kvp.Key, kvp.Value));
-        }
+        
         
         return data;
     }
@@ -72,15 +69,13 @@ public class HeightGrid
         heightPoints.Clear();
         
         foreach (var point in data.heightPoints)
-        {
             SetHeight(point.position, point.height);
-        }
+        
         
         Debug.Log($"Imported {data.heightPoints.Count} height points");
     }
 
     public int GetPointCount()
-    {
-        return heightPoints.Count;
-    }
+        => heightPoints.Count;
+    
 }

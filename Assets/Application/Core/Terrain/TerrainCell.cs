@@ -6,7 +6,7 @@ public class TerrainCell
     [Header("Grid Position")]
     public Vector2Int gridPosition;
     
-    [Header("Height Values (0-1 = flach, höhere Werte = erhöht)")]
+    [Header("Height Values")]
     public float heightNorthWest; 
     public float heightNorthEast;
     public float heightSouthWest;

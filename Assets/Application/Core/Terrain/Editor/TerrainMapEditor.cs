@@ -11,15 +11,6 @@ public class TerrainMapEditor : EditorWindow
     }
     
     // Editor Settings
-    private enum EditMode
-    {
-        None,
-        RaiseHeight,
-        LowerHeight,
-        FlattenHeight,
-        PaintTileType
-    }
-    
     private EditMode currentMode = EditMode.None;
     
     private float heightBrushSize = 2f;
@@ -59,7 +50,7 @@ public class TerrainMapEditor : EditorWindow
         
         if (terrainManager == null)
         {
-            EditorGUILayout.HelpBox("Bitte TerrainGridManager zuweisen!", MessageType.Warning);
+            EditorGUILayout.HelpBox("Assign TerrainGridManager", MessageType.Warning);
             return;
         }
         
@@ -89,8 +80,8 @@ public class TerrainMapEditor : EditorWindow
             tileBrushSize = EditorGUILayout.Slider("Brush Size", tileBrushSize, 0f, 10f);
             
             EditorGUILayout.HelpBox(
-                "Brush Size bestimmt den Radius in Tiles.\n" +
-                "0 = Einzelnes Tile\n" +
+                "Brush Size\n" +
+                "0 = Single Tile\n" +
                 "1 = 3x3 Tiles\n" +
                 "2 = 5x5 Tiles", 
                 MessageType.Info
@@ -167,7 +158,7 @@ public class TerrainMapEditor : EditorWindow
             }
         }
 
-        if (GUILayout.Button("🔄 Reset Terrain (Clear + Flatten)", GUILayout.Height(30)))
+        if (GUILayout.Button("🔄 Reset Terrain", GUILayout.Height(30)))
         {
             if (EditorUtility.DisplayDialog(
                 "Reset Terrain", 
@@ -202,7 +193,7 @@ public class TerrainMapEditor : EditorWindow
         }
         
         // Info
-        string infoText = "Halte SHIFT und klicke in die Scene View.\n";
+        string infoText = "Hold SHIFT and click within the Scene View.\n";
         if (currentMode == EditMode.PaintTileType)
         {
             infoText += $"Painting: {selectedTileType}\n";
@@ -224,16 +215,14 @@ public class TerrainMapEditor : EditorWindow
         
         Event e = Event.current;
         
-        // Zeichne Brush Preview
         Ray ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
-        RaycastHit hit;
-        
-        if (Physics.Raycast(ray, out hit, 1000f))
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 1000f))
         {
-            Color brushColor = currentMode == EditMode.PaintTileType 
-                ? GetTileTypeColor(selectedTileType) 
+            Color brushColor = currentMode == EditMode.PaintTileType
+                ? GetTileTypeColor(selectedTileType)
                 : Color.green;
-            
+
             if (currentMode == EditMode.PaintTileType)
             {
                 DrawSquareBrush(hit.point, tileBrushSize, brushColor);
@@ -245,31 +234,31 @@ public class TerrainMapEditor : EditorWindow
                 Handles.color = brushColor;
                 Handles.DrawWireDisc(hit.point, Vector3.up, heightBrushSize);
             }
-            
+
             if (e.type == EventType.MouseDown && e.button == 0 && e.shift)
             {
                 isPainting = true;
                 e.Use();
             }
-            
+
             if (e.type == EventType.MouseUp && e.button == 0)
             {
                 isPainting = false;
             }
-            
+
             if (e.type == EventType.MouseDrag && isPainting && e.shift)
             {
                 PaintTerrain(hit.point);
                 e.Use();
             }
-            
+
             if (isPainting && e.type == EventType.MouseDown && e.shift)
             {
                 PaintTerrain(hit.point);
                 e.Use();
             }
         }
-        
+
         if (currentMode != EditMode.None)
         {
             sceneView.Repaint();
@@ -316,7 +305,6 @@ public class TerrainMapEditor : EditorWindow
                 Vector2Int cellPos = gridPos + new Vector2Int(x, z);
                 Vector3 cellWorldPos = terrainManager.GridToWorld(cellPos, center.y);
                 
-                // Zeichne Tile-Umriss
                 Vector3[] cellVerts = new Vector3[5];
                 cellVerts[0] = cellWorldPos + new Vector3(-1, 0, -1);
                 cellVerts[1] = cellWorldPos + new Vector3(1, 0, -1);

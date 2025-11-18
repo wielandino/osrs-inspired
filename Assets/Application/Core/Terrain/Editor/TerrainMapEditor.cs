@@ -134,7 +134,14 @@ public class TerrainMapEditor : EditorWindow
         
         if (GUILayout.Button("Clear All Tiles"))
         {
-            terrainManager.ClearAllTiles();
+            if (EditorUtility.DisplayDialog(
+                "Clear All Tiles", 
+                "This will remove all tile GameObjects but keep height data. Use 'Reset Terrain' to also clear heights.", 
+                "Clear", 
+                "Cancel"))
+            {
+                terrainManager.ClearAllTiles();
+            }
         }
         
         if (GUILayout.Button("Regenerate Terrain"))
@@ -142,6 +149,43 @@ public class TerrainMapEditor : EditorWindow
             RegenerateTerrain();
         }
         
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Terrain Manipulation", EditorStyles.boldLabel);
+
+        if (GUILayout.Button("⬇️ Flatten Terrain", GUILayout.Height(30)))
+        {
+            if (EditorUtility.DisplayDialog(
+                "Flatten Terrain", 
+                "This will set all heights to 0 and regenerate tiles. Continue?", 
+                "Flatten", 
+                "Cancel"))
+            {
+                terrainManager.FlattenTerrain();
+                terrainManager.ClearAllTiles();
+                terrainManager.GenerateAllTiles();
+                EditorUtility.DisplayDialog("Done", "Terrain flattened successfully!", "OK");
+            }
+        }
+
+        if (GUILayout.Button("🔄 Reset Terrain (Clear + Flatten)", GUILayout.Height(30)))
+        {
+            if (EditorUtility.DisplayDialog(
+                "Reset Terrain", 
+                "This will remove all tiles AND reset all heights to 0. This cannot be undone!", 
+                "Reset", 
+                "Cancel"))
+            {
+                terrainManager.ResetTerrain();
+                EditorUtility.DisplayDialog("Done", "Terrain completely reset!", "OK");
+            }
+        }
+
+        
+        if (GUILayout.Button("🔄 Update A* Pathfinding"))
+        {
+            terrainManager.UpdatePathfindingGraph();
+        }
+
         EditorGUILayout.Space();
 
         EditorGUILayout.LabelField("Save/Load", EditorStyles.boldLabel);

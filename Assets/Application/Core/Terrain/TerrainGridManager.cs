@@ -166,6 +166,8 @@ public class TerrainGridManager : MonoBehaviour
             PlaceTile(kvp.Key);
             tilesPlaced++;
         }
+
+        UpdatePathfindingGraph();
     }
     
     public void ClearAllTiles()
@@ -282,6 +284,64 @@ public class TerrainGridManager : MonoBehaviour
         heightGrid.ImportData(terrainData);
         
         Debug.Log($"Terrain data loaded! {terrainData.heightPoints.Count} height points");
+    }
+
+    public void UpdatePathfindingGraph()
+    {
+        if (AstarPath.active != null)
+        {
+            AstarPath.active.Scan();
+            Debug.Log("A* Graph updated!");
+        }
+    }
+
+    /// <summary>
+    /// Setzt alle Höhenwerte auf 0 (flaches Terrain)
+    /// </summary>
+    public void FlattenTerrain()
+    {
+        if (heightGrid == null)
+        {
+            heightGrid = new HeightGrid();
+        }
+        
+        // Erstelle neue leere Height-Daten
+        terrainData = new SerializableTerrainData(gridSize);
+        
+        // Setze alle Höhen auf 0
+        for (int x = 0; x <= gridSize.x; x++)
+        {
+            for (int z = 0; z <= gridSize.y; z++)
+            {
+                heightGrid.SetHeight(new Vector2Int(x, z), 0f);
+            }
+        }
+        
+        // Aktualisiere alle Cells
+        foreach (var kvp in terrainGrid)
+        {
+            heightGrid.UpdateCellHeights(kvp.Value);
+        }
+        
+        #if UNITY_EDITOR
+        MarkDirty();
+        #endif
+        
+        Debug.Log("Terrain flattened!");
+    }
+
+    /// <summary>
+    /// Löscht alle Tiles UND setzt Höhendaten zurück
+    /// </summary>
+    public void ResetTerrain()
+    {
+        // Lösche Tiles
+        ClearAllTiles();
+        
+        // Setze Höhendaten zurück
+        FlattenTerrain();
+        
+        Debug.Log("Terrain reset - all tiles cleared and heights set to 0!");
     }
 
     #if UNITY_EDITOR

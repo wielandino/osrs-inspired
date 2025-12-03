@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public abstract class TreeLogBaseState
 {
     public abstract void EnterState(TreeLogStateManager treeLog);

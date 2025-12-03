@@ -202,7 +202,7 @@ public class TerrainMapEditor : EditorWindow
         else
         {
             infoText += $"Mode: {currentMode}\n";
-            infoText += "Brush-Form: Kreis";
+            infoText += "Brush-Form: Circle";
         }
         
         EditorGUILayout.HelpBox(infoText, MessageType.Info);
@@ -345,7 +345,6 @@ public class TerrainMapEditor : EditorWindow
                     break;
                     
                 case EditMode.FlattenHeight:
-                    // TODO: Flatten implementieren
                     break;
             }
             

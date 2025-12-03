@@ -99,7 +99,6 @@ public static class ObjectHelper
         
         foreach (var adjacentPos in adjacentPositions)
         {
-            // Hole korrekte Y-Position
             Vector3 correctedPos = adjacentPos;
             correctedPos.y = GetGroundYPosition(adjacentPos);
             

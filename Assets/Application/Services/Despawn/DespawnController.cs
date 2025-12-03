@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-using static UnityEditor.Progress;
 
 public class DespawnController : MonoBehaviour
 {
@@ -56,7 +54,7 @@ public class DespawnController : MonoBehaviour
             if (DespawnItems[i].GameObjectToDespawn == objectToRemove)
             {
                 DespawnItems.RemoveAt(i);
-                Debug.Log($"DespawnController: {objectToRemove.name} aus Despawn-Liste entfernt");
+                Debug.Log($"DespawnController: {objectToRemove.name} removed from despawn list.");
                 return;
             }
         }
@@ -69,7 +67,6 @@ public class DespawnController : MonoBehaviour
             return;
         }
 
-        // Pr�fe ob Objekt bereits registriert ist
         DespawnItem existingItem = DespawnItems.Find(item => item.GameObjectToDespawn == objectToDespawn);
         if (existingItem != null)
         {
